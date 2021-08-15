@@ -3,6 +3,7 @@
 import os
 import random
 import logging
+import itertools
 import numpy as np
 from _logger import *
 
@@ -80,11 +81,14 @@ def remove_repeat(findit_ij):
     return findit
 
 
-def run_tailor_xy(data_input, data_output, flag):
+def run_tailor_xy(data_input, data_output, repeat, flag = "n"):
 
-    for i, j in zip(data_input, data_output):
-        finditi = np.where((i[:,:2]<0)) if flag=="n" else np.where((i[:,:2]>1))
-        finditj = np.where((j[:,:2]<0)) if flag=="n" else np.where((j[:,:2]>1))
+    trans_ = [_ for _ in range(repeat)]
+    trans = list(itertools.product(trans_, trans_, [0]))
+
+    for index, (i, j) in enumerate(zip(data_input, data_output)):
+        finditi = np.where((i<0)) if flag=="n" else np.where((i>1))
+        finditj = np.where((j<0)) if flag=="n" else np.where((j>1))
         findit_ij = (np.concatenate([finditi[0], finditj[0]]), np.concatenate([finditi[1], finditj[1]]))
         findit = remove_repeat(findit_ij)
         i_news = []
@@ -103,23 +107,45 @@ def run_tailor_xy(data_input, data_output, flag):
                 if count>=10:
                     i_news.append(ori_i_new)
                     j_news.append(ori_j_new)
-                    logger.warning(f"i_new = {ori_i_new} y_new = {ori_j_new}")
+                    logger.warning(f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} index = {trans[(index+1) % 4]}")
                     break
         i[findit], j[findit] = i_news, j_news
 
     return data_input, data_output
 
 
-def tailor_xy(input_coor, output_coor):
+def tailor_xy(input_coor, output_coor, repeat):
 
     data_input = input_coor.copy()
     data_output = output_coor.copy()
 
-    data_input, data_output = run_tailor_xy(data_input, data_output, "n")
-    data_input, data_output = run_tailor_xy(data_input, data_output, "p")
+    data_input, data_output = run_tailor_xy(data_input, data_output, repeat, "n")
+    data_input, data_output = run_tailor_xy(data_input, data_output, repeat, "p")
 
     return data_input, data_output
 
+
+def expand_xy(input_coor, output_coor, repeat):
+
+    trans_coor_i, trans_coor_o = [], []
+    for coor_i, coor_o in  zip(input_coor, output_coor):
+        trans = [_ for _ in range(repeat)]
+        coor_trans_i, coor_trans_o = [], []
+
+        for item in itertools.product(trans,trans,[0]):
+            coor_t_i = coor_i + np.array(item)/repeat
+            coor_t_o = coor_o + np.array(item)/repeat
+
+            coor_t_i = np.where(coor_t_i>1, coor_t_i-1, coor_t_i)
+            coor_t_o = np.where(coor_t_o>1, coor_t_o-1, coor_t_o)
+
+            coor_trans_i.append(coor_t_i)
+            coor_trans_o.append(coor_t_o)
+
+        trans_coor_i += coor_trans_i
+        trans_coor_o += coor_trans_o
+
+    return np.array(trans_coor_i), np.array(trans_coor_o)
 
 if __name__ == "__main__":
 
@@ -128,8 +154,10 @@ if __name__ == "__main__":
     output_coor = np.array([coor for coor in read_dir(output_dir)])
 
     logger.info("Apply the PBC and tailor the x-y coordinates.")
-    input_coor, output_coor = PBC_apply(input_coor, output_coor)
-    input_coor, output_coor = tailor_xy(input_coor, output_coor)
+    repeat = 2 # supercell (2x2)
+    trans_coor_i, trans_coor_o = expand_xy(input_coor, output_coor, repeat)
+    input_coor, output_coor = PBC_apply(trans_coor_i, trans_coor_o)
+    input_coor, output_coor = tailor_xy(input_coor, output_coor, repeat)
 
     logger.info("Expand the data in z-direction.")
     input_coor = data_ztrans(input_coor, 0.2, 2)

@@ -1,10 +1,11 @@
 #!/usr/bin/env python
 
+import itertools
 import os
 import random
-import logging
-import itertools
+
 import numpy as np
+
 from _logger import *
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # 屏蔽TF日志输出
@@ -58,19 +59,17 @@ def data_ztrans(coor, boundary: float, num: int):
     return coor
 
 
-def PBC_apply(input_coor, output_coor):
+def pbc_apply(input_arr, output_arr):
+    data_input_arr = input_arr.copy()
+    data_output_arr = output_arr.copy()
+    data_output_arr = np.where((data_input_arr - data_output_arr) > 0.5, data_output_arr + 1, data_output_arr)
+    data_output_arr = np.where((data_input_arr - data_output_arr) < -0.5, data_output_arr - 1, data_output_arr)
 
-    data_input = input_coor.copy()
-    data_output = output_coor.copy()
-    data_output = np.where((data_input - data_output) > 0.5, data_output + 1, data_output)
-    data_output = np.where((data_input - data_output) < -0.5, data_output - 1, data_output)
-
-    return data_input, data_output
+    return data_input_arr, data_output_arr
 
 
 def remove_repeat(findit_ij):
-
-    findit = [(i, j) for i, j in zip(findit_ij[0], findit_ij[1])]
+    findit = [(mesh_x, mesh_y) for mesh_x, mesh_y in zip(findit_ij[0], findit_ij[1])]
     findit_set = set(findit)
     findit_arr = np.array(list(findit_set))
     try:
@@ -81,71 +80,70 @@ def remove_repeat(findit_ij):
     return findit
 
 
-def run_tailor_xy(data_input, data_output, repeat, flag = "n"):
-
-    trans_ = [_ for _ in range(repeat)]
+def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, flag="n"):
+    trans_ = [_ for _ in range(repeat_unit)]
     trans = list(itertools.product(trans_, trans_, [0]))
 
-    for index, (i, j) in enumerate(zip(data_input, data_output)):
-        finditi = np.where((i<0)) if flag=="n" else np.where((i>1))
-        finditj = np.where((j<0)) if flag=="n" else np.where((j>1))
+    for fileno, (i_, j_) in enumerate(zip(data_input_arr, data_output_arr)):
+        finditi = np.where((i_ < 0)) if flag == "n" else np.where((i_ > 1))
+        finditj = np.where((j_ < 0)) if flag == "n" else np.where((j_ > 1))
         findit_ij = (np.concatenate([finditi[0], finditj[0]]), np.concatenate([finditi[1], finditj[1]]))
         findit = remove_repeat(findit_ij)
         i_news = []
         j_news = []
-        for i_new, j_new in zip(i[findit], j[findit]):
+        for i_new, j_new in zip(i_[findit], j_[findit]):
             count = 0
             ori_i_new, ori_j_new = i_new, j_new
             while True:
-                i_new = i_new + 1 if flag=="n" else i_new - 1
-                j_new = j_new + 1 if flag=="n" else j_new - 1
+                i_new = i_new + 1 if flag == "n" else i_new - 1
+                j_new = j_new + 1 if flag == "n" else j_new - 1
                 count += 1
-                if ((i_new >= 0 and i_new <= 1 and j_new >= 0 and j_new <= 1)):
+                if 0 <= i_new <= 1 and 0 <= j_new <= 1:
                     i_news.append(i_new)
                     j_news.append(j_new)
                     break
-                if count>=10:
+                if count >= 10:
                     i_news.append(ori_i_new)
                     j_news.append(ori_j_new)
-                    logger.warning(f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} index = {trans[(index+1) % 4]}")
+                    logger.warning(
+                        f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} fileno = {trans[(fileno + 1) % 4]}")
                     break
-        i[findit], j[findit] = i_news, j_news
+        i_[findit], j_[findit] = i_news, j_news
 
-    return data_input, data_output
-
-
-def tailor_xy(input_coor, output_coor, repeat):
-
-    data_input = input_coor.copy()
-    data_output = output_coor.copy()
-
-    data_input, data_output = run_tailor_xy(data_input, data_output, repeat, "n")
-    data_input, data_output = run_tailor_xy(data_input, data_output, repeat, "p")
-
-    return data_input, data_output
+    return data_input_arr, data_output_arr
 
 
-def expand_xy(input_coor, output_coor, repeat):
+def tailor_xy(input_arr, output_arr, repeat_unit):
+    data_input_arr = input_arr.copy()
+    data_output_arr = output_arr.copy()
 
-    trans_coor_i, trans_coor_o = [], []
-    for coor_i, coor_o in  zip(input_coor, output_coor):
-        trans = [_ for _ in range(repeat)]
+    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "n")
+    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "p")
+
+    return data_input_arr, data_output_arr
+
+
+def expand_xy(input_arr, output_arr, repeat_unit):
+    trans_coor_i_iner, trans_coor_o_iner = [], []
+    for coor_i, coor_o in zip(input_arr, output_arr):
+        trans = [_ for _ in range(repeat_unit)]
         coor_trans_i, coor_trans_o = [], []
 
-        for item in itertools.product(trans,trans,[0]):
-            coor_t_i = coor_i + np.array(item)/repeat
-            coor_t_o = coor_o + np.array(item)/repeat
+        for item in itertools.product(trans, trans, [0]):
+            coor_t_i = coor_i + np.array(item) / repeat_unit
+            coor_t_o = coor_o + np.array(item) / repeat_unit
 
-            coor_t_i = np.where(coor_t_i>1, coor_t_i-1, coor_t_i)
-            coor_t_o = np.where(coor_t_o>1, coor_t_o-1, coor_t_o)
+            coor_t_i = np.where(coor_t_i > 1, coor_t_i - 1, coor_t_i)
+            coor_t_o = np.where(coor_t_o > 1, coor_t_o - 1, coor_t_o)
 
             coor_trans_i.append(coor_t_i)
             coor_trans_o.append(coor_t_o)
 
-        trans_coor_i += coor_trans_i
-        trans_coor_o += coor_trans_o
+        trans_coor_i_iner += coor_trans_i
+        trans_coor_o_iner += coor_trans_o
 
-    return np.array(trans_coor_i), np.array(trans_coor_o)
+    return np.array(trans_coor_i_iner), np.array(trans_coor_o_iner)
+
 
 if __name__ == "__main__":
 
@@ -154,9 +152,9 @@ if __name__ == "__main__":
     output_coor = np.array([coor for coor in read_dir(output_dir)])
 
     logger.info("Apply the PBC and tailor the x-y coordinates.")
-    repeat = 2 # supercell (2x2)
+    repeat = 2  # supercell (2x2)
     trans_coor_i, trans_coor_o = expand_xy(input_coor, output_coor, repeat)
-    input_coor, output_coor = PBC_apply(trans_coor_i, trans_coor_o)
+    input_coor, output_coor = pbc_apply(trans_coor_i, trans_coor_o)
     input_coor, output_coor = tailor_xy(input_coor, output_coor, repeat)
 
     logger.info("Expand the data in z-direction.")
@@ -207,7 +205,7 @@ if __name__ == "__main__":
         train_input = np.array(shuffle_train_input)
         train_output = np.array(shuffle_train_output)
 
-        test_input = test_input.reshape((test_input.shape[0], 38 *3))
+        test_input = test_input.reshape((test_input.shape[0], 38 * 3))
         test_output = test_output.reshape((test_output.shape[0], 38 * 3))
 
         history = model.fit(train_input, train_output, epochs=30, batch_size=2, validation_split=0.1)
@@ -215,7 +213,6 @@ if __name__ == "__main__":
 
         avg_loss += scores[0]
         avg_mae += scores[1]
-
 
     logger.info("K fold average mae: {}".format(avg_mae / n_split))
     logger.info("K fold average loss: {}".format(avg_loss / n_split))

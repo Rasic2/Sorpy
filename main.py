@@ -106,7 +106,7 @@ def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, flag="n"):
                     i_news.append(ori_i_new)
                     j_news.append(ori_j_new)
                     logger.warning(
-                        f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} fileno = {trans[(fileno + 1) % 4]}")
+                        f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} index = {trans[(fileno + 1) % 4]}")
                     break
         i_[findit], j_[findit] = i_news, j_news
 
@@ -145,6 +145,53 @@ def expand_xy(input_arr, output_arr, repeat_unit):
     return np.array(trans_coor_i_iner), np.array(trans_coor_o_iner)
 
 
+def k_fold_validation(model_iner, n_split_iner, data_input_arr, data_output_arr):
+
+    from sklearn.model_selection import KFold
+
+    avg_mae_iner = 0
+    avg_loss_iner = 0
+
+    def tailor_atom_order(train_input_iner, train_output_iner):
+
+        shuffle_train_input, shuffle_train_output = [], []
+        for i, j in zip(train_input_iner, train_output_iner):
+            k1 = list(range(12)) # _Ce atom
+            k2 = list(range(12, 36)) #_O atom
+            random.shuffle(k1)
+            random.shuffle(k2)
+            k = k1 + k2 + [36, 37] # _CO molecule
+            i = i[k]
+            j = j[k]
+            i = i.reshape(38 * 3)
+            j = j.reshape(38 * 3)
+            shuffle_train_input.append(i)
+            shuffle_train_output.append(j)
+
+        train_input_iner = np.array(shuffle_train_input)
+        train_output_iner = np.array(shuffle_train_output)
+
+        return train_input_iner, train_output_iner
+
+    for train_index, test_index in KFold(n_split_iner).split(data_input_arr):
+
+        train_input, test_input = data_input_arr[train_index], data_input_arr[test_index]
+        train_output, test_output = data_output_arr[train_index], data_output_arr[test_index]
+
+        train_input, train_output = tailor_atom_order(train_input, train_output)
+
+        test_input = test_input.reshape((test_input.shape[0], 38 * 3))
+        test_output = test_output.reshape((test_output.shape[0], 38 * 3))
+
+        model_iner.fit(train_input, train_output, epochs=30, batch_size=2, validation_split=0.1)
+        scores = model_iner.evaluate(test_input, test_output)
+
+        avg_loss_iner += scores[0]
+        avg_mae_iner += scores[1]
+
+    return avg_mae_iner, avg_loss_iner
+
+
 if __name__ == "__main__":
 
     logger.info("Load the structure information.")
@@ -160,6 +207,7 @@ if __name__ == "__main__":
     logger.info("Expand the data in z-direction.")
     input_coor = data_ztrans(input_coor, 0.2, 2)
     output_coor = data_ztrans(output_coor, 0.2, 2)
+    logger.info(f"Data Shape: {input_coor.shape}")
 
     logger.info("Shuffle the data.")
     data_input, data_output = input_coor, output_coor
@@ -170,57 +218,25 @@ if __name__ == "__main__":
 
     from keras import models
     from keras import layers
-    from sklearn.model_selection import KFold
 
     model = models.Sequential()
     model.add(layers.Dense(1024, activation='relu', input_shape=(38 * 3,)))
     model.add(layers.Dense(114))
     model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
-    n_split = 5
-    avg_mae = 0
-    avg_loss = 0
+    K_fold_flag = True
 
-    logger.info("Train and test the model applying the K-fold validation method.")
-    for train_index, test_index in KFold(n_split).split(data_input):
-
-        train_input, test_input = data_input[train_index], data_input[test_index]
-        train_output, test_output = data_output[train_index], data_output[test_index]
-
-        shuffle_train_input = []
-        shuffle_train_output = []
-        for i, j in zip(train_input, train_output):
-            k1 = list(range(12))
-            k2 = list(range(12, 36))
-            random.shuffle(k1)
-            random.shuffle(k2)
-            k = k1 + k2 + [36, 37]
-            i = i[k]
-            j = j[k]
-            i = i.reshape(38 * 3)
-            j = j.reshape(38 * 3)
-            shuffle_train_input.append(i)
-            shuffle_train_output.append(j)
-
-        train_input = np.array(shuffle_train_input)
-        train_output = np.array(shuffle_train_output)
-
-        test_input = test_input.reshape((test_input.shape[0], 38 * 3))
-        test_output = test_output.reshape((test_output.shape[0], 38 * 3))
-
-        history = model.fit(train_input, train_output, epochs=30, batch_size=2, validation_split=0.1)
-        scores = model.evaluate(test_input, test_output)
-
-        avg_loss += scores[0]
-        avg_mae += scores[1]
-
-    logger.info("K fold average mae: {}".format(avg_mae / n_split))
-    logger.info("K fold average loss: {}".format(avg_loss / n_split))
+    if K_fold_flag:
+        logger.info("Train and test the model_iner applying the K-fold validation method.")
+        n_split = 5
+        avg_mae, avg_loss = k_fold_validation(model, n_split, data_input, data_output)
+        logger.info("K fold average mae: {}".format(avg_mae / n_split))
+        logger.info("K fold average loss: {}".format(avg_loss / n_split))
 
 # test=test_input[5]
 # test=test.reshape((1,38*3))
 # print(test)
-# predict=model.predict(test)[0]
+# predict=model_iner.predict(test)[0]
 # true=test_output[5].reshape((38*3))
 # print(predict)
 # print(true)

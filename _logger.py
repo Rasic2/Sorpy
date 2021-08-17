@@ -1,5 +1,16 @@
+import os
+import time
+import inspect
 import logging
 
+current_dir = os.path.dirname(os.path.abspath(os.path.realpath(inspect.getfile(inspect.currentframe()))))
+parent_dir = os.path.dirname(current_dir)
+LOG_DIR = f"{current_dir}/logs"
+
+if not os.path.exists(LOG_DIR):
+    os.mkdir(LOG_DIR)
+
+date = time.strftime("%Y-%m-%d", time.localtime())
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 RESET_SEQ = "\033[0m"
@@ -24,7 +35,7 @@ def formatter_message(message, use_color = True):
 
 class ColoredFormatter(logging.Formatter):
 
-    def __init__(self, msg, use_color = True):
+    def __init__(self, msg, use_color = False):
 
         logging.Formatter.__init__(self, msg)
         self.use_color = use_color
@@ -43,15 +54,22 @@ class ColoredLogger(logging.Logger):
 
     FORMAT = "%(asctime)s ($BOLD%(filename)s$RESET:%(lineno)d) [$BOLD%(name)s$RESET][%(levelname)s] %(message)s"
     COLOR_FORMAT = formatter_message(FORMAT, True)
+    FILE_FORMAT = formatter_message(FORMAT, False)
 
     def __init__(self, name):
 
         logging.Logger.__init__(self, name)
-        color_formatter = ColoredFormatter(self.COLOR_FORMAT)
+        file_formatter = ColoredFormatter(self.FILE_FORMAT, False)
+        color_formatter = ColoredFormatter(self.COLOR_FORMAT, True)
 
-        console = logging.StreamHandler()
-        console.setFormatter(color_formatter)
+        fh = logging.FileHandler(f"{LOG_DIR}/{date}.txt")
+        fh.setFormatter(file_formatter)
 
-        self.addHandler(console)
+        ch = logging.StreamHandler()
+        ch.setFormatter(color_formatter)
+
+        self.addHandler(fh)
+        self.addHandler(ch)
+
 
 

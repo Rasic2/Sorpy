@@ -16,7 +16,6 @@ logger.setLevel(logging.INFO)
 
 _ELEMENT = ['Ce', 'O', 'C']
 
-current_dir = os.getcwd()
 input_dir = os.path.join(current_dir, "input")
 output_dir = os.path.join(current_dir, "output")
 

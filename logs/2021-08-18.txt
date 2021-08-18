@@ -1,0 +1,26 @@
+2021-08-18 17:20:42,250 (main.py:196) [__main__][INFO] Load the structure information.
+2021-08-18 17:20:42,435 (main.py:200) [__main__][INFO] Apply the PBC and tailor the x-y coordinates.
+2021-08-18 17:20:42,458 (main.py:107) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
+2021-08-18 17:20:42,458 (main.py:107) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (1, 0, 0)
+2021-08-18 17:20:42,473 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.007578 index = (1, 1, 0)
+2021-08-18 17:20:42,474 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.007578 index = (0, 0, 0)
+2021-08-18 17:20:42,475 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.008777 index = (1, 1, 0)
+2021-08-18 17:20:42,475 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.008777 index = (0, 0, 0)
+2021-08-18 17:20:42,476 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.002167 index = (1, 1, 0)
+2021-08-18 17:20:42,476 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.002167 index = (0, 0, 0)
+2021-08-18 17:20:42,477 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.008413 index = (1, 1, 0)
+2021-08-18 17:20:42,478 (main.py:107) [__main__][WARNING] i_new = 0.037057 j_new = -0.008413 index = (0, 0, 0)
+2021-08-18 17:20:42,497 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.026811 index = (1, 0, 0)
+2021-08-18 17:20:42,497 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.026811 index = (0, 0, 0)
+2021-08-18 17:20:42,508 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.006106 index = (1, 1, 0)
+2021-08-18 17:20:42,508 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.006106 index = (0, 0, 0)
+2021-08-18 17:20:42,509 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.016232 index = (1, 1, 0)
+2021-08-18 17:20:42,509 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.016232 index = (0, 0, 0)
+2021-08-18 17:20:42,509 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.024894 index = (1, 1, 0)
+2021-08-18 17:20:42,510 (main.py:107) [__main__][WARNING] i_new = 0.944444 j_new = 1.024894 index = (0, 0, 0)
+2021-08-18 17:20:42,513 (main.py:206) [__main__][INFO] Expand the data in z-direction.
+2021-08-18 17:20:42,528 (main.py:209) [__main__][INFO] Data Shape: (4000, 38, 3)
+2021-08-18 17:20:42,528 (main.py:211) [__main__][INFO] Shuffle the data.
+2021-08-18 17:20:46,354 (main.py:229) [__main__][INFO] Train and test the model_iner applying the K-fold validation method.
+2021-08-18 17:27:58,225 (main.py:232) [__main__][INFO] K fold average mae: 0.04390068501234055
+2021-08-18 17:27:58,225 (main.py:233) [__main__][INFO] K fold average loss: 0.0031981096137315033

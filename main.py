@@ -1,7 +1,6 @@
 #!/usr/bin/env python
 
 import itertools
-import os
 import random
 
 import numpy as np
@@ -20,14 +19,47 @@ input_dir = os.path.join(current_dir, "input")
 output_dir = os.path.join(current_dir, "output")
 
 
-def generator(filename):
+class FileManager:
+    """
+    TODO
+    """
+    pass
+
+
+class CoorTailor:
+    """
+    TODO
+    """
+    pass
+
+
+class Model:
+    """
+    TODO
+    """
+    pass
+
+
+def __generator(filename: str):
+    """
+    The coordinates __generator for reading the input/output. <helper func>
+
+    :param filename:        the filename of input/output
+    :return:                coordinate array
+    """
     with open(filename, "r") as f:
         data = f.readlines()
     coor = [[float(_) for _ in line.split()[:3]] for line in data[9:47]]
     return np.array(coor)
 
 
-def read_dir(dirname):
+def read_dir(dirname: str):
+    """
+    read the input/output coordinates
+
+    :param dirname:         the name of the directory storing the POSCAR/CONTCAR file
+    :return:                coordinates array
+    """
     if dirname.endswith("input"):
         prefix = "POSCAR"
     else:
@@ -35,16 +67,17 @@ def read_dir(dirname):
     for file in range(1, 101):
         for _ in range(1, 3):
             filename = os.path.join(dirname, f'{prefix}_{_}-{file}')
-            yield generator(filename)
+            yield __generator(filename)
 
 
 def data_ztrans(coor, boundary: float, num: int):
     """
     Put the Slab+Mol translate along the Z-axis. (Data Improver)
-    :param coor: Slab+Mol coor ndarray
-    :param boundary: max-value of the translate
-    :param num: the num of part split between the [0,boundary]
-    :return: the translate coor (len = 2*num*ori_len)
+
+    :param coor:              Slab+Mol coor ndarray
+    :param boundary:          max-value of the translate
+    :param num:               the num of part split between the [0,boundary]
+    :return:                  the translate coor (len = 2*num*ori_len)
     """
     ori_coor = coor.copy()
     for _ in range(num):
@@ -59,6 +92,13 @@ def data_ztrans(coor, boundary: float, num: int):
 
 
 def pbc_apply(input_arr, output_arr):
+    """
+    Handling the periodic-boundary-condition
+
+    :param input_arr:           input-data array
+    :param output_arr:          output-data array
+    :return:                    data_input, data_output after pbc handle
+    """
     data_input_arr = input_arr.copy()
     data_output_arr = output_arr.copy()
     data_output_arr = np.where((data_input_arr - data_output_arr) > 0.5, data_output_arr + 1, data_output_arr)
@@ -67,7 +107,13 @@ def pbc_apply(input_arr, output_arr):
     return data_input_arr, data_output_arr
 
 
-def remove_repeat(findit_ij):
+def __remove_repeat(findit_ij):
+    """
+    Removing the repeat mesh for which (coordinates < 0 or coordinates > 1) <helper func>
+
+    :param findit_ij:           input and output merge mesh (may including the repeat item)
+    :return:                    mesh after removing the repeat
+    """
     findit = [(mesh_x, mesh_y) for mesh_x, mesh_y in zip(findit_ij[0], findit_ij[1])]
     findit_set = set(findit)
     findit_arr = np.array(list(findit_set))
@@ -79,7 +125,16 @@ def remove_repeat(findit_ij):
     return findit
 
 
-def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, flag="n"):
+def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit: int, flag: str = "n"):
+    """
+    tailor_xy coordinates in (0, 1) area. (if failed print warning)
+
+    :param data_input_arr:              data_input array
+    :param data_output_arr:             data_output array
+    :param repeat_unit:                 slab-supercell (e.g. 2 represents the 2x2 slab)
+    :param flag::                       falg determing handling the (<0 or >1) case
+    :return:                            data_input_arr, data_output_arr after tailoring the xy coordinates
+    """
     trans_ = [_ for _ in range(repeat_unit)]
     trans = list(itertools.product(trans_, trans_, [0]))
 
@@ -87,7 +142,7 @@ def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, flag="n"):
         finditi = np.where((i_ < 0)) if flag == "n" else np.where((i_ > 1))
         finditj = np.where((j_ < 0)) if flag == "n" else np.where((j_ > 1))
         findit_ij = (np.concatenate([finditi[0], finditj[0]]), np.concatenate([finditi[1], finditj[1]]))
-        findit = remove_repeat(findit_ij)
+        findit = __remove_repeat(findit_ij)
         i_news = []
         j_news = []
         for i_new, j_new in zip(i_[findit], j_[findit]):
@@ -112,17 +167,33 @@ def run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, flag="n"):
     return data_input_arr, data_output_arr
 
 
-def tailor_xy(input_arr, output_arr, repeat_unit):
+def tailor_xy(input_arr, output_arr, repeat_unit: int):
+    """
+    tailor xy coordinates for (<0 or >1) case
+
+    :param input_arr:                 data_input array
+    :param output_arr:                data_output array
+    :param repeat_unit:               slab-supercell (e.g. 2 represents the 2x2 slab)
+    :return:                          data_input_arr, data_output_arr after tailoring the xy coordinates
+    """
     data_input_arr = input_arr.copy()
     data_output_arr = output_arr.copy()
 
-    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "n")
-    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "p")
+    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "n")  # xy < 0 case
+    data_input_arr, data_output_arr = run_tailor_xy(data_input_arr, data_output_arr, repeat_unit, "p")  # xy > 1 case
 
     return data_input_arr, data_output_arr
 
 
-def expand_xy(input_arr, output_arr, repeat_unit):
+def expand_xy(input_arr, output_arr, repeat_unit: int):
+    """
+    For supercell, translate the left-bottom region into other area (Data Improver)
+
+    :param input_arr:           data_input array
+    :param output_arr:          data_output array
+    :param repeat_unit:         slab-supercell (e.g. 2 represents the 2x2 slab)
+    :return:                    data_input_arr, data_output_arr after expanding the xy coordinates
+    """
     trans_coor_i_iner, trans_coor_o_iner = [], []
     for coor_i, coor_o in zip(input_arr, output_arr):
         trans = [_ for _ in range(repeat_unit)]
@@ -144,8 +215,16 @@ def expand_xy(input_arr, output_arr, repeat_unit):
     return np.array(trans_coor_i_iner), np.array(trans_coor_o_iner)
 
 
-def k_fold_validation(model_iner, n_split_iner, data_input_arr, data_output_arr):
+def k_fold_validation(model_iner, n_split_iner: int, data_input_arr, data_output_arr):
+    """
+    K fold validation method for the Model test.
 
+    :param model_iner:                      Keras.model
+    :param n_split_iner:                    how many fold
+    :param data_input_arr:                  data_input array 
+    :param data_output_arr:                 data_output array
+    :return:                                avg_mae, ave loss
+    """
     from sklearn.model_selection import KFold
 
     avg_mae_iner = 0
@@ -155,11 +234,11 @@ def k_fold_validation(model_iner, n_split_iner, data_input_arr, data_output_arr)
 
         shuffle_train_input, shuffle_train_output = [], []
         for i, j in zip(train_input_iner, train_output_iner):
-            k1 = list(range(12)) # _Ce atom
-            k2 = list(range(12, 36)) #_O atom
+            k1 = list(range(12))  # _Ce atom
+            k2 = list(range(12, 36))  # _O atom
             random.shuffle(k1)
             random.shuffle(k2)
-            k = k1 + k2 + [36, 37] # _CO molecule
+            k = k1 + k2 + [36, 37]  # _CO molecule
             i = i[k]
             j = j[k]
             i = i.reshape(38 * 3)
@@ -173,7 +252,6 @@ def k_fold_validation(model_iner, n_split_iner, data_input_arr, data_output_arr)
         return train_input_iner, train_output_iner
 
     for train_index, test_index in KFold(n_split_iner).split(data_input_arr):
-
         train_input, test_input = data_input_arr[train_index], data_input_arr[test_index]
         train_output, test_output = data_output_arr[train_index], data_output_arr[test_index]
 

@@ -1,7 +1,8 @@
 #!/usr/bin/env python
 
-import itertools
+import math
 import random
+import itertools
 
 import numpy as np
 
@@ -215,6 +216,62 @@ def expand_xy(input_arr, output_arr, repeat_unit: int):
     return np.array(trans_coor_i_iner), np.array(trans_coor_o_iner)
 
 
+def __tailor_atom_order(train_input_iner, train_output_iner):
+    """
+    Shuffle the atom order in the data_input, data_output (train set) <helper func>
+
+    :param train_input_iner:            train_input array
+    :param train_output_iner:           train_output array
+    :return:                            train_input array, train_output array after suffering the atom order
+    """
+
+    shuffle_train_input, shuffle_train_output = [], []
+    for i, j in zip(train_input_iner, train_output_iner):
+        k1 = list(range(12))  # _Ce atom
+        k2 = list(range(12, 36))  # _O atom
+        random.shuffle(k1)
+        random.shuffle(k2)
+        k = k1 + k2 + [36, 37]  # _CO molecule
+        i = i[k]
+        j = j[k]
+        i = i.reshape(38 * 3)
+        j = j.reshape(38 * 3)
+        shuffle_train_input.append(i)
+        shuffle_train_output.append(j)
+
+    train_input_iner = np.array(shuffle_train_input)
+    train_output_iner = np.array(shuffle_train_output)
+
+    return train_input_iner, train_output_iner
+
+
+def hold_out(model_iner, data_input_arr, data_output_arr, percent_iner=0.8):
+    """
+    Hold-out method for the model test.
+
+    :param model_iner:                  Keras.model
+    :param data_input_arr:              data_input array
+    :param data_output_arr:             data_output array
+    :param percent_iner:                train:test percent
+    :return:                            mae and loss
+    """
+
+    shape = data_input_arr.shape
+    count = shape[0]
+    count_train = math.ceil(count * percent_iner)
+    count_test = count - count_train
+
+    train_input_arr, train_output_arr = __tailor_atom_order(data_input_arr[:count_train], data_output_arr[:count_train])
+    test_input_arr, test_output_arr = data_input_arr[count_train:], data_output_arr[count_train:]
+    test_input_arr, test_output_arr = test_input_arr.reshape(
+        (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
+
+    model_iner.fit(train_input_arr, train_output_arr, epochs=30, batch_size=2, validation_split=0.1)
+    scores = model_iner.evaluate(test_input_arr, test_output_arr)
+
+    return scores
+
+
 def k_fold_validation(model_iner, n_split_iner: int, data_input_arr, data_output_arr):
     """
     K fold validation method for the Model test.
@@ -230,32 +287,11 @@ def k_fold_validation(model_iner, n_split_iner: int, data_input_arr, data_output
     avg_mae_iner = 0
     avg_loss_iner = 0
 
-    def tailor_atom_order(train_input_iner, train_output_iner):
-
-        shuffle_train_input, shuffle_train_output = [], []
-        for i, j in zip(train_input_iner, train_output_iner):
-            k1 = list(range(12))  # _Ce atom
-            k2 = list(range(12, 36))  # _O atom
-            random.shuffle(k1)
-            random.shuffle(k2)
-            k = k1 + k2 + [36, 37]  # _CO molecule
-            i = i[k]
-            j = j[k]
-            i = i.reshape(38 * 3)
-            j = j.reshape(38 * 3)
-            shuffle_train_input.append(i)
-            shuffle_train_output.append(j)
-
-        train_input_iner = np.array(shuffle_train_input)
-        train_output_iner = np.array(shuffle_train_output)
-
-        return train_input_iner, train_output_iner
-
     for train_index, test_index in KFold(n_split_iner).split(data_input_arr):
         train_input, test_input = data_input_arr[train_index], data_input_arr[test_index]
         train_output, test_output = data_output_arr[train_index], data_output_arr[test_index]
 
-        train_input, train_output = tailor_atom_order(train_input, train_output)
+        train_input, train_output = __tailor_atom_order(train_input, train_output)
 
         test_input = test_input.reshape((test_input.shape[0], 38 * 3))
         test_output = test_output.reshape((test_output.shape[0], 38 * 3))
@@ -301,15 +337,23 @@ if __name__ == "__main__":
     model.add(layers.Dense(114))
     model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
-    K_fold_flag = True
+    K_fold_flag = False
 
     if K_fold_flag:
-        logger.info("Train and test the model_iner applying the K-fold validation method.")
+        logger.info("Train and test the model applying the K-fold validation method.")
         n_split = 5
         avg_mae, avg_loss = k_fold_validation(model, n_split, data_input, data_output)
         logger.info("K fold average mae: {}".format(avg_mae / n_split))
         logger.info("K fold average loss: {}".format(avg_loss / n_split))
-
+    else:
+        persent = 0.8
+        logger.info(
+            f"Train and test the model applying the hold-out method. \
+            <train:test = {math.ceil(persent * 100)}:{math.ceil((1 - persent) * 100)}>")
+        loss, mae = hold_out(model, data_input, data_output)
+        logger.info(f"mae = {mae}")
+        logger.info(f"loss = {loss}")
+        
 # test=test_input[5]
 # test=test.reshape((1,38*3))
 # print(test)

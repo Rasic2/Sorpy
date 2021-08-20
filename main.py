@@ -5,6 +5,7 @@ import random
 import itertools
 
 import numpy as np
+from pymatgen.io.vasp import Poscar
 
 from _logger import *
 
@@ -19,12 +20,80 @@ _ELEMENT = ['Ce', 'O', 'C']
 input_dir = os.path.join(current_dir, "input")
 output_dir = os.path.join(current_dir, "output")
 
+class FileManager():
+    """
+        single POSCAR-like file Manager
+    """
+    def __init__(self, fname: str):
+        """
+        :param fname:   file name
+        """
+        self.fname = fname
+        self.type = fname.split("_")[0].split("/")[-1]
+        self.index = fname.split("_")[1]
 
-class FileManager:
+    def __repr__(self):
+        return f"{self.type}: {self.index}"
+
+    @property
+    def poscar(self):
+        """
+        Call the Pymatgen to read the POSCAR-like file
+
+        :return:    pymatgen.io.vasp.Poscar <class>
+        """
+        return Poscar.from_file(self.fname)
+
+    @property
+    def structure(self):
+        return self.poscar.structure
+
+    @property
+    def sites(self):
+        return self.structure.sites
+
+    @property
+    def species(self):
+        return self.structure.species
+
+    @property
+    def coords(self):
+        return self.structure.frac_coords
+
+class DirManager():
     """
-    TODO
+        Input/Output directory manager
     """
-    pass
+    def __init__(self, dname: str, type: str):
+        """
+        :param dname:       directory name
+        :param type:        determine which type of file including (e.g. POSCAR or CONTCAR)
+        """
+        self.dname = dname
+        self.type = type
+
+    def one_file(self, fname):
+        """
+        The single file manager
+
+        :param fname:   file name
+        :return:        FileManager(fname)
+        """
+        return FileManager(f"{self.dname}/{fname}")
+
+    @property
+    def all_files(self):
+        for fname in os.listdir(self.dname):
+            if fname.startswith(self.type):
+                yield FileManager(f"{self.dname}/{fname}")
+
+    @property
+    def count(self):
+        return len(list(self.all_files))
+
+    @property
+    def coords(self):
+        return np.array([file.coords for file in self.all_files])
 
 
 class CoorTailor:
@@ -39,36 +108,6 @@ class Model:
     TODO
     """
     pass
-
-
-def __generator(filename: str):
-    """
-    The coordinates __generator for reading the input/output. <helper func>
-
-    :param filename:        the filename of input/output
-    :return:                coordinate array
-    """
-    with open(filename, "r") as f:
-        data = f.readlines()
-    coor = [[float(_) for _ in line.split()[:3]] for line in data[9:47]]
-    return np.array(coor)
-
-
-def read_dir(dirname: str):
-    """
-    read the input/output coordinates
-
-    :param dirname:         the name of the directory storing the POSCAR/CONTCAR file
-    :return:                coordinates array
-    """
-    if dirname.endswith("input"):
-        prefix = "POSCAR"
-    else:
-        prefix = "CONTCAR"
-    for file in range(1, 101):
-        for _ in range(1, 3):
-            filename = os.path.join(dirname, f'{prefix}_{_}-{file}')
-            yield __generator(filename)
 
 
 def data_ztrans(coor, boundary: float, num: int):
@@ -266,7 +305,7 @@ def hold_out(model_iner, data_input_arr, data_output_arr, percent_iner=0.8):
     test_input_arr, test_output_arr = test_input_arr.reshape(
         (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
 
-    model_iner.fit(train_input_arr, train_output_arr, epochs=30, batch_size=2, validation_split=0.1)
+    model_iner.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
     scores = model_iner.evaluate(test_input_arr, test_output_arr)
 
     return scores
@@ -308,8 +347,8 @@ def k_fold_validation(model_iner, n_split_iner: int, data_input_arr, data_output
 if __name__ == "__main__":
 
     logger.info("Load the structure information.")
-    input_coor = np.array([coor for coor in read_dir(input_dir)])
-    output_coor = np.array([coor for coor in read_dir(output_dir)])
+    input_coor = DirManager("input", "POSCAR").coords
+    output_coor = DirManager("output", "CONTCAR").coords
 
     logger.info("Apply the PBC and tailor the x-y coordinates.")
     repeat = 2  # supercell (2x2)
@@ -353,7 +392,7 @@ if __name__ == "__main__":
         loss, mae = hold_out(model, data_input, data_output)
         logger.info(f"mae = {mae}")
         logger.info(f"loss = {loss}")
-        
+
 # test=test_input[5]
 # test=test.reshape((1,38*3))
 # print(test)

@@ -97,10 +97,135 @@ class DirManager():
 
 
 class CoorTailor:
-    """
-    TODO
-    """
-    pass
+
+    def __init__(self, input_arr, output_arr, repeat_unit: int):
+
+        self.input_arr, self.output_arr = input_arr, output_arr
+        self.repeat_unit = repeat_unit
+
+    def run(self):
+        self._expand_xy()
+        self._pbc_apply()
+        self._tailor_xy()
+
+    def _expand_xy(self):
+        """
+        For supercell, translate the left-bottom region into other area (Data Improver)
+
+        :param input_arr:           data_input array
+        :param output_arr:          data_output array
+        :param repeat_unit:         slab-supercell (e.g. 2 represents the 2x2 slab)
+        :return:                    data_input_arr, data_output_arr after expanding the xy coordinates
+        """
+        trans_coor_i_iner, trans_coor_o_iner = [], []
+        input_arr, output_arr = self.input_arr.copy(), self.output_arr.copy()
+
+        for coor_i, coor_o in zip(input_arr, output_arr):
+            trans = [_ for _ in range(self.repeat_unit)]
+            coor_trans_i, coor_trans_o = [], []
+
+            for item in itertools.product(trans, trans, [0]):
+                coor_t_i = coor_i + np.array(item) / self.repeat_unit
+                coor_t_o = coor_o + np.array(item) / self.repeat_unit
+
+                coor_t_i = np.where(coor_t_i > 1, coor_t_i - 1, coor_t_i)
+                coor_t_o = np.where(coor_t_o > 1, coor_t_o - 1, coor_t_o)
+
+                coor_trans_i.append(coor_t_i)
+                coor_trans_o.append(coor_t_o)
+
+            trans_coor_i_iner += coor_trans_i
+            trans_coor_o_iner += coor_trans_o
+
+        self.input_arr, self.output_arr = np.array(trans_coor_i_iner), np.array(trans_coor_o_iner)
+
+    def _pbc_apply(self):
+        """
+        Handling the periodic-boundary-condition
+
+        :param input_arr:           input-data array
+        :param output_arr:          output-data array
+        :return:                    data_input, data_output after pbc handle
+        """
+        data_input_arr, data_output_arr = self.input_arr.copy(), self.output_arr.copy()
+        data_output_arr = np.where((data_input_arr - data_output_arr) > 0.5, data_output_arr + 1, data_output_arr)
+        data_output_arr = np.where((data_input_arr - data_output_arr) < -0.5, data_output_arr - 1, data_output_arr)
+
+        self.input_arr, self.output_arr = data_input_arr, data_output_arr
+
+    def __remove_repeat(self, findit_ij):
+        """
+        Removing the repeat mesh for which (coordinates < 0 or coordinates > 1) <helper func>
+
+        :param findit_ij:           input and output merge mesh (may including the repeat item)
+        :return:                    mesh after removing the repeat
+        """
+        findit = [(mesh_x, mesh_y) for mesh_x, mesh_y in zip(findit_ij[0], findit_ij[1])]
+        findit_set = set(findit)
+        findit_arr = np.array(list(findit_set))
+        try:
+            findit = (findit_arr[:, 0], findit_arr[:, 1])
+        except IndexError:
+            findit = (np.array([], dtype=np.int64), np.array([], dtype=np.int64))
+
+        return findit
+
+    def __run_tailor_xy(self, data_input_arr, data_output_arr, flag: str = "n"):
+        """
+        tailor_xy coordinates in (0, 1) area. (if failed print warning)
+
+        :param data_input_arr:              data_input array
+        :param data_output_arr:             data_output array
+        :param repeat_unit:                 slab-supercell (e.g. 2 represents the 2x2 slab)
+        :param flag::                       falg determing handling the (<0 or >1) case
+        :return:                            data_input_arr, data_output_arr after tailoring the xy coordinates
+        """
+        trans_ = [_ for _ in range(self.repeat_unit)]
+        trans = list(itertools.product(trans_, trans_, [0]))
+
+        for fileno, (i_, j_) in enumerate(zip(data_input_arr, data_output_arr)):
+            finditi = np.where((i_ < 0)) if flag == "n" else np.where((i_ > 1))
+            finditj = np.where((j_ < 0)) if flag == "n" else np.where((j_ > 1))
+            findit_ij = (np.concatenate([finditi[0], finditj[0]]), np.concatenate([finditi[1], finditj[1]]))
+            findit = self.__remove_repeat(findit_ij)
+            i_news = []
+            j_news = []
+            for i_new, j_new in zip(i_[findit], j_[findit]):
+                count = 0
+                ori_i_new, ori_j_new = i_new, j_new
+                while True:
+                    i_new = i_new + 1 if flag == "n" else i_new - 1
+                    j_new = j_new + 1 if flag == "n" else j_new - 1
+                    count += 1
+                    if 0 <= i_new <= 1 and 0 <= j_new <= 1:
+                        i_news.append(i_new)
+                        j_news.append(j_new)
+                        break
+                    if count >= 10:
+                        i_news.append(ori_i_new)
+                        j_news.append(ori_j_new)
+                        logger.warning(
+                            f"i_new = {ori_i_new:8.6f} j_new = {ori_j_new:8.6f} index = {trans[(fileno + 1) % 4]}")
+                        break
+            i_[findit], j_[findit] = i_news, j_news
+
+        return data_input_arr, data_output_arr
+
+    def _tailor_xy(self):
+        """
+        tailor xy coordinates for (<0 or >1) case
+
+        :param input_arr:                 data_input array
+        :param output_arr:                data_output array
+        :param repeat_unit:               slab-supercell (e.g. 2 represents the 2x2 slab)
+        :return:                          data_input_arr, data_output_arr after tailoring the xy coordinates
+        """
+        data_input_arr, data_output_arr = self.input_arr.copy(), self.output_arr.copy()
+
+        data_input_arr, data_output_arr = self.__run_tailor_xy(data_input_arr, data_output_arr, "n")  # xy < 0 case
+        data_input_arr, data_output_arr = self.__run_tailor_xy(data_input_arr, data_output_arr, "p")  # xy > 1 case
+
+        self.input_arr, self.output_arr = data_input_arr, data_output_arr
 
 
 class Model:
@@ -352,10 +477,18 @@ if __name__ == "__main__":
 
     logger.info("Apply the PBC and tailor the x-y coordinates.")
     repeat = 2  # supercell (2x2)
-    trans_coor_i, trans_coor_o = expand_xy(input_coor, output_coor, repeat)
-    input_coor, output_coor = pbc_apply(trans_coor_i, trans_coor_o)
-    input_coor, output_coor = tailor_xy(input_coor, output_coor, repeat)
+    #trans_coor_i, trans_coor_o = expand_xy(input_coor, output_coor, repeat)
+    CT = CoorTailor(input_coor, output_coor, repeat)
+    #print(CT.input_arr.shape)
+    CT.run()
+    #print(CT.input_arr.shape)
+    #exit()
+    #input_coor, output_coor = pbc_apply(CT.input_arr, CT.output_arr)
+    #input_coor, output_coor = pbc_apply(trans_coor_i, trans_coor_o)
+    #input_coor, output_coor = tailor_xy(CT.input_arr, CT.output_arr, repeat)
+    #input_coor, output_coor = tailor_xy(input_coor, output_coor, repeat)
 
+    input_coor, output_coor = CT.input_arr, CT.output_arr
     logger.info("Expand the data in z-direction.")
     input_coor = data_ztrans(input_coor, 0.2, 2)
     output_coor = data_ztrans(output_coor, 0.2, 2)

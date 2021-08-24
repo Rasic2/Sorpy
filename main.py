@@ -26,13 +26,25 @@ class FileManager:
         single POSCAR-like file Manager
     """
 
-    def __init__(self, fname: str):
+    def __init__(self, fname: str, mol_index=None):
         """
         :param fname:   file name
         """
         self.fname = fname
         self.type = fname.split("_")[0].split("/")[-1]
         self.index = fname.split("_")[1]
+
+        if type(mol_index) == list:
+            self.mol_index = mol_index
+        elif type(mol_index) == str:
+            if "-" in mol_index:
+                self.mol_index = list(range(int(mol_index.split("-")[0]) - 1, int(mol_index.split("-")[1])))
+            else:
+                self.mol_index = [int(mol_index)]
+        else:
+            self.mol_index = None
+            logger.warning("Can't align the Molecule.")
+
 
     def __repr__(self):
         return f"{self.type}: {self.index}"
@@ -62,19 +74,54 @@ class FileManager:
     def coords(self):
         return self.structure.frac_coords
 
+    @property
+    def atom_num(self):
+        return len(self.coords)
+
+    @property
+    def molecule(self):
+        if type(self.mol_index) == list and len(self.mol_index):
+            return [(index+1, site) for index, site in zip (self.mol_index, np.array(self.structure)[self.mol_index])]
+        else:
+            return None
+
+    @property
+    def slab(self):
+        if self.molecule:
+            self.slab_index = list(set(list(range(self.atom_num))).difference(set(self.mol_index)))
+            return [(index, site) for index, site in zip(self.slab_index, np.array(self.structure)[self.slab_index])]
+        else:
+            self.slab_index = list(range(self.atom_num))
+            return [(index, site) for index, site in enumerate(np.array(self.structure))]
+
+    def align_the_element(self):
+
+        from collections import defaultdict
+
+        self.slab
+        self.atom_dict = defaultdict(list)
+        for index, item in enumerate(self.species):
+            if index in self.slab_index:
+                self.atom_dict[item].append(index)
+            elif index in self.mol_index:
+                self.atom_dict["mol"].append(index)
+
 
 class DirManager:
     """
         Input/Output directory manager
     """
 
-    def __init__(self, dname: str, ftype: str):
+    def __init__(self, dname: str, ftype: str, mol_index = None):
         """
         :param dname:       directory name
         :param ftype:        determine which type of file including (e.g. POSCAR or CONTCAR)
         """
         self.dname = dname
         self.type = ftype
+        self.mol_index = mol_index
+        if self.mol_index:
+            logger.info(f"Molecule was align to {self.mol_index} location.")
 
     def one_file(self, fname):
         """
@@ -83,13 +130,13 @@ class DirManager:
         :param fname:   file name
         :return:        FileManager(fname)
         """
-        return FileManager(f"{self.dname}/{fname}")
+        return FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
 
     @property
     def all_files(self):
         for fname in os.listdir(self.dname):
             if fname.startswith(self.type):
-                yield FileManager(f"{self.dname}/{fname}")
+                yield FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
 
     @property
     def count(self):
@@ -98,6 +145,11 @@ class DirManager:
     @property
     def coords(self):
         return np.array([file.coords for file in self.all_files])
+
+    def split_slab_mol(self):
+        for file in self.all_files:
+            file.align_the_element()
+            return file.atom_dict
 
 
 class CoorTailor:
@@ -249,7 +301,7 @@ class CoorTailor:
 
 class Model:
 
-    def __init__(self, data_input_arr, data_output_arr, K_fold_flag):
+    def __init__(self, data_input_arr, data_output_arr, atom_list, k_fold_flag):
 
         from keras import models
         from keras import layers
@@ -262,10 +314,12 @@ class Model:
         self.data_input = data_input_arr
         self.data_output = data_output_arr
 
-        self.K_fold_flag = K_fold_flag
+        self.atom_list = atom_list
+
+        self.K_fold_flag = k_fold_flag
 
     @staticmethod
-    def __tailor_atom_order(train_input_iner, train_output_iner):
+    def __tailor_atom_order(train_input_iner, train_output_iner, atom_list):
         """
         Shuffle the atom order in the data_input, data_output (train set) <helper func>
 
@@ -275,14 +329,15 @@ class Model:
         """
 
         shuffle_train_input, shuffle_train_output = [], []
+
         for i, j in zip(train_input_iner, train_output_iner):
-            k1 = list(range(12))  # _Ce atom
-            k2 = list(range(12, 36))  # _O atom
-            random.shuffle(k1)
-            random.shuffle(k2)
-            k = k1 + k2 + [36, 37]  # _CO molecule
-            i = i[k]
-            j = j[k]
+            random_list = []
+            for key in atom_list.keys():
+                k = atom_list[key]
+                random.shuffle(k) if key != "mol" else None
+                random_list += k
+            i = i[random_list]
+            j = j[random_list]
             i = i.reshape(38 * 3)
             j = j.reshape(38 * 3)
             shuffle_train_input.append(i)
@@ -307,7 +362,8 @@ class Model:
         count_test = count - count_train
 
         train_input_arr, train_output_arr = Model.__tailor_atom_order(self.data_input[:count_train],
-                                                                      self.data_output[:count_train])
+                                                                      self.data_output[:count_train],
+                                                                      self.atom_list)
         test_input_arr, test_output_arr = self.data_input[count_train:], self.data_output[count_train:]
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
@@ -333,7 +389,7 @@ class Model:
             train_input, test_input = self.data_input[train_index], self.data_input[test_index]
             train_output, test_output = self.data_output[train_index], self.data_output[test_index]
 
-            train_input, train_output = Model.__tailor_atom_order(train_input, train_output)
+            train_input, train_output = Model.__tailor_atom_order(train_input, train_output, self.atom_list)
 
             test_input = test_input.reshape((test_input.shape[0], 38 * 3))
             test_output = test_output.reshape((test_output.shape[0], 38 * 3))
@@ -350,8 +406,14 @@ class Model:
 if __name__ == "__main__":
 
     logger.info("Load the structure information.")
-    input_coor = DirManager("input", "POSCAR").coords
-    output_coor = DirManager("output", "CONTCAR").coords
+    input_DM = DirManager("input", "POSCAR", "37-38")
+    output_DM = DirManager("output", "CONTCAR", "37-38")
+
+    input_coor = input_DM.coords
+    output_coor = output_DM.coords
+
+    atom_list = input_DM.split_slab_mol()
+    logger.info(f"The atom_list is {atom_list}")
 
     logger.info("Apply the PBC and tailor the x-y, z coordinates.")
     repeat = 2  # supercell (2x2)
@@ -369,7 +431,7 @@ if __name__ == "__main__":
     data_input = data_input[index]
     data_output = data_output[index]
 
-    model = Model(data_input, data_output, K_fold_flag=True)
+    model = Model(data_input, data_output, atom_list, k_fold_flag=False)
 
     if model.K_fold_flag:
         logger.info("Train and test the model applying the K-fold validation method.")
@@ -395,7 +457,7 @@ if __name__ == "__main__":
 # print(true)
 # print(predict-true)
 
-##### Figure #####
+# Figure #####
 # from matplotlib import pyplot as plt
 # acc = history.history['acc']
 # loss = history.history['loss']

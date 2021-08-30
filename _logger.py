@@ -71,5 +71,6 @@ class ColoredLogger(logging.Logger):
         self.addHandler(fh)
         self.addHandler(ch)
 
-
-
+logging.setLoggerClass(ColoredLogger)
+logger = logging.getLogger("__main__")
+logger.setLevel(logging.INFO)

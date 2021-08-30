@@ -260,3 +260,61 @@
 2021-08-30 11:45:54,099 (main.py:473) [__main__][INFO] mae = 0.044076256453990936
 2021-08-30 11:45:54,099 (main.py:474) [__main__][INFO] loss = 0.003063294803723693
 2021-08-30 11:45:54,099 (main.py:421) [__main__][INFO] Plotting the acc and loss curve.
+2021-08-30 14:46:07,670 (main.py:429) [main][INFO] Load the structure information.
+2021-08-30 14:46:07,670 (main.py:121) [main][INFO] Molecule was align to 37-38 location.
+2021-08-30 14:46:07,670 (main.py:121) [main][INFO] Molecule was align to 37-38 location.
+2021-08-30 14:46:08,964 (main.py:437) [main][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-08-30 14:46:08,964 (main.py:439) [main][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-08-30 14:46:08,994 (main.py:257) [main][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
+2021-08-30 14:46:08,994 (main.py:257) [main][WARNING] i_new = 0.055556 j_new = -0.026982 index = (1, 0, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.007578 index = (1, 1, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.007578 index = (0, 0, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.008777 index = (1, 1, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.008777 index = (0, 0, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.002167 index = (1, 1, 0)
+2021-08-30 14:46:09,012 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.002167 index = (0, 0, 0)
+2021-08-30 14:46:09,013 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.008413 index = (1, 1, 0)
+2021-08-30 14:46:09,013 (main.py:257) [main][WARNING] i_new = 0.037057 j_new = -0.008413 index = (0, 0, 0)
+2021-08-30 14:46:09,018 (main.py:257) [main][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-08-30 14:46:09,019 (main.py:257) [main][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-08-30 14:46:09,022 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.008735 index = (1, 0, 0)
+2021-08-30 14:46:09,022 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.008735 index = (0, 0, 0)
+2021-08-30 14:46:09,022 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-08-30 14:46:09,023 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-08-30 14:46:09,024 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.012956 index = (1, 0, 0)
+2021-08-30 14:46:09,024 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.012956 index = (0, 0, 0)
+2021-08-30 14:46:09,024 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.031759 index = (1, 1, 0)
+2021-08-30 14:46:09,024 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.031759 index = (0, 0, 0)
+2021-08-30 14:46:09,024 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.025653 index = (1, 1, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.025653 index = (0, 0, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.027806 index = (1, 1, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.027806 index = (0, 0, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.016229 index = (1, 1, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.016229 index = (0, 0, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.007869 index = (1, 1, 0)
+2021-08-30 14:46:09,025 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.007869 index = (0, 0, 0)
+2021-08-30 14:46:09,026 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.007243 index = (1, 0, 0)
+2021-08-30 14:46:09,026 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.007243 index = (0, 0, 0)
+2021-08-30 14:46:09,026 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.032678 index = (1, 1, 0)
+2021-08-30 14:46:09,026 (main.py:257) [main][WARNING] i_new = 0.029989 j_new = -0.032678 index = (0, 0, 0)
+2021-08-30 14:46:09,027 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.006315 index = (1, 0, 0)
+2021-08-30 14:46:09,027 (main.py:257) [main][WARNING] i_new = 0.004423 j_new = -0.006315 index = (0, 0, 0)
+2021-08-30 14:46:09,033 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.026811 index = (1, 0, 0)
+2021-08-30 14:46:09,034 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.026811 index = (0, 0, 0)
+2021-08-30 14:46:09,050 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.006106 index = (1, 1, 0)
+2021-08-30 14:46:09,050 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.006106 index = (0, 0, 0)
+2021-08-30 14:46:09,050 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.016232 index = (1, 1, 0)
+2021-08-30 14:46:09,051 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.016232 index = (0, 0, 0)
+2021-08-30 14:46:09,051 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.024894 index = (1, 1, 0)
+2021-08-30 14:46:09,051 (main.py:257) [main][WARNING] i_new = 0.944444 j_new = 1.024894 index = (0, 0, 0)
+2021-08-30 14:46:09,088 (main.py:446) [main][INFO] Data Shape: (6000, 38, 3)
+2021-08-30 14:46:09,088 (main.py:448) [main][INFO] Shuffle the data.
+2021-08-30 14:46:11,431 (main.py:465) [main][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-08-30 14:46:24,437 (generate_adsorbate.py:117) [main][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 14:50:57,724 (generate_adsorbate.py:120) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:07:02,920 (generate_adsorbate.py:124) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:07:47,205 (generate_adsorbate.py:124) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:11:55,850 (generate_adsorbate.py:127) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:14:09,397 (generate_adsorbate.py:127) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:28:02,040 (generate_adsorbate.py:130) [__main__][INFO] Generate the VASP input file-POSCAR.
+2021-08-30 15:33:33,606 (generate_adsorbate.py:133) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.

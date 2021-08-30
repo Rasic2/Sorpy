@@ -11,10 +11,6 @@ from _logger import *
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # 屏蔽TF日志输出
 
-logging.setLoggerClass(ColoredLogger)
-logger = logging.getLogger(__name__)
-logger.setLevel(logging.INFO)
-
 _ELEMENT = ['Ce', 'O', 'C']
 
 input_dir = os.path.join(current_dir, "input")

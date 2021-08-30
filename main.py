@@ -45,6 +45,8 @@ class FileManager:
             self.mol_index = None
             logger.warning("Can't align the Molecule.")
 
+        from collections import defaultdict
+        self.atom_dict = defaultdict(list)
 
     def __repr__(self):
         return f"{self.type}: {self.index}"
@@ -81,30 +83,29 @@ class FileManager:
     @property
     def molecule(self):
         if type(self.mol_index) == list and len(self.mol_index):
-            return [(index+1, site) for index, site in zip (self.mol_index, np.array(self.structure)[self.mol_index])]
+            return [(ii + 1, site) for ii, site in zip(self.mol_index, np.array(self.structure)[self.mol_index])]
         else:
             return None
 
-    @property
-    def slab(self):
+    def _setter_slab_index(self):
         if self.molecule:
             self.slab_index = list(set(list(range(self.atom_num))).difference(set(self.mol_index)))
-            return [(index, site) for index, site in zip(self.slab_index, np.array(self.structure)[self.slab_index])]
         else:
             self.slab_index = list(range(self.atom_num))
-            return [(index, site) for index, site in enumerate(np.array(self.structure))]
+
+    @property
+    def slab(self):
+        self._setter_slab_index()
+        return [(ii, site) for ii, site in zip(self.slab_index, np.array(self.structure)[self.slab_index])]
 
     def align_the_element(self):
 
-        from collections import defaultdict
-
-        self.slab
-        self.atom_dict = defaultdict(list)
-        for index, item in enumerate(self.species):
-            if index in self.slab_index:
-                self.atom_dict[item].append(index)
-            elif index in self.mol_index:
-                self.atom_dict["mol"].append(index)
+        self._setter_slab_index()
+        for ii, item in enumerate(self.species):
+            if ii in self.slab_index:
+                self.atom_dict[item].append(ii)
+            elif ii in self.mol_index:
+                self.atom_dict["mol"].append(ii)
 
 
 class DirManager:
@@ -112,7 +113,7 @@ class DirManager:
         Input/Output directory manager
     """
 
-    def __init__(self, dname: str, ftype: str, mol_index = None):
+    def __init__(self, dname: str, ftype: str, mol_index=None):
         """
         :param dname:       directory name
         :param ftype:        determine which type of file including (e.g. POSCAR or CONTCAR)
@@ -301,7 +302,7 @@ class CoorTailor:
 
 class Model:
 
-    def __init__(self, data_input_arr, data_output_arr, atom_list, k_fold_flag):
+    def __init__(self, data_input_arr, data_output_arr, atom_list_iner, k_fold_flag):
 
         from keras import models
         from keras import layers
@@ -314,12 +315,12 @@ class Model:
         self.data_input = data_input_arr
         self.data_output = data_output_arr
 
-        self.atom_list = atom_list
+        self.atom_list = atom_list_iner
 
         self.K_fold_flag = k_fold_flag
 
     @staticmethod
-    def __tailor_atom_order(train_input_iner, train_output_iner, atom_list):
+    def __tailor_atom_order(train_input_iner, train_output_iner, atom_list_iner):
         """
         Shuffle the atom order in the data_input, data_output (train set) <helper func>
 
@@ -332,8 +333,8 @@ class Model:
 
         for i, j in zip(train_input_iner, train_output_iner):
             random_list = []
-            for key in atom_list.keys():
-                k = atom_list[key]
+            for key in atom_list_iner.keys():
+                k = atom_list_iner[key]
                 random.shuffle(k) if key != "mol" else None
                 random_list += k
             i = i[random_list]
@@ -368,10 +369,10 @@ class Model:
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
 
-        self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
+        history = self.model.fit(train_input_arr, train_output_arr, epochs=30, batch_size=2, validation_split=0.1)
         scores = self.model.evaluate(test_input_arr, test_output_arr)
 
-        return scores
+        return history, scores
 
     def k_fold_validation(self, n_split_iner: int):
         """
@@ -401,6 +402,30 @@ class Model:
             avg_mae_iner += scores[1]
 
         return avg_mae_iner, avg_loss_iner
+
+
+class Ploter:
+
+    def __init__(self, history_i):
+
+        self.history = history_i
+
+        self.acc = self.history.history['mae']
+        self.loss = self.history.history['loss']
+        self.val_acc = self.history.history['val_mae']
+        self.val_loss = self.history.history['val_loss']
+        self.epochs = range(1, len(self.acc) + 1)
+
+    def plot(self):
+
+        logger.info("Plotting the acc and loss curve.")
+
+        from matplotlib import pyplot as plt
+        plt.plot(self.epochs, self.acc, "ro")
+        plt.plot(self.epochs, self.val_acc, 'r')
+        plt.plot(self.epochs, self.loss, "bo")
+        plt.plot(self.epochs, self.val_loss, 'b')
+        plt.show()
 
 
 if __name__ == "__main__":
@@ -444,29 +469,9 @@ if __name__ == "__main__":
         logger.info(
             f"Train and test the model applying the hold-out method. \
             <train:test = {math.ceil(persent * 100)}:{math.ceil((1 - persent) * 100)}>")
-        loss, mae = model.hold_out()
+        history, (loss, mae) = model.hold_out()
         logger.info(f"mae = {mae}")
         logger.info(f"loss = {loss}")
 
-# test=test_input[5]
-# test=test.reshape((1,38*3))
-# print(test)
-# predict=model_iner.predict(test)[0]
-# true=test_output[5].reshape((38*3))
-# print(predict)
-# print(true)
-# print(predict-true)
-
-# Figure #####
-# from matplotlib import pyplot as plt
-# acc = history.history['acc']
-# loss = history.history['loss']
-# val_acc = history.history['val_acc']
-# val_loss = history.history['val_loss']
-# epochs = range(1,len(acc)+1)
-
-# plt.plot(epochs,acc,"ro")
-# plt.plot(epochs,val_acc,'r')
-# plt.plot(epochs,loss,"bo")
-# plt.plot(epochs,val_loss,'b')
-# plt.show()
+        p = Ploter(history)
+        p.plot()

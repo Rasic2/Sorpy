@@ -1,0 +1,14 @@
+# crystal information
+SpaceGroup: "Fm-3m"
+LatticeParameter: 5.450
+Species: ["Ce", "O"]
+Coordinates: [[0, 0, 0], [0.25, 0.25, 0.25]]
+
+# surface information
+MillerIndex: (1, 1, 0)
+SlabThickness: 3.0
+VacuumHeight: 15.0
+supercell: (2, 2, 1)
+
+# adsorbate information
+z_height: 17.5

@@ -12,34 +12,32 @@ from pymatgen.core.sites import Site
 from pymatgen.io.vasp import Poscar
 
 from _logger import *
+from load_yaml import PM
 
 CAL_DIR = os.path.join(current_dir, "cal")
 surface_111_DIR = os.path.join(CAL_DIR, "111")
 surface_110_DIR = os.path.join(CAL_DIR, "110")
 
-warnings.filterwarnings("ignore") # Ignore the warning output
+warnings.filterwarnings("ignore")  # Ignore the warning output
 
-def surface_cleave( miller: tuple, latt_abc: float = 5.450, supercell: tuple = (2, 2, 1)):
+
+def surface_cleave(miller: tuple):
     """
     Cleave the specified surface according to the Miller-index
 
-    :param latt_abc:            晶格常数
     :param miller:              密勒指数，指定切哪个表面
-    :param supercell:           扩胞参数
     :return:                    表面Slab
     """
-    CeO2 = Structure.from_spacegroup("Fm-3m", Lattice.cubic(latt_abc), ["Ce", "O"], [[0, 0, 0], [0.25, 0.25, 0.25]])
+    CeO2 = Structure.from_spacegroup(PM.SpaceGroup, Lattice.cubic(PM.LatticeParameter), PM.Species, PM.Coordinates)
+    slabs = generate_all_slabs(CeO2, max_index=1, min_slab_size=PM.SlabThickness, min_vacuum_size=PM.VacuumHeight,
+                               center_slab=True, max_normal_search=1)
 
     if miller == (1, 1, 1):
-        slabs = generate_all_slabs(CeO2, max_index=1, min_slab_size=8.0, min_vacuum_size=15.0, center_slab=True,
-                                   max_normal_search=1)
         CeO2_surf = [slab for slab in slabs if slab.miller_index == miller][1]
     else:
-        slabs = generate_all_slabs(CeO2, max_index=1, min_slab_size=3.0, min_vacuum_size=15.0, center_slab=True,
-                                   max_normal_search=1)
         CeO2_surf = [slab for slab in slabs if slab.miller_index == miller][0]
 
-    CeO2_surf.make_supercell(supercell)
+    CeO2_surf.make_supercell(PM.supercell)
     asf_CeO2_surf = AdsorbateSiteFinder(CeO2_surf)
 
     return asf_CeO2_surf
@@ -113,29 +111,31 @@ def orthogonal_molecule_getter():
 
     return Molecules_i
 
+
 if __name__ == "__main__":
 
     if not os.path.exists(CAL_DIR):
         os.mkdir(CAL_DIR)
 
-    side_ref = 7.707464 # 111 surface <latt_abc>
-    miller = (1, 1, 0)
-    z_height = 17.5
+    side_ref = PM.LatticeParameter / math.sqrt(2) * 2  # 111 surface <latt_abc>
 
-    #asf_CeO2_surf = surface_cleave((1, 1, 1))
-    asf_CeO2_surf = surface_cleave(miller)
+    # asf_CeO2_surf = surface_cleave((1, 1, 1))
+    asf_CeO2_surf = surface_cleave(PM.MillerIndex)
     latt = asf_CeO2_surf.slab.lattice.matrix[:2, :2]
     side_a = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.a / side_ref))
     side_b = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.b / side_ref))
     side_arr = np.linspace(0, 0.5, num=10)
     Molecules = orthogonal_molecule_getter()
 
-    logger.info(f"Generate the VASP input file-POSCAR for the {miller} surface.")
+    logger.info(f"Generate the VASP input file-POSCAR for the {PM.MillerIndex} surface.")
+    logger.info(f"The related parameters are listed below. \n Setting Parameters: \n {PM.__dict__}")
+    # TODO formated dict output
+
     for i, item in enumerate(Molecules):
         count = 0
         for j in itertools.product(side_a, side_b):
             Mat2 = np.dot(j, latt)
-            CO_ads = asf_CeO2_surf.add_adsorbate(item, [Mat2[0], Mat2[1], z_height])
+            CO_ads = asf_CeO2_surf.add_adsorbate(item, [Mat2[0], Mat2[1], PM.z_height])
             for site in CO_ads.sites:
                 site.properties['selective_dynamics'] = [True, True, True]
             count += 1

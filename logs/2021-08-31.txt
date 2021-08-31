@@ -1,0 +1,131 @@
+2021-08-31 17:01:27,918 (generate_adsorbate.py:134) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:04:36,021 (generate_adsorbate.py:134) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:14:26,694 (generate_adsorbate.py:129) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:18:00,780 (generate_adsorbate.py:129) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:18:00,780 (generate_adsorbate.py:130) [__main__][INFO] Setting Parameters: {'fname': 'setting.yaml', 'SpaceGroup': 'Fm-3m', 'LatticeParameter': 5.45, 'Species': ['Ce', 'O'], 'Coordinates': [[0, 0, 0], [0.25, 0.25, 0.25]], 'MillerIndex': (1, 1, 0), 'SlabThickness': 3.0, 'VacuumHeight': 15.0, 'supercell': (2, 2, 1), 'z_height': 17.5}
+2021-08-31 17:18:13,126 (generate_adsorbate.py:129) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:18:13,126 (generate_adsorbate.py:130) [__main__][INFO] Setting Parameters: 
+ {'fname': 'setting.yaml', 'SpaceGroup': 'Fm-3m', 'LatticeParameter': 5.45, 'Species': ['Ce', 'O'], 'Coordinates': [[0, 0, 0], [0.25, 0.25, 0.25]], 'MillerIndex': (1, 1, 0), 'SlabThickness': 3.0, 'VacuumHeight': 15.0, 'supercell': (2, 2, 1), 'z_height': 17.5}
+2021-08-31 17:18:54,455 (generate_adsorbate.py:129) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:18:54,455 (generate_adsorbate.py:130) [__main__][INFO] 
+ Setting Parameters: 
+ {'fname': 'setting.yaml', 'SpaceGroup': 'Fm-3m', 'LatticeParameter': 5.45, 'Species': ['Ce', 'O'], 'Coordinates': [[0, 0, 0], [0.25, 0.25, 0.25]], 'MillerIndex': (1, 1, 0), 'SlabThickness': 3.0, 'VacuumHeight': 15.0, 'supercell': (2, 2, 1), 'z_height': 17.5}
+2021-08-31 17:19:54,629 (generate_adsorbate.py:129) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:19:54,629 (generate_adsorbate.py:130) [__main__][INFO] The related parameters are listed below. 
+ Setting Parameters: 
+ {'fname': 'setting.yaml', 'SpaceGroup': 'Fm-3m', 'LatticeParameter': 5.45, 'Species': ['Ce', 'O'], 'Coordinates': [[0, 0, 0], [0.25, 0.25, 0.25]], 'MillerIndex': (1, 1, 0), 'SlabThickness': 3.0, 'VacuumHeight': 15.0, 'supercell': (2, 2, 1), 'z_height': 17.5}
+2021-08-31 17:24:05,435 (generate_adsorbate.py:131) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:24:05,435 (generate_adsorbate.py:132) [__main__][INFO] The related parameters are listed below. 
+ Setting Parameters: 
+ {
+    "fname": "setting.yaml",
+    "SpaceGroup": "Fm-3m",
+    "LatticeParameter": 5.45,
+    "Species": [
+        "Ce",
+        "O"
+    ],
+    "Coordinates": [
+        [
+            0,
+            0,
+            0
+        ],
+        [
+            0.25,
+            0.25,
+            0.25
+        ]
+    ],
+    "MillerIndex": [
+        1,
+        1,
+        0
+    ],
+    "SlabThickness": 3.0,
+    "VacuumHeight": 15.0,
+    "supercell": [
+        2,
+        2,
+        1
+    ],
+    "z_height": 17.5
+}
+2021-08-31 17:24:30,091 (generate_adsorbate.py:131) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:24:30,092 (generate_adsorbate.py:132) [__main__][INFO] The related parameters are listed below. 
+ Setting Parameters: 
+ {
+        "fname": "setting.yaml",
+        "SpaceGroup": "Fm-3m",
+        "LatticeParameter": 5.45,
+        "Species": [
+                "Ce",
+                "O"
+        ],
+        "Coordinates": [
+                [
+                        0,
+                        0,
+                        0
+                ],
+                [
+                        0.25,
+                        0.25,
+                        0.25
+                ]
+        ],
+        "MillerIndex": [
+                1,
+                1,
+                0
+        ],
+        "SlabThickness": 3.0,
+        "VacuumHeight": 15.0,
+        "supercell": [
+                2,
+                2,
+                1
+        ],
+        "z_height": 17.5
+}
+2021-08-31 17:24:37,492 (generate_adsorbate.py:131) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:24:37,492 (generate_adsorbate.py:132) [__main__][INFO] The related parameters are listed below. 
+ Setting Parameters: 
+ {
+ "fname": "setting.yaml",
+ "SpaceGroup": "Fm-3m",
+ "LatticeParameter": 5.45,
+ "Species": [
+  "Ce",
+  "O"
+ ],
+ "Coordinates": [
+  [
+   0,
+   0,
+   0
+  ],
+  [
+   0.25,
+   0.25,
+   0.25
+  ]
+ ],
+ "MillerIndex": [
+  1,
+  1,
+  0
+ ],
+ "SlabThickness": 3.0,
+ "VacuumHeight": 15.0,
+ "supercell": [
+  2,
+  2,
+  1
+ ],
+ "z_height": 17.5
+}
+2021-08-31 17:25:26,167 (generate_adsorbate.py:131) [__main__][INFO] Generate the VASP input file-POSCAR for the (1, 1, 0) surface.
+2021-08-31 17:25:26,167 (generate_adsorbate.py:132) [__main__][INFO] The related parameters are listed below. 
+ Setting Parameters: 
+ {'fname': 'setting.yaml', 'SpaceGroup': 'Fm-3m', 'LatticeParameter': 5.45, 'Species': ['Ce', 'O'], 'Coordinates': [[0, 0, 0], [0.25, 0.25, 0.25]], 'MillerIndex': (1, 1, 0), 'SlabThickness': 3.0, 'VacuumHeight': 15.0, 'supercell': (2, 2, 1), 'z_height': 17.5}

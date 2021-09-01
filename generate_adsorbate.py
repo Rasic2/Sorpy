@@ -1,6 +1,7 @@
 #!/usr/bin/env python
 
 import math
+import random
 import warnings
 import itertools
 
@@ -111,6 +112,25 @@ def orthogonal_molecule_getter():
 
     return Molecules_i
 
+
+def random_molecule_getter():
+    theta=random.random() * 180
+    phi = random.random() * 360
+    CO = Molecule(["C", "O"], [[0, 0, 0], [0, 0, 1.142]])
+    CO_new = rotate_molecule(CO, list(range(len(CO.sites))), theta=theta, phi=phi)
+
+    shiftz = 0
+    for jj in range(len(CO_new)):
+        site_i = CO_new._sites[jj]
+        if site_i.coords[2] < 0 and math.fabs(site_i.coords[2]) > shiftz:
+            shiftz = math.fabs(site_i.coords[2])
+
+    frandom = 2 * random.random() -1
+    shiftz += frandom
+
+    CO_newt = translate_molecule(CO_new, [0, 0, shiftz])
+
+    return CO_newt
 
 if __name__ == "__main__":
 

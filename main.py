@@ -365,7 +365,8 @@ class Model:
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
 
-        history = self.model.fit(train_input_arr, train_output_arr, epochs=30, batch_size=2, validation_split=0.1)
+        history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
+        self.model.save("CeO2_111_CO.h5")
         scores = self.model.evaluate(test_input_arr, test_output_arr)
 
         return history, scores

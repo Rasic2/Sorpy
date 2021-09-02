@@ -392,13 +392,14 @@ class Model:
             test_input = test_input.reshape((test_input.shape[0], 38 * 3))
             test_output = test_output.reshape((test_output.shape[0], 38 * 3))
 
-            self.model.fit(train_input, train_output, epochs=30, batch_size=2, validation_split=0.1)
+            history = self.model.fit(train_input, train_output, epochs=30, batch_size=2, validation_split=0.1)
             scores = self.model.evaluate(test_input, test_output)
 
             avg_loss_iner += scores[0]
             avg_mae_iner += scores[1]
 
-        return avg_mae_iner, avg_loss_iner
+        self.model.save("CeO2_111_CO_kfold.h5")
+        return history, avg_mae_iner, avg_loss_iner
 
 
 class Ploter:
@@ -413,7 +414,7 @@ class Ploter:
         self.val_loss = self.history.history['val_loss']
         self.epochs = range(1, len(self.acc) + 1)
 
-    def plot(self):
+    def plot(self, fname):
 
         logger.info("Plotting the acc and loss curve.")
 
@@ -422,7 +423,7 @@ class Ploter:
         plt.plot(self.epochs, self.val_acc, 'r')
         plt.plot(self.epochs, self.loss, "bo")
         plt.plot(self.epochs, self.val_loss, 'b')
-        plt.show()
+        plt.savefig(fname)
 
 
 if __name__ == "__main__":
@@ -453,12 +454,12 @@ if __name__ == "__main__":
     data_input = data_input[index]
     data_output = data_output[index]
 
-    model = Model(data_input, data_output, atom_list, k_fold_flag=False)
+    model = Model(data_input, data_output, atom_list, k_fold_flag=True)
 
     if model.K_fold_flag:
         logger.info("Train and test the model applying the K-fold validation method.")
         n_split = 5
-        avg_mae, avg_loss = model.k_fold_validation(n_split)
+        history, avg_mae, avg_loss = model.k_fold_validation(n_split)
         logger.info("K fold average mae: {}".format(avg_mae / n_split))
         logger.info("K fold average loss: {}".format(avg_loss / n_split))
     else:
@@ -470,5 +471,5 @@ if __name__ == "__main__":
         logger.info(f"mae = {mae}")
         logger.info(f"loss = {loss}")
 
-        p = Ploter(history)
-        p.plot()
+    p = Ploter(history)
+    p.plot("CeO2_111_history.svg")

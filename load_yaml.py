@@ -19,7 +19,7 @@ class ParameterManager:
         """
         TODO default value and type split!!!
 
-        :param filename:            setting.yaml
+        :param filename:            setting_110.yaml
         """
         self.fname = filename
 
@@ -41,6 +41,3 @@ class ParameterManager:
                     self.__dict__[key] = tuple(eval(self.__dict__[key]))
                 else:
                     raise IndexError
-
-
-PM = ParameterManager("setting.yaml")

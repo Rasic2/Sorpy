@@ -13,13 +13,16 @@ from pymatgen.core.sites import Site
 from pymatgen.io.vasp import Poscar
 
 from _logger import *
-from load_yaml import PM
+from load_yaml import ParameterManager
+from utils import format_dict
 
 CAL_DIR = os.path.join(current_dir, "cal")
 surface_111_DIR = os.path.join(CAL_DIR, "111")
 surface_110_DIR = os.path.join(CAL_DIR, "110")
 
 warnings.filterwarnings("ignore")  # Ignore the warning output
+
+PM = ParameterManager("setting_110.yaml")
 
 
 def surface_cleave(miller: tuple):
@@ -125,9 +128,6 @@ def random_molecule_getter():
         if site_i.coords[2] < 0 and math.fabs(site_i.coords[2]) > shiftz:
             shiftz = math.fabs(site_i.coords[2])
 
-    frandom = 2 * random.random() -1
-    shiftz += frandom
-
     CO_newt = translate_molecule(CO_new, [0, 0, shiftz])
 
     return CO_newt
@@ -144,12 +144,10 @@ if __name__ == "__main__":
     latt = asf_CeO2_surf.slab.lattice.matrix[:2, :2]
     side_a = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.a / side_ref))
     side_b = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.b / side_ref))
-    side_arr = np.linspace(0, 0.5, num=10)
     Molecules = orthogonal_molecule_getter()
 
     logger.info(f"Generate the VASP input file-POSCAR for the {PM.MillerIndex} surface.")
-    logger.info(f"The related parameters are listed below. \n Setting Parameters: \n {PM.__dict__}")
-    # TODO formated dict output
+    logger.info(f"The related parameters are listed below. \n{format_dict(PM.__dict__)}")
 
     for i, item in enumerate(Molecules):
         count = 0

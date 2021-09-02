@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-import math
+import random
 import numpy as np
 from keras.models import load_model
 from pymatgen.io.vasp import Poscar
@@ -40,21 +40,19 @@ if not os.path.exists(Test_DIR):
 ori_test_dir = os.path.join(Test_DIR, "ori")
 ML_test_dir = os.path.join(Test_DIR, "ML")
 
-PM = ParameterManager("test.yaml")
-side_ref = PM.LatticeParameter / math.sqrt(2) * 2  # 111 surface <latt_abc>
-
+PM = ParameterManager("test_111.yaml")
 asf_CeO2_surf = surface_cleave(PM.MillerIndex)
 latt = asf_CeO2_surf.slab.lattice.matrix[:2, :2]
-side_a = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.a / side_ref))
-side_b = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.b / side_ref))
-side_arr = np.linspace(0, 0.5, num=10)
 
 if not os.path.exists(ori_test_dir):
     os.mkdir(ori_test_dir)
 
 for ii in range(PM.TestNum):
     molecule = random_molecule_getter()
-    CO_ads = asf_CeO2_surf.add_adsorbate(molecule, [0, 0, PM.z_height])
+    j = np.random.random((1, 2))
+    Mat2 = np.dot(j, latt)
+    shiftz = 2 * random.random() - 1
+    CO_ads = asf_CeO2_surf.add_adsorbate(molecule, [Mat2[0, 0], Mat2[0, 1], PM.z_height + shiftz])
     for site in CO_ads.sites:
         site.properties['selective_dynamics'] = [True, True, True]
     p = Poscar(CO_ads)

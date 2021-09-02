@@ -11,7 +11,7 @@ VacuumHeight: 15.0
 supercell: (2, 2, 1)
 
 # adsorbate information
-z_height: 22.5
+z_height: 20.5
 
 # test-set number
 TestNum: 50

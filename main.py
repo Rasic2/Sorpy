@@ -368,8 +368,8 @@ class Model:
         history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
         self.model.save("CeO2_111_CO.h5")
         scores = self.model.evaluate(test_input_arr, test_output_arr)
-
-        return history, scores
+        print(test_input_arr[0])
+        return history, scores, self.model.predict(test_input_arr)
 
     def k_fold_validation(self, n_split_iner: int):
         """
@@ -454,7 +454,7 @@ if __name__ == "__main__":
     data_input = data_input[index]
     data_output = data_output[index]
 
-    model = Model(data_input, data_output, atom_list, k_fold_flag=True)
+    model = Model(data_input, data_output, atom_list, k_fold_flag=False)
 
     if model.K_fold_flag:
         logger.info("Train and test the model applying the K-fold validation method.")
@@ -467,7 +467,8 @@ if __name__ == "__main__":
         logger.info(
             f"Train and test the model applying the hold-out method. \
             <train:test = {math.ceil(persent * 100)}:{math.ceil((1 - persent) * 100)}>")
-        history, (loss, mae) = model.hold_out()
+        history, (loss, mae), predict_arr = model.hold_out()
+        print(predict_arr[0])
         logger.info(f"mae = {mae}")
         logger.info(f"loss = {loss}")
 

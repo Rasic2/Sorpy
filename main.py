@@ -319,6 +319,7 @@ class Model:
     def __tailor_atom_order(train_input_iner, train_output_iner, atom_list_iner):
         """
         Shuffle the atom order in the data_input, data_output (train set) <helper func>
+        TODO: Something wrong make the model work like trash !!!
 
         :param train_input_iner:            train_input array
         :param train_output_iner:           train_output array
@@ -358,9 +359,13 @@ class Model:
         count_train = math.ceil(count * percent_iner)
         count_test = count - count_train
 
-        train_input_arr, train_output_arr = Model.__tailor_atom_order(self.data_input[:count_train],
-                                                                      self.data_output[:count_train],
-                                                                      self.atom_list)
+        # train_input_arr, train_output_arr = Model.__tailor_atom_order(self.data_input[:count_train],
+        #                                                              self.data_output[:count_train],
+        #                                                              self.atom_list)
+        train_input_arr, train_output_arr = self.data_input[:count_train], self.data_output[:count_train]
+        train_input_arr, train_output_arr = train_input_arr.reshape(
+            (count_train, shape[1] * shape[2])), train_output_arr.reshape((count_train, shape[1] * shape[2]))
+
         test_input_arr, test_output_arr = self.data_input[count_train:], self.data_output[count_train:]
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
@@ -368,8 +373,8 @@ class Model:
         history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
         self.model.save("CeO2_111_CO.h5")
         scores = self.model.evaluate(test_input_arr, test_output_arr)
-        print(test_input_arr[0])
-        return history, scores, self.model.predict(test_input_arr)
+
+        return history, scores
 
     def k_fold_validation(self, n_split_iner: int):
         """
@@ -387,7 +392,10 @@ class Model:
             train_input, test_input = self.data_input[train_index], self.data_input[test_index]
             train_output, test_output = self.data_output[train_index], self.data_output[test_index]
 
-            train_input, train_output = Model.__tailor_atom_order(train_input, train_output, self.atom_list)
+            # train_input, train_output = Model.__tailor_atom_order(train_input, train_output, self.atom_list)
+
+            train_input = train_input.reshape((train_input.shape[0], 38 * 3))
+            train_output = train_output.reshape((train_output.shape[0], 38 * 3))
 
             test_input = test_input.reshape((test_input.shape[0], 38 * 3))
             test_output = test_output.reshape((test_output.shape[0], 38 * 3))
@@ -405,7 +413,6 @@ class Model:
 class Ploter:
 
     def __init__(self, history_i):
-
         self.history = history_i
 
         self.acc = self.history.history['mae']
@@ -415,7 +422,6 @@ class Ploter:
         self.epochs = range(1, len(self.acc) + 1)
 
     def plot(self, fname):
-
         logger.info("Plotting the acc and loss curve.")
 
         from matplotlib import pyplot as plt
@@ -454,7 +460,7 @@ if __name__ == "__main__":
     data_input = data_input[index]
     data_output = data_output[index]
 
-    model = Model(data_input, data_output, atom_list, k_fold_flag=False)
+    model = Model(data_input, data_output, atom_list, k_fold_flag=True)
 
     if model.K_fold_flag:
         logger.info("Train and test the model applying the K-fold validation method.")
@@ -467,10 +473,9 @@ if __name__ == "__main__":
         logger.info(
             f"Train and test the model applying the hold-out method. \
             <train:test = {math.ceil(persent * 100)}:{math.ceil((1 - persent) * 100)}>")
-        history, (loss, mae), predict_arr = model.hold_out()
-        print(predict_arr[0])
+        history, (loss, mae) = model.hold_out()
         logger.info(f"mae = {mae}")
         logger.info(f"loss = {loss}")
 
     p = Ploter(history)
-    p.plot("CeO2_111_history.svg")
+    p.plot("CeO2_111_history_kfold.svg")

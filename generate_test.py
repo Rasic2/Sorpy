@@ -38,7 +38,7 @@ if not os.path.exists(Test_DIR):
     os.mkdir(Test_DIR)
 
 ori_test_dir = os.path.join(Test_DIR, "ori")
-ML_test_dir = os.path.join(Test_DIR, "ML")
+ML_test_dir = os.path.join(Test_DIR, "ML-2")
 
 PM = ParameterManager("test_111.yaml")
 asf_CeO2_surf = surface_cleave(PM.MillerIndex)
@@ -56,7 +56,7 @@ for ii in range(PM.TestNum):
     for site in CO_ads.sites:
         site.properties['selective_dynamics'] = [True, True, True]
     p = Poscar(CO_ads)
-    p.write_file(f"{ori_test_dir}/POSCAR_ori_{ii+1}")
+    #p.write_file(f"{ori_test_dir}/POSCAR_ori_{ii+1}")
 
 test_ori_DM = DirManager("test/ori", "POSCAR", "37-38")
 test_ori_coor = test_ori_DM.coords

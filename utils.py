@@ -1,3 +1,5 @@
+import numpy as np
+
 """
 Utils functions
 
@@ -10,3 +12,6 @@ def format_dict(dict_i):
         strings += f"{key:20s}:  {value} \n"
 
     return strings.rstrip()
+
+def distance(array_i, array_j):
+    return np.linalg.norm(array_i-array_j)

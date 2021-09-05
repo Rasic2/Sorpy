@@ -305,6 +305,7 @@ class Model:
 
         self.model = models.Sequential()
         self.model.add(layers.Dense(1024, activation='relu', input_shape=(38 * 3,)))
+        #self.model.add(layers.Dense(1024, activation='relu'))
         self.model.add(layers.Dense(114))
         self.model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
@@ -438,7 +439,7 @@ if __name__ == "__main__":
     input_DM = DirManager("input", "POSCAR", "37-38")
     output_DM = DirManager("output", "CONTCAR", "37-38")
 
-    input_coor = input_DM.coords
+    input_coor = input_DM.coords # TODO: CO molecule coords use C_coor + bond_length + theta + phi, <normalization>
     output_coor = output_DM.coords
 
     atom_list = input_DM.split_slab_mol()
@@ -448,7 +449,7 @@ if __name__ == "__main__":
     repeat = 2  # supercell (2x2)
 
     CT = CoorTailor(input_coor, output_coor, repeat)
-    CT.run()
+    CT.run(boundary=0.2, num=2)
 
     input_coor, output_coor = CT.input_arr, CT.output_arr
     logger.info(f"Data Shape: {input_coor.shape}")
@@ -460,7 +461,7 @@ if __name__ == "__main__":
     data_input = data_input[index]
     data_output = data_output[index]
 
-    model = Model(data_input, data_output, atom_list, k_fold_flag=True)
+    model = Model(data_input, data_output, atom_list, k_fold_flag=False)
 
     if model.K_fold_flag:
         logger.info("Train and test the model applying the K-fold validation method.")
@@ -478,4 +479,4 @@ if __name__ == "__main__":
         logger.info(f"loss = {loss}")
 
     p = Ploter(history)
-    p.plot("CeO2_111_history_kfold.svg")
+    p.plot("CeO2_111_history.svg")

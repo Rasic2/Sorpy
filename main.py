@@ -8,6 +8,7 @@ import numpy as np
 from pymatgen.io.vasp import Poscar
 
 from _logger import *
+from common.structure import Molecule
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # 屏蔽TF日志输出
 
@@ -61,6 +62,10 @@ class FileManager:
         return self.poscar.structure
 
     @property
+    def latt(self):
+        return self.structure.lattice.matrix
+
+    @property
     def sites(self):
         return self.structure.sites
 
@@ -102,6 +107,26 @@ class FileManager:
                 self.atom_dict[item].append(ii)
             elif ii in self.mol_index:
                 self.atom_dict["mol"].append(ii)
+
+    @property
+    def mcoords(self):
+        """
+        Cal Slab frac_coors + Mol <anchor_frac + bond length + theta + phi>
+        """
+        self._setter_slab_index()
+
+        if self.molecule:
+            m = Molecule(self.coords[self.mol_index], self.latt)
+            slab_coor = self.coords[self.slab_index]
+            m_anchor = m[0].frac_coord.reshape((1, 3))
+            m.phi_m = m.phi if m.phi >= 0 else 360 + m.phi
+            m_intercoor = np.array([m.bond_length, m.theta, m.phi_m]).reshape((1, 3))
+            #m_intercoor = (m_intercoor/ [[1, 180, 360]] - [[1.142, 0, 0]])
+            if m_intercoor[0, 0] > 2 or m_intercoor[0,0] < 1:
+                print(m.frac_coords)
+                print(m.vector)
+                print(self.fname, m_intercoor[0,0])
+            return np.concatenate((slab_coor, m_anchor, m_intercoor), axis=0)
 
 
 class DirManager:
@@ -148,20 +173,32 @@ class DirManager:
             file.align_the_element()
             return file.atom_dict
 
+    @property
+    def mcoords(self):
+        return np.array([file.mcoords for file in self.all_files])
+
 
 class CoorTailor:
 
-    def __init__(self, input_arr, output_arr, repeat_unit: int):
+    def __init__(self, input_arr, output_arr, repeat_unit: int, intercoor_index = None):
 
         self.input_arr, self.output_arr = input_arr, output_arr
         self.repeat_unit = repeat_unit
+
+        self.intercoor_index = intercoor_index if intercoor_index is not None else []
+        self.total_index = list(range(input_arr.shape[1]))
+
+        if self.intercoor_index is not None:
+            self.frac_index = list(set(self.total_index).difference(set(self.intercoor_index)))
+        else:
+            self.frac_index = self.total_index
 
     def run(self, boundary: float = 0.2, num: int = 2):
         self._expand_xy()
         self._pbc_apply()
         self._tailor_xy()
-        self.input_arr = CoorTailor._tailor_z(self.input_arr, boundary, num)
-        self.output_arr = CoorTailor._tailor_z(self.output_arr, boundary, num)
+        self.input_arr = CoorTailor._tailor_z(self.input_arr, self.frac_index, self.intercoor_index, boundary, num)
+        self.output_arr = CoorTailor._tailor_z(self.output_arr, self.frac_index, self.intercoor_index, boundary, num)
 
     def _expand_xy(self):
         """
@@ -177,11 +214,14 @@ class CoorTailor:
             coor_trans_i, coor_trans_o = [], []
 
             for item in itertools.product(trans, trans, [0]):
-                coor_t_i = coor_i + np.array(item) / self.repeat_unit
-                coor_t_o = coor_o + np.array(item) / self.repeat_unit
+                coor_t_i = coor_i[self.frac_index] + np.array(item) / self.repeat_unit
+                coor_t_o = coor_o[self.frac_index] + np.array(item) / self.repeat_unit
 
                 coor_t_i = np.where(coor_t_i > 1, coor_t_i - 1, coor_t_i)
                 coor_t_o = np.where(coor_t_o > 1, coor_t_o - 1, coor_t_o)
+
+                coor_t_i = np.concatenate((coor_t_i, coor_i[self.intercoor_index]), axis=0) # inter_coor append
+                coor_t_o = np.concatenate((coor_t_o, coor_o[self.intercoor_index]), axis=0) # inter_coor append
 
                 coor_trans_i.append(coor_t_i)
                 coor_trans_o.append(coor_t_o)
@@ -197,9 +237,13 @@ class CoorTailor:
 
         :return:                    data_input, data_output after pbc handle
         """
-        data_input_arr, data_output_arr = self.input_arr.copy(), self.output_arr.copy()
+        data_input_arr, data_output_arr = self.input_arr.copy()[:, self.frac_index, :], self.output_arr.copy()[:, self.frac_index, :]
+
         data_output_arr = np.where((data_input_arr - data_output_arr) > 0.5, data_output_arr + 1, data_output_arr)
         data_output_arr = np.where((data_input_arr - data_output_arr) < -0.5, data_output_arr - 1, data_output_arr)
+
+        data_input_arr = np.concatenate((data_input_arr, self.input_arr[:, self.intercoor_index, :]), axis=1)
+        data_output_arr = np.concatenate((data_output_arr, self.output_arr[:, self.intercoor_index, :]), axis=1)
 
         self.input_arr, self.output_arr = data_input_arr, data_output_arr
 
@@ -267,15 +311,18 @@ class CoorTailor:
 
         :return:                          data_input_arr, data_output_arr after tailoring the xy coordinates
         """
-        data_input_arr, data_output_arr = self.input_arr.copy(), self.output_arr.copy()
+        data_input_arr, data_output_arr = self.input_arr.copy()[:, self.frac_index, :], self.output_arr.copy()[:, self.frac_index, :]
 
         data_input_arr, data_output_arr = self.__run_tailor_xy(data_input_arr, data_output_arr, "n")  # xy < 0 case
         data_input_arr, data_output_arr = self.__run_tailor_xy(data_input_arr, data_output_arr, "p")  # xy > 1 case
 
+        data_input_arr = np.concatenate((data_input_arr, self.input_arr[:, self.intercoor_index, :]), axis=1)
+        data_output_arr = np.concatenate((data_output_arr, self.output_arr[:, self.intercoor_index, :]), axis=1)
+
         self.input_arr, self.output_arr = data_input_arr, data_output_arr
 
     @staticmethod
-    def _tailor_z(coor, boundary: float, num: int):
+    def _tailor_z(coor, frac_index, intercoor_index, boundary: float, num: int):
         """
         Put the Slab+Mol translate along the Z-axis. (Data Improver)
 
@@ -285,14 +332,19 @@ class CoorTailor:
         :return:                  the translate coor (len = 2*num*ori_len)
         """
         ori_coor = coor.copy()
+
         for _ in range(num):
-            delta_z = (_ * boundary / num)
-            coor_p = ori_coor.copy()
-            coor_n = ori_coor.copy()
+            delta_z = ((_+1) * boundary / num)
+            coor_p = ori_coor.copy()[:, frac_index, :]
+            coor_n = ori_coor.copy()[:, frac_index, :]
             coor_p = coor_p + np.array([0.0, 0.0, delta_z])
             coor_n = coor_n + np.array([0.0, 0.0, -delta_z])
+            coor_p = np.concatenate((coor_p, ori_coor[:, intercoor_index, :]), axis=1)
+            coor_n = np.concatenate((coor_n, ori_coor[:, intercoor_index, :]), axis=1)
+
             coor = np.append(coor, coor_p, axis=0)
             coor = np.append(coor, coor_n, axis=0)
+
         return coor
 
 
@@ -305,7 +357,6 @@ class Model:
 
         self.model = models.Sequential()
         self.model.add(layers.Dense(1024, activation='relu', input_shape=(38 * 3,)))
-        #self.model.add(layers.Dense(1024, activation='relu'))
         self.model.add(layers.Dense(114))
         self.model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
@@ -371,8 +422,13 @@ class Model:
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
 
+        #print(train_input_arr[0])
+        #print(train_output_arr[0])
         history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
-        self.model.save("CeO2_111_CO.h5")
+        #predict = self.model.predict(test_input_arr)
+        #print(predict[0])
+        #print(predict[:, 111:114] * [1.142, 180, 360])
+        self.model.save("CeO2_111_CO_test.h5")
         scores = self.model.evaluate(test_input_arr, test_output_arr)
 
         return history, scores
@@ -436,11 +492,14 @@ class Ploter:
 if __name__ == "__main__":
 
     logger.info("Load the structure information.")
-    input_DM = DirManager("input", "POSCAR", "37-38")
-    output_DM = DirManager("output", "CONTCAR", "37-38")
+    input_DM = DirManager("input-test", "POSCAR", "37-38")
+    output_DM = DirManager("output-test", "CONTCAR", "37-38")
 
-    input_coor = input_DM.coords # TODO: CO molecule coords use C_coor + bond_length + theta + phi, <normalization>
-    output_coor = output_DM.coords
+    input_coor = input_DM.mcoords # TODO: CO molecule coords use C_coor + bond_length + theta + phi, <normalization>
+    output_coor = output_DM.mcoords
+
+    #input_coor = input_DM.coords
+    #output_coor = output_DM.coords
 
     atom_list = input_DM.split_slab_mol()
     logger.info(f"The atom_list is {atom_list}")
@@ -448,7 +507,7 @@ if __name__ == "__main__":
     logger.info("Apply the PBC and tailor the x-y, z coordinates.")
     repeat = 2  # supercell (2x2)
 
-    CT = CoorTailor(input_coor, output_coor, repeat)
+    CT = CoorTailor(input_coor, output_coor, repeat, intercoor_index=[37])
     CT.run(boundary=0.2, num=2)
 
     input_coor, output_coor = CT.input_arr, CT.output_arr
@@ -460,6 +519,11 @@ if __name__ == "__main__":
     random.shuffle(index)
     data_input = data_input[index]
     data_output = data_output[index]
+
+    #for i, j in zip(data_input[:,37,:], data_output[:,37,:]):
+    #    if j[0] > 2 or j[0] < 1:
+    #        print(j[0])
+    exit()
 
     model = Model(data_input, data_output, atom_list, k_fold_flag=False)
 

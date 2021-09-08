@@ -8,7 +8,7 @@ import numpy as np
 from pymatgen.io.vasp import Poscar
 
 from _logger import *
-from common.structure import Molecule
+from common.structure import Molecule, Latt
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # 屏蔽TF日志输出
 
@@ -29,7 +29,7 @@ class FileManager:
         """
         self.fname = fname
         self.type = fname.split("_")[0].split("/")[-1]
-        self.index = fname.split("_")[1]
+        self.index = fname.split("_")[-1]
 
         if type(mol_index) == list:
             self.mol_index = mol_index
@@ -44,6 +44,15 @@ class FileManager:
 
         from collections import defaultdict
         self.atom_dict = defaultdict(list)
+
+    def __eq__(self, other):
+        return self.type == other.type and self.index == other.index
+
+    def __le__(self, other):
+        return self.type == other.type and self.index <= other.index
+
+    def __gt__(self, other):
+        return self.type == other.type and self.index > other.index
 
     def __repr__(self):
         return f"{self.type}: {self.index}"
@@ -63,7 +72,7 @@ class FileManager:
 
     @property
     def latt(self):
-        return self.structure.lattice.matrix
+        return Latt(self.structure.lattice.matrix)
 
     @property
     def sites(self):
@@ -116,16 +125,12 @@ class FileManager:
         self._setter_slab_index()
 
         if self.molecule:
-            m = Molecule(self.coords[self.mol_index], self.latt)
+            m = Molecule(self.coords[self.mol_index], self.latt.matrix)
             slab_coor = self.coords[self.slab_index]
             m_anchor = m[0].frac_coord.reshape((1, 3))
             m.phi_m = m.phi if m.phi >= 0 else 360 + m.phi
             m_intercoor = np.array([m.bond_length, m.theta, m.phi_m]).reshape((1, 3))
-            #m_intercoor = (m_intercoor/ [[1, 180, 360]] - [[1.142, 0, 0]])
-            if m_intercoor[0, 0] > 2 or m_intercoor[0,0] < 1:
-                print(m.frac_coords)
-                print(m.vector)
-                print(self.fname, m_intercoor[0,0])
+            m_intercoor = (m_intercoor/ [[1, 180, 360]] - [[1.142, 0, 0]])
             return np.concatenate((slab_coor, m_anchor, m_intercoor), axis=0)
 
 
@@ -154,15 +159,19 @@ class DirManager:
         """
         return FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
 
-    @property
-    def all_files(self):
+
+    def __all_files(self):
         for fname in os.listdir(self.dname):
             if fname.startswith(self.type):
                 yield FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
 
     @property
+    def all_files(self):
+        return sorted(list(self.__all_files()))
+
+    @property
     def count(self):
-        return len(list(self.all_files))
+        return len(self.all_files)
 
     @property
     def coords(self):
@@ -194,9 +203,9 @@ class CoorTailor:
             self.frac_index = self.total_index
 
     def run(self, boundary: float = 0.2, num: int = 2):
-        self._expand_xy()
+        #self._expand_xy() # TODO delete make the model work like trash
         self._pbc_apply()
-        self._tailor_xy()
+        #self._tailor_xy() # TODO delete make the model work like trash
         self.input_arr = CoorTailor._tailor_z(self.input_arr, self.frac_index, self.intercoor_index, boundary, num)
         self.output_arr = CoorTailor._tailor_z(self.output_arr, self.frac_index, self.intercoor_index, boundary, num)
 
@@ -422,12 +431,8 @@ class Model:
         test_input_arr, test_output_arr = test_input_arr.reshape(
             (count_test, shape[1] * shape[2])), test_output_arr.reshape((count_test, shape[1] * shape[2]))
 
-        #print(train_input_arr[0])
-        #print(train_output_arr[0])
         history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
-        #predict = self.model.predict(test_input_arr)
-        #print(predict[0])
-        #print(predict[:, 111:114] * [1.142, 180, 360])
+        predict = self.model.predict(test_input_arr)
         self.model.save("CeO2_111_CO_test.h5")
         scores = self.model.evaluate(test_input_arr, test_output_arr)
 
@@ -492,14 +497,11 @@ class Ploter:
 if __name__ == "__main__":
 
     logger.info("Load the structure information.")
-    input_DM = DirManager("input-test", "POSCAR", "37-38")
-    output_DM = DirManager("output-test", "CONTCAR", "37-38")
+    input_DM = DirManager("input", "POSCAR", "37-38")
+    output_DM = DirManager("output", "CONTCAR", "37-38")
 
-    input_coor = input_DM.mcoords # TODO: CO molecule coords use C_coor + bond_length + theta + phi, <normalization>
+    input_coor = input_DM.mcoords
     output_coor = output_DM.mcoords
-
-    #input_coor = input_DM.coords
-    #output_coor = output_DM.coords
 
     atom_list = input_DM.split_slab_mol()
     logger.info(f"The atom_list is {atom_list}")
@@ -519,11 +521,6 @@ if __name__ == "__main__":
     random.shuffle(index)
     data_input = data_input[index]
     data_output = data_output[index]
-
-    #for i, j in zip(data_input[:,37,:], data_output[:,37,:]):
-    #    if j[0] > 2 or j[0] < 1:
-    #        print(j[0])
-    exit()
 
     model = Model(data_input, data_output, atom_list, k_fold_flag=False)
 

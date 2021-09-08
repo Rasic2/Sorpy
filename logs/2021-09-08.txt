@@ -1,0 +1,769 @@
+2021-09-08 09:49:45,478 (main.py:494) [__main__][INFO] Load the structure information.
+2021-09-08 09:49:45,479 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:49:45,479 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:51:32,648 (main.py:494) [__main__][INFO] Load the structure information.
+2021-09-08 09:51:32,651 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:51:32,652 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:52:44,956 (main.py:494) [__main__][INFO] Load the structure information.
+2021-09-08 09:52:44,960 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:52:44,960 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:52:47,651 (main.py:505) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 09:52:47,651 (main.py:507) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 09:52:47,700 (main.py:301) [__main__][WARNING] i_new = 0.833333 j_new = 1.045002 index = (1, 0, 0)
+2021-09-08 09:52:47,701 (main.py:301) [__main__][WARNING] i_new = 0.833333 j_new = 1.045002 index = (0, 0, 0)
+2021-09-08 09:52:47,703 (main.py:301) [__main__][WARNING] i_new = 0.555556 j_new = 1.015811 index = (1, 0, 0)
+2021-09-08 09:52:47,703 (main.py:301) [__main__][WARNING] i_new = 0.555556 j_new = 1.015811 index = (0, 0, 0)
+2021-09-08 09:52:47,732 (main.py:514) [__main__][INFO] Data Shape: (1200, 38, 3)
+2021-09-08 09:52:47,732 (main.py:516) [__main__][INFO] Shuffle the data.
+2021-09-08 09:53:21,906 (main.py:494) [__main__][INFO] Load the structure information.
+2021-09-08 09:53:21,910 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:53:21,910 (main.py:146) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:54:22,057 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 09:54:22,061 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 09:54:22,061 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:00:27,400 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:00:27,401 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:00:27,402 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:06:35,250 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:06:35,253 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:06:35,254 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:08:35,917 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:08:35,919 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:08:35,919 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:08:58,502 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:08:58,503 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:08:58,503 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:13:39,891 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:13:39,894 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:13:39,894 (main.py:148) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:14:34,674 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:14:34,678 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:14:34,678 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:14:53,731 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:14:53,731 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:14:53,732 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:15:36,949 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:15:36,952 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:15:36,952 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:16:39,551 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:16:39,555 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:16:39,555 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:21:28,579 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:21:28,586 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:21:28,587 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:23:55,106 (main.py:495) [__main__][INFO] Load the structure information.
+2021-09-08 10:23:55,109 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:23:55,109 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:26:12,970 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:26:12,973 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:26:12,974 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:26:55,949 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:26:55,949 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:26:55,949 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:27:39,985 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:27:39,988 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:27:39,988 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:29:54,527 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:29:54,528 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:29:54,528 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:30:12,801 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:30:12,804 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:30:12,808 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:30:49,889 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:30:49,893 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:30:49,893 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:32:18,286 (main.py:496) [__main__][INFO] Load the structure information.
+2021-09-08 10:32:18,289 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:32:18,290 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:33:22,249 (main.py:497) [__main__][INFO] Load the structure information.
+2021-09-08 10:33:22,252 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:33:22,252 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:37:42,410 (main.py:500) [__main__][INFO] Load the structure information.
+2021-09-08 10:37:42,413 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:37:42,414 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:38:09,207 (main.py:500) [__main__][INFO] Load the structure information.
+2021-09-08 10:38:09,210 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:38:09,210 (main.py:147) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:41:30,440 (main.py:509) [__main__][INFO] Load the structure information.
+2021-09-08 10:41:30,443 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:41:30,443 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:42:07,510 (main.py:509) [__main__][INFO] Load the structure information.
+2021-09-08 10:42:07,513 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:42:07,514 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:44:55,715 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 10:44:55,719 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:44:55,719 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:46:57,916 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 10:46:57,920 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:46:57,920 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:47:17,541 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 10:47:17,542 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:47:17,542 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:47:34,312 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 10:47:34,315 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:47:34,316 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:48:58,865 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 10:48:58,868 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 10:48:58,868 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:10:29,347 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 11:10:29,349 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:10:29,353 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:11:31,622 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 11:11:31,625 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:11:31,625 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:12:27,710 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 11:12:27,713 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:12:27,713 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:12:57,156 (main.py:508) [__main__][INFO] Load the structure information.
+2021-09-08 11:12:57,160 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 11:12:57,160 (main.py:156) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:23:12,387 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 12:23:12,390 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:23:12,390 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:25:02,941 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 12:25:02,944 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:25:02,944 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:25:05,135 (main.py:526) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 12:25:05,135 (main.py:528) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 12:25:05,206 (main.py:535) [__main__][INFO] Data Shape: (1200, 38, 3)
+2021-09-08 12:25:05,206 (main.py:537) [__main__][INFO] Shuffle the data.
+2021-09-08 12:25:34,069 (main.py:559) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 12:27:20,581 (main.py:563) [__main__][INFO] mae = 0.017906900495290756
+2021-09-08 12:27:20,585 (main.py:564) [__main__][INFO] loss = 0.0006950005772523582
+2021-09-08 12:27:20,585 (main.py:491) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 12:29:32,264 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 12:29:32,267 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:29:32,268 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 12:29:34,585 (main.py:526) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 12:29:34,586 (main.py:528) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 12:29:34,647 (main.py:535) [__main__][INFO] Data Shape: (1200, 38, 3)
+2021-09-08 12:29:34,648 (main.py:537) [__main__][INFO] Shuffle the data.
+2021-09-08 12:29:55,651 (main.py:559) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 12:31:32,909 (main.py:563) [__main__][INFO] mae = 0.015033273957669735
+2021-09-08 12:31:32,911 (main.py:564) [__main__][INFO] loss = 0.0007015836308710277
+2021-09-08 12:31:32,911 (main.py:491) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 12:36:41,000 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:06:37,780 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 13:06:37,783 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:06:37,784 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:06:59,622 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 13:06:59,625 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:06:59,625 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:07:01,885 (main.py:526) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 13:07:01,885 (main.py:528) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 13:07:01,953 (main.py:535) [__main__][INFO] Data Shape: (1200, 38, 3)
+2021-09-08 13:07:01,953 (main.py:537) [__main__][INFO] Shuffle the data.
+2021-09-08 13:07:28,973 (main.py:559) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 13:09:43,466 (main.py:563) [__main__][INFO] mae = 0.02004675380885601
+2021-09-08 13:09:43,470 (main.py:564) [__main__][INFO] loss = 0.0009612562134861946
+2021-09-08 13:09:43,470 (main.py:491) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 13:12:29,273 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 13:12:29,277 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:12:29,277 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:12:31,458 (main.py:43) [__main__][WARNING] Can't align the Molecule.
+2021-09-08 13:18:45,546 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 13:18:45,549 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:18:45,550 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:18:47,683 (main.py:526) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 13:18:47,684 (main.py:528) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 13:18:47,795 (main.py:535) [__main__][INFO] Data Shape: (1200, 38, 3)
+2021-09-08 13:18:47,795 (main.py:537) [__main__][INFO] Shuffle the data.
+2021-09-08 13:19:40,111 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:20:51,556 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:21:47,533 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:22:35,252 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:52:13,197 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:52:49,227 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:53:18,510 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 13:57:44,288 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:00:28,596 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:02:01,111 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:03:22,127 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:05:22,620 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:14:04,478 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:15:17,596 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:16:46,871 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:17:32,558 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:18:11,590 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:19:41,889 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:23:07,219 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:24:07,625 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:25:15,034 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:29:05,681 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:30:17,373 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:31:46,437 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:32:44,306 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:35:39,117 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:48:04,411 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:48:51,315 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:54:23,546 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 14:55:13,742 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 15:02:34,971 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 15:13:38,835 (main.py:503) [__main__][INFO] Load the structure information.
+2021-09-08 15:13:38,838 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 15:13:38,838 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 15:14:11,880 (main.py:526) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 15:14:11,881 (main.py:528) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 15:14:12,116 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
+2021-09-08 15:14:12,116 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (1, 0, 0)
+2021-09-08 15:14:12,218 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.019498 index = (0, 1, 0)
+2021-09-08 15:14:12,219 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.019498 index = (1, 0, 0)
+2021-09-08 15:14:12,219 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.040325 index = (0, 1, 0)
+2021-09-08 15:14:12,220 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.040325 index = (1, 0, 0)
+2021-09-08 15:14:12,221 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021231 index = (0, 1, 0)
+2021-09-08 15:14:12,221 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021231 index = (1, 0, 0)
+2021-09-08 15:14:12,237 (main.py:310) [__main__][WARNING] i_new = 0.000086 j_new = -0.000011 index = (1, 1, 0)
+2021-09-08 15:14:12,237 (main.py:310) [__main__][WARNING] i_new = 0.000086 j_new = -0.000011 index = (0, 0, 0)
+2021-09-08 15:14:12,258 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012214 index = (0, 1, 0)
+2021-09-08 15:14:12,258 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012214 index = (1, 0, 0)
+2021-09-08 15:14:12,261 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.005082 index = (0, 1, 0)
+2021-09-08 15:14:12,262 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.005082 index = (1, 0, 0)
+2021-09-08 15:14:12,263 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.011341 index = (0, 1, 0)
+2021-09-08 15:14:12,263 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.011341 index = (1, 0, 0)
+2021-09-08 15:14:12,264 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.010343 index = (0, 1, 0)
+2021-09-08 15:14:12,266 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.010343 index = (1, 0, 0)
+2021-09-08 15:14:12,267 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012756 index = (0, 1, 0)
+2021-09-08 15:14:12,268 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012756 index = (1, 0, 0)
+2021-09-08 15:14:12,270 (main.py:310) [__main__][WARNING] i_new = -0.000735 j_new = 0.000081 index = (0, 1, 0)
+2021-09-08 15:14:12,270 (main.py:310) [__main__][WARNING] i_new = -0.001396 j_new = 0.001130 index = (0, 1, 0)
+2021-09-08 15:14:12,270 (main.py:310) [__main__][WARNING] i_new = -0.000735 j_new = 0.000081 index = (1, 1, 0)
+2021-09-08 15:14:12,271 (main.py:310) [__main__][WARNING] i_new = -0.001396 j_new = 0.001130 index = (1, 1, 0)
+2021-09-08 15:14:12,310 (main.py:310) [__main__][WARNING] i_new = 0.000047 j_new = -0.001388 index = (0, 1, 0)
+2021-09-08 15:14:12,310 (main.py:310) [__main__][WARNING] i_new = 0.000017 j_new = -0.001068 index = (0, 1, 0)
+2021-09-08 15:14:12,311 (main.py:310) [__main__][WARNING] i_new = 0.000211 j_new = -0.001106 index = (0, 1, 0)
+2021-09-08 15:14:12,311 (main.py:310) [__main__][WARNING] i_new = 0.000008 j_new = -0.000901 index = (0, 1, 0)
+2021-09-08 15:14:12,311 (main.py:310) [__main__][WARNING] i_new = 0.000458 j_new = -0.000809 index = (0, 1, 0)
+2021-09-08 15:14:12,311 (main.py:310) [__main__][WARNING] i_new = 0.000267 j_new = -0.000961 index = (0, 1, 0)
+2021-09-08 15:14:12,312 (main.py:310) [__main__][WARNING] i_new = 0.000003 j_new = -0.001069 index = (0, 1, 0)
+2021-09-08 15:14:12,312 (main.py:310) [__main__][WARNING] i_new = 0.000047 j_new = -0.001388 index = (1, 0, 0)
+2021-09-08 15:14:12,312 (main.py:310) [__main__][WARNING] i_new = 0.000002 j_new = -0.001010 index = (1, 0, 0)
+2021-09-08 15:14:12,312 (main.py:310) [__main__][WARNING] i_new = 0.000008 j_new = -0.000901 index = (1, 0, 0)
+2021-09-08 15:14:12,313 (main.py:310) [__main__][WARNING] i_new = 0.000267 j_new = -0.000961 index = (1, 0, 0)
+2021-09-08 15:14:12,313 (main.py:310) [__main__][WARNING] i_new = 0.000017 j_new = -0.001068 index = (1, 1, 0)
+2021-09-08 15:14:12,313 (main.py:310) [__main__][WARNING] i_new = 0.000211 j_new = -0.001106 index = (1, 1, 0)
+2021-09-08 15:14:12,314 (main.py:310) [__main__][WARNING] i_new = 0.000458 j_new = -0.000809 index = (1, 1, 0)
+2021-09-08 15:14:12,314 (main.py:310) [__main__][WARNING] i_new = 0.000004 j_new = -0.001036 index = (1, 1, 0)
+2021-09-08 15:14:12,314 (main.py:310) [__main__][WARNING] i_new = 0.000010 j_new = -0.000964 index = (1, 1, 0)
+2021-09-08 15:14:12,314 (main.py:310) [__main__][WARNING] i_new = 0.000048 j_new = -0.001177 index = (1, 1, 0)
+2021-09-08 15:14:12,314 (main.py:310) [__main__][WARNING] i_new = 0.000059 j_new = -0.001505 index = (1, 1, 0)
+2021-09-08 15:14:12,315 (main.py:310) [__main__][WARNING] i_new = 0.000003 j_new = -0.001069 index = (1, 1, 0)
+2021-09-08 15:14:12,315 (main.py:310) [__main__][WARNING] i_new = 0.000002 j_new = -0.001010 index = (0, 0, 0)
+2021-09-08 15:14:12,315 (main.py:310) [__main__][WARNING] i_new = 0.000004 j_new = -0.001036 index = (0, 0, 0)
+2021-09-08 15:14:12,315 (main.py:310) [__main__][WARNING] i_new = 0.000010 j_new = -0.000964 index = (0, 0, 0)
+2021-09-08 15:14:12,315 (main.py:310) [__main__][WARNING] i_new = 0.000048 j_new = -0.001177 index = (0, 0, 0)
+2021-09-08 15:14:12,316 (main.py:310) [__main__][WARNING] i_new = 0.000059 j_new = -0.001505 index = (0, 0, 0)
+2021-09-08 15:14:12,317 (main.py:310) [__main__][WARNING] i_new = 0.000001 j_new = -0.001393 index = (0, 1, 0)
+2021-09-08 15:14:12,317 (main.py:310) [__main__][WARNING] i_new = 0.000012 j_new = -0.000469 index = (0, 1, 0)
+2021-09-08 15:14:12,317 (main.py:310) [__main__][WARNING] i_new = 0.000023 j_new = -0.001830 index = (0, 1, 0)
+2021-09-08 15:14:12,318 (main.py:310) [__main__][WARNING] i_new = 0.000004 j_new = -0.001816 index = (0, 1, 0)
+2021-09-08 15:14:12,318 (main.py:310) [__main__][WARNING] i_new = 0.000173 j_new = -0.001218 index = (0, 1, 0)
+2021-09-08 15:14:12,318 (main.py:310) [__main__][WARNING] i_new = 0.000015 j_new = -0.000821 index = (0, 1, 0)
+2021-09-08 15:14:12,318 (main.py:310) [__main__][WARNING] i_new = 0.000001 j_new = -0.001393 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000091 j_new = -0.000572 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000023 j_new = -0.001830 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000004 j_new = -0.001816 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000016 j_new = -0.001264 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000173 j_new = -0.001218 index = (1, 0, 0)
+2021-09-08 15:14:12,319 (main.py:310) [__main__][WARNING] i_new = 0.000350 j_new = -0.001250 index = (1, 0, 0)
+2021-09-08 15:14:12,320 (main.py:310) [__main__][WARNING] i_new = 0.000012 j_new = -0.000469 index = (1, 1, 0)
+2021-09-08 15:14:12,320 (main.py:310) [__main__][WARNING] i_new = 0.000000 j_new = -0.001620 index = (1, 1, 0)
+2021-09-08 15:14:12,320 (main.py:310) [__main__][WARNING] i_new = 0.000219 j_new = -0.001943 index = (1, 1, 0)
+2021-09-08 15:14:12,320 (main.py:310) [__main__][WARNING] i_new = 0.000015 j_new = -0.000821 index = (1, 1, 0)
+2021-09-08 15:14:12,321 (main.py:310) [__main__][WARNING] i_new = 0.000091 j_new = -0.000572 index = (0, 0, 0)
+2021-09-08 15:14:12,321 (main.py:310) [__main__][WARNING] i_new = 0.000000 j_new = -0.001620 index = (0, 0, 0)
+2021-09-08 15:14:12,321 (main.py:310) [__main__][WARNING] i_new = 0.000016 j_new = -0.001264 index = (0, 0, 0)
+2021-09-08 15:14:12,321 (main.py:310) [__main__][WARNING] i_new = 0.000219 j_new = -0.001943 index = (0, 0, 0)
+2021-09-08 15:14:12,321 (main.py:310) [__main__][WARNING] i_new = 0.000350 j_new = -0.001250 index = (0, 0, 0)
+2021-09-08 15:14:12,323 (main.py:310) [__main__][WARNING] i_new = 0.000074 j_new = -0.001486 index = (0, 1, 0)
+2021-09-08 15:14:12,324 (main.py:310) [__main__][WARNING] i_new = 0.000006 j_new = -0.000030 index = (0, 1, 0)
+2021-09-08 15:14:12,324 (main.py:310) [__main__][WARNING] i_new = 0.000142 j_new = -0.000533 index = (0, 1, 0)
+2021-09-08 15:14:12,325 (main.py:310) [__main__][WARNING] i_new = 0.000467 j_new = -0.000275 index = (0, 1, 0)
+2021-09-08 15:14:12,326 (main.py:310) [__main__][WARNING] i_new = 0.000029 j_new = -0.000200 index = (0, 1, 0)
+2021-09-08 15:14:12,326 (main.py:310) [__main__][WARNING] i_new = 0.000320 j_new = -0.001007 index = (0, 1, 0)
+2021-09-08 15:14:12,326 (main.py:310) [__main__][WARNING] i_new = -0.000006 j_new = 0.000264 index = (0, 1, 0)
+2021-09-08 15:14:12,326 (main.py:310) [__main__][WARNING] i_new = 0.000074 j_new = -0.001486 index = (1, 0, 0)
+2021-09-08 15:14:12,327 (main.py:310) [__main__][WARNING] i_new = 0.000006 j_new = -0.000243 index = (1, 0, 0)
+2021-09-08 15:14:12,327 (main.py:310) [__main__][WARNING] i_new = 0.000320 j_new = -0.001007 index = (1, 0, 0)
+2021-09-08 15:14:12,327 (main.py:310) [__main__][WARNING] i_new = 0.000006 j_new = -0.000030 index = (1, 1, 0)
+2021-09-08 15:14:12,328 (main.py:310) [__main__][WARNING] i_new = 0.000142 j_new = -0.000533 index = (1, 1, 0)
+2021-09-08 15:14:12,328 (main.py:310) [__main__][WARNING] i_new = 0.000467 j_new = -0.000275 index = (1, 1, 0)
+2021-09-08 15:14:12,328 (main.py:310) [__main__][WARNING] i_new = 0.000029 j_new = -0.000200 index = (1, 1, 0)
+2021-09-08 15:14:12,329 (main.py:310) [__main__][WARNING] i_new = 0.000005 j_new = -0.001151 index = (1, 1, 0)
+2021-09-08 15:14:12,329 (main.py:310) [__main__][WARNING] i_new = -0.000006 j_new = 0.000264 index = (1, 1, 0)
+2021-09-08 15:14:12,330 (main.py:310) [__main__][WARNING] i_new = 0.000006 j_new = -0.000243 index = (0, 0, 0)
+2021-09-08 15:14:12,330 (main.py:310) [__main__][WARNING] i_new = 0.000005 j_new = -0.001151 index = (0, 0, 0)
+2021-09-08 15:14:12,332 (main.py:310) [__main__][WARNING] i_new = -0.000000 j_new = 0.000441 index = (0, 1, 0)
+2021-09-08 15:14:12,333 (main.py:310) [__main__][WARNING] i_new = -0.000085 j_new = 0.000107 index = (0, 1, 0)
+2021-09-08 15:14:12,334 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000033 index = (0, 1, 0)
+2021-09-08 15:14:12,334 (main.py:310) [__main__][WARNING] i_new = 0.000035 j_new = -0.000085 index = (0, 1, 0)
+2021-09-08 15:14:12,334 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.000280 index = (0, 1, 0)
+2021-09-08 15:14:12,335 (main.py:310) [__main__][WARNING] i_new = 0.000010 j_new = -0.000033 index = (1, 0, 0)
+2021-09-08 15:14:12,335 (main.py:310) [__main__][WARNING] i_new = -0.000000 j_new = 0.000441 index = (1, 0, 0)
+2021-09-08 15:14:12,335 (main.py:310) [__main__][WARNING] i_new = 0.000000 j_new = -0.000441 index = (1, 0, 0)
+2021-09-08 15:14:12,335 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000033 index = (1, 0, 0)
+2021-09-08 15:14:12,336 (main.py:310) [__main__][WARNING] i_new = 0.000035 j_new = -0.000085 index = (1, 0, 0)
+2021-09-08 15:14:12,336 (main.py:310) [__main__][WARNING] i_new = -0.000085 j_new = 0.000107 index = (1, 1, 0)
+2021-09-08 15:14:12,336 (main.py:310) [__main__][WARNING] i_new = 0.000024 j_new = -0.000280 index = (1, 1, 0)
+2021-09-08 15:14:12,336 (main.py:310) [__main__][WARNING] i_new = 0.000085 j_new = -0.000107 index = (1, 1, 0)
+2021-09-08 15:14:12,337 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.000280 index = (1, 1, 0)
+2021-09-08 15:14:12,337 (main.py:310) [__main__][WARNING] i_new = 0.000000 j_new = -0.000441 index = (0, 0, 0)
+2021-09-08 15:14:12,337 (main.py:310) [__main__][WARNING] i_new = 0.000010 j_new = -0.000033 index = (0, 0, 0)
+2021-09-08 15:14:12,337 (main.py:310) [__main__][WARNING] i_new = 0.000024 j_new = -0.000280 index = (0, 0, 0)
+2021-09-08 15:14:12,338 (main.py:310) [__main__][WARNING] i_new = 0.000085 j_new = -0.000107 index = (0, 0, 0)
+2021-09-08 15:14:12,338 (main.py:310) [__main__][WARNING] i_new = -0.000290 j_new = 0.001098 index = (0, 1, 0)
+2021-09-08 15:14:12,338 (main.py:310) [__main__][WARNING] i_new = -0.000005 j_new = 0.000834 index = (0, 1, 0)
+2021-09-08 15:14:12,338 (main.py:310) [__main__][WARNING] i_new = -0.000002 j_new = 0.001318 index = (0, 1, 0)
+2021-09-08 15:14:12,338 (main.py:310) [__main__][WARNING] i_new = -0.000234 j_new = 0.000800 index = (0, 1, 0)
+2021-09-08 15:14:12,339 (main.py:310) [__main__][WARNING] i_new = -0.000094 j_new = 0.000368 index = (0, 1, 0)
+2021-09-08 15:14:12,339 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000701 index = (0, 1, 0)
+2021-09-08 15:14:12,339 (main.py:310) [__main__][WARNING] i_new = -0.000290 j_new = 0.001098 index = (1, 0, 0)
+2021-09-08 15:14:12,339 (main.py:310) [__main__][WARNING] i_new = -0.000002 j_new = 0.001318 index = (1, 0, 0)
+2021-09-08 15:14:12,340 (main.py:310) [__main__][WARNING] i_new = 0.000009 j_new = -0.000342 index = (1, 0, 0)
+2021-09-08 15:14:12,340 (main.py:310) [__main__][WARNING] i_new = -0.000234 j_new = 0.000800 index = (1, 1, 0)
+2021-09-08 15:14:12,340 (main.py:310) [__main__][WARNING] i_new = -0.000094 j_new = 0.000368 index = (1, 1, 0)
+2021-09-08 15:14:12,340 (main.py:310) [__main__][WARNING] i_new = -0.000005 j_new = 0.000834 index = (1, 1, 0)
+2021-09-08 15:14:12,341 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000701 index = (1, 1, 0)
+2021-09-08 15:14:12,341 (main.py:310) [__main__][WARNING] i_new = 0.000009 j_new = -0.000342 index = (0, 0, 0)
+2021-09-08 15:14:12,342 (main.py:310) [__main__][WARNING] i_new = 0.000018 j_new = -0.000077 index = (0, 1, 0)
+2021-09-08 15:14:12,342 (main.py:310) [__main__][WARNING] i_new = 0.000046 j_new = -0.000031 index = (0, 1, 0)
+2021-09-08 15:14:12,342 (main.py:310) [__main__][WARNING] i_new = 0.000205 j_new = -0.000201 index = (1, 0, 0)
+2021-09-08 15:14:12,342 (main.py:310) [__main__][WARNING] i_new = 0.000018 j_new = -0.000077 index = (1, 0, 0)
+2021-09-08 15:14:12,343 (main.py:310) [__main__][WARNING] i_new = 0.000092 j_new = -0.000071 index = (1, 0, 0)
+2021-09-08 15:14:12,343 (main.py:310) [__main__][WARNING] i_new = 0.000046 j_new = -0.000031 index = (1, 0, 0)
+2021-09-08 15:14:12,343 (main.py:310) [__main__][WARNING] i_new = 0.000103 j_new = -0.000104 index = (1, 1, 0)
+2021-09-08 15:14:12,343 (main.py:310) [__main__][WARNING] i_new = 0.000169 j_new = -0.000015 index = (1, 1, 0)
+2021-09-08 15:14:12,344 (main.py:310) [__main__][WARNING] i_new = 0.000103 j_new = -0.000104 index = (0, 0, 0)
+2021-09-08 15:14:12,344 (main.py:310) [__main__][WARNING] i_new = 0.000205 j_new = -0.000201 index = (0, 0, 0)
+2021-09-08 15:14:12,344 (main.py:310) [__main__][WARNING] i_new = 0.000092 j_new = -0.000071 index = (0, 0, 0)
+2021-09-08 15:14:12,344 (main.py:310) [__main__][WARNING] i_new = 0.000169 j_new = -0.000015 index = (0, 0, 0)
+2021-09-08 15:14:12,351 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000417 index = (0, 1, 0)
+2021-09-08 15:14:12,351 (main.py:310) [__main__][WARNING] i_new = -0.000012 j_new = 0.000404 index = (0, 1, 0)
+2021-09-08 15:14:12,352 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.001412 index = (0, 1, 0)
+2021-09-08 15:14:12,352 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.001010 index = (0, 1, 0)
+2021-09-08 15:14:12,352 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000417 index = (1, 0, 0)
+2021-09-08 15:14:12,353 (main.py:310) [__main__][WARNING] i_new = -0.000012 j_new = 0.000404 index = (1, 0, 0)
+2021-09-08 15:14:12,353 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.001412 index = (1, 1, 0)
+2021-09-08 15:14:12,353 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.001010 index = (1, 1, 0)
+2021-09-08 15:14:12,370 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.026811 index = (1, 0, 0)
+2021-09-08 15:14:12,371 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.026811 index = (0, 0, 0)
+2021-09-08 15:14:12,410 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.006106 index = (1, 1, 0)
+2021-09-08 15:14:12,410 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.006106 index = (0, 0, 0)
+2021-09-08 15:14:12,411 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.016232 index = (1, 1, 0)
+2021-09-08 15:14:12,411 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.016232 index = (0, 0, 0)
+2021-09-08 15:14:12,412 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.024894 index = (1, 1, 0)
+2021-09-08 15:14:12,412 (main.py:310) [__main__][WARNING] i_new = 0.944444 j_new = 1.024894 index = (0, 0, 0)
+2021-09-08 15:14:12,510 (main.py:310) [__main__][WARNING] i_new = 0.999965 j_new = 1.000085 index = (1, 0, 0)
+2021-09-08 15:14:12,511 (main.py:310) [__main__][WARNING] i_new = 0.999965 j_new = 1.000085 index = (0, 0, 0)
+2021-09-08 15:14:12,511 (main.py:310) [__main__][WARNING] i_new = 0.999750 j_new = 1.000240 index = (1, 0, 0)
+2021-09-08 15:14:12,512 (main.py:310) [__main__][WARNING] i_new = 0.999819 j_new = 1.001086 index = (1, 1, 0)
+2021-09-08 15:14:12,512 (main.py:310) [__main__][WARNING] i_new = 0.999994 j_new = 1.000391 index = (1, 1, 0)
+2021-09-08 15:14:12,512 (main.py:310) [__main__][WARNING] i_new = 0.999744 j_new = 1.001145 index = (1, 1, 0)
+2021-09-08 15:14:12,512 (main.py:310) [__main__][WARNING] i_new = 0.999819 j_new = 1.001086 index = (0, 0, 0)
+2021-09-08 15:14:12,512 (main.py:310) [__main__][WARNING] i_new = 0.999994 j_new = 1.000391 index = (0, 0, 0)
+2021-09-08 15:14:12,513 (main.py:310) [__main__][WARNING] i_new = 0.999744 j_new = 1.001145 index = (0, 0, 0)
+2021-09-08 15:14:12,513 (main.py:310) [__main__][WARNING] i_new = 0.999750 j_new = 1.000240 index = (0, 0, 0)
+2021-09-08 15:14:12,518 (main.py:310) [__main__][WARNING] i_new = 0.999748 j_new = 1.001346 index = (1, 0, 0)
+2021-09-08 15:14:12,518 (main.py:310) [__main__][WARNING] i_new = 0.999876 j_new = 1.001469 index = (1, 0, 0)
+2021-09-08 15:14:12,518 (main.py:310) [__main__][WARNING] i_new = 0.999996 j_new = 1.000808 index = (1, 0, 0)
+2021-09-08 15:14:12,519 (main.py:310) [__main__][WARNING] i_new = 0.999892 j_new = 1.000413 index = (1, 1, 0)
+2021-09-08 15:14:12,519 (main.py:310) [__main__][WARNING] i_new = 0.999992 j_new = 1.000429 index = (1, 1, 0)
+2021-09-08 15:14:12,519 (main.py:310) [__main__][WARNING] i_new = 0.999748 j_new = 1.001346 index = (0, 0, 0)
+2021-09-08 15:14:12,519 (main.py:310) [__main__][WARNING] i_new = 0.999996 j_new = 1.000808 index = (0, 0, 0)
+2021-09-08 15:14:12,519 (main.py:310) [__main__][WARNING] i_new = 0.999992 j_new = 1.000429 index = (0, 0, 0)
+2021-09-08 15:14:12,520 (main.py:310) [__main__][WARNING] i_new = 0.999892 j_new = 1.000413 index = (0, 0, 0)
+2021-09-08 15:14:12,520 (main.py:310) [__main__][WARNING] i_new = 0.999876 j_new = 1.001469 index = (0, 0, 0)
+2021-09-08 15:14:12,643 (main.py:535) [__main__][INFO] Data Shape: (12000, 38, 3)
+2021-09-08 15:14:12,646 (main.py:537) [__main__][INFO] Shuffle the data.
+2021-09-08 15:14:34,494 (main.py:559) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 15:29:38,112 (main.py:563) [__main__][INFO] mae = 0.011079627089202404
+2021-09-08 15:29:38,117 (main.py:564) [__main__][INFO] loss = 0.0006813523941673338
+2021-09-08 15:29:38,118 (main.py:491) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 15:47:23,139 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 15:48:23,341 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:30:56,373 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:30:56,376 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:31:58,186 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:31:58,189 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:32:33,859 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:32:33,862 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:33:45,647 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:33:45,650 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:34:34,906 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:34:34,909 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:35:23,876 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:35:23,879 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:35:37,065 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:35:37,066 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:17,445 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:17,448 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:35,058 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:35,061 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:49,462 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:37:49,465 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:40:00,985 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:40:00,988 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:40:26,296 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:40:26,296 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:41:49,641 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:41:49,644 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:42:28,311 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:42:28,314 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:43:00,110 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:43:00,114 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:44:25,660 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:44:25,663 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:50:16,746 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:50:16,749 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:50:57,447 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:50:57,451 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:51:10,857 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:51:10,858 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:54:39,747 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:54:39,750 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:55:45,252 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 16:55:45,256 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:02:36,647 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:02:36,651 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:03:20,867 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:03:20,870 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:03:21,556 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 17:03:21,556 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-09-08 17:03:21,557 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-09-08 17:03:21,557 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-09-08 17:03:21,562 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 17:03:21,563 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (1, 1, 0)
+2021-09-08 17:06:13,698 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:06:13,701 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:06:14,383 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 17:06:14,384 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-09-08 17:06:14,385 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-09-08 17:06:14,385 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-09-08 17:06:14,392 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 17:06:14,393 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (1, 1, 0)
+2021-09-08 17:13:09,579 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:14:43,543 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:14:43,546 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:14:44,208 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.036806 index = (0, 1, 0)
+2021-09-08 17:14:44,209 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.036806 index = (1, 1, 0)
+2021-09-08 17:14:44,215 (main.py:310) [__main__][WARNING] i_new = 0.111111 j_new = -0.006304 index = (0, 1, 0)
+2021-09-08 17:14:44,216 (main.py:310) [__main__][WARNING] i_new = 0.111111 j_new = -0.006304 index = (1, 1, 0)
+2021-09-08 17:14:44,219 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021407 index = (0, 1, 0)
+2021-09-08 17:14:44,219 (main.py:310) [__main__][WARNING] i_new = 0.226645 j_new = -0.018588 index = (0, 1, 0)
+2021-09-08 17:14:44,220 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021407 index = (1, 1, 0)
+2021-09-08 17:14:44,220 (main.py:310) [__main__][WARNING] i_new = 0.226645 j_new = -0.018588 index = (1, 1, 0)
+2021-09-08 17:14:44,222 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.081898 index = (0, 1, 0)
+2021-09-08 17:14:44,222 (main.py:310) [__main__][WARNING] i_new = 0.166667 j_new = -0.017895 index = (0, 1, 0)
+2021-09-08 17:14:44,223 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.081898 index = (1, 0, 0)
+2021-09-08 17:14:44,223 (main.py:310) [__main__][WARNING] i_new = 0.166667 j_new = -0.017895 index = (1, 1, 0)
+2021-09-08 17:14:44,224 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.061473 index = (0, 1, 0)
+2021-09-08 17:14:44,224 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.061473 index = (1, 0, 0)
+2021-09-08 17:14:44,224 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.085027 index = (0, 1, 0)
+2021-09-08 17:14:44,225 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.085027 index = (1, 0, 0)
+2021-09-08 17:14:44,225 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.086158 index = (0, 1, 0)
+2021-09-08 17:14:44,226 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.360280 index = (1, 0, 0)
+2021-09-08 17:14:44,226 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.086158 index = (1, 0, 0)
+2021-09-08 17:14:44,226 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.360280 index = (0, 0, 0)
+2021-09-08 17:14:44,227 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.079548 index = (0, 1, 0)
+2021-09-08 17:14:44,227 (main.py:310) [__main__][WARNING] i_new = 0.059979 j_new = -0.303799 index = (1, 0, 0)
+2021-09-08 17:14:44,227 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.079548 index = (1, 0, 0)
+2021-09-08 17:14:44,228 (main.py:310) [__main__][WARNING] i_new = 0.059979 j_new = -0.303799 index = (0, 0, 0)
+2021-09-08 17:14:44,228 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.072793 index = (0, 1, 0)
+2021-09-08 17:14:44,228 (main.py:310) [__main__][WARNING] i_new = 0.115534 j_new = -0.247416 index = (1, 0, 0)
+2021-09-08 17:14:44,229 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.072793 index = (1, 0, 0)
+2021-09-08 17:14:44,229 (main.py:310) [__main__][WARNING] i_new = 0.115534 j_new = -0.247416 index = (0, 0, 0)
+2021-09-08 17:14:44,233 (main.py:310) [__main__][WARNING] i_new = -0.148168 j_new = 0.086566 index = (0, 1, 0)
+2021-09-08 17:14:44,233 (main.py:310) [__main__][WARNING] i_new = -0.148168 j_new = 0.086566 index = (1, 0, 0)
+2021-09-08 17:14:44,234 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.029475 index = (0, 1, 0)
+2021-09-08 17:14:44,235 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.170842 index = (0, 1, 0)
+2021-09-08 17:14:44,235 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.029475 index = (1, 1, 0)
+2021-09-08 17:14:44,236 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.170842 index = (1, 1, 0)
+2021-09-08 17:14:44,237 (main.py:310) [__main__][WARNING] i_new = 0.333333 j_new = -0.120762 index = (0, 1, 0)
+2021-09-08 17:14:44,237 (main.py:310) [__main__][WARNING] i_new = 0.333333 j_new = -0.120762 index = (1, 1, 0)
+2021-09-08 17:14:44,239 (main.py:310) [__main__][WARNING] i_new = 0.388889 j_new = -0.068630 index = (0, 1, 0)
+2021-09-08 17:14:44,240 (main.py:310) [__main__][WARNING] i_new = 0.388889 j_new = -0.068630 index = (1, 1, 0)
+2021-09-08 17:14:44,240 (main.py:310) [__main__][WARNING] i_new = 0.444444 j_new = -0.016876 index = (0, 1, 0)
+2021-09-08 17:14:44,241 (main.py:310) [__main__][WARNING] i_new = 0.444444 j_new = -0.016876 index = (1, 1, 0)
+2021-09-08 17:14:44,241 (main.py:310) [__main__][WARNING] i_new = -0.171090 j_new = 0.037102 index = (0, 1, 0)
+2021-09-08 17:14:44,241 (main.py:310) [__main__][WARNING] i_new = -0.171090 j_new = 0.037102 index = (1, 1, 0)
+2021-09-08 17:14:44,242 (main.py:310) [__main__][WARNING] i_new = -0.115534 j_new = 0.153954 index = (0, 1, 0)
+2021-09-08 17:14:44,242 (main.py:310) [__main__][WARNING] i_new = -0.115534 j_new = 0.153954 index = (1, 1, 0)
+2021-09-08 17:14:44,243 (main.py:310) [__main__][WARNING] i_new = -0.059979 j_new = 0.215459 index = (0, 1, 0)
+2021-09-08 17:14:44,243 (main.py:310) [__main__][WARNING] i_new = -0.059979 j_new = 0.215459 index = (1, 1, 0)
+2021-09-08 17:14:44,244 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.097076 index = (0, 1, 0)
+2021-09-08 17:14:44,244 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.096053 index = (0, 1, 0)
+2021-09-08 17:14:44,244 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.097076 index = (1, 0, 0)
+2021-09-08 17:14:44,244 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.096053 index = (1, 1, 0)
+2021-09-08 17:14:44,245 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.084545 index = (0, 1, 0)
+2021-09-08 17:14:44,245 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.084545 index = (1, 0, 0)
+2021-09-08 17:14:44,246 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.006928 index = (0, 1, 0)
+2021-09-08 17:14:44,246 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.006928 index = (1, 0, 0)
+2021-09-08 17:14:44,250 (main.py:310) [__main__][WARNING] i_new = 0.611111 j_new = 1.053661 index = (1, 0, 0)
+2021-09-08 17:14:44,251 (main.py:310) [__main__][WARNING] i_new = 0.611111 j_new = 1.053661 index = (0, 0, 0)
+2021-09-08 17:14:44,254 (main.py:310) [__main__][WARNING] i_new = 0.666667 j_new = 1.151500 index = (1, 0, 0)
+2021-09-08 17:14:44,254 (main.py:310) [__main__][WARNING] i_new = 0.666667 j_new = 1.151500 index = (0, 0, 0)
+2021-09-08 17:14:44,257 (main.py:310) [__main__][WARNING] i_new = 0.782201 j_new = 1.095452 index = (1, 0, 0)
+2021-09-08 17:14:44,257 (main.py:310) [__main__][WARNING] i_new = 0.782201 j_new = 1.095452 index = (0, 0, 0)
+2021-09-08 17:14:44,258 (main.py:310) [__main__][WARNING] i_new = 0.893312 j_new = 1.050375 index = (1, 0, 0)
+2021-09-08 17:14:44,258 (main.py:310) [__main__][WARNING] i_new = 0.893312 j_new = 1.050375 index = (0, 0, 0)
+2021-09-08 17:14:44,261 (main.py:310) [__main__][WARNING] i_new = 0.777778 j_new = 1.000926 index = (1, 0, 0)
+2021-09-08 17:14:44,262 (main.py:310) [__main__][WARNING] i_new = 0.777778 j_new = 1.000926 index = (0, 0, 0)
+2021-09-08 17:14:44,265 (main.py:310) [__main__][WARNING] i_new = 0.833333 j_new = 1.000465 index = (1, 0, 0)
+2021-09-08 17:14:44,266 (main.py:310) [__main__][WARNING] i_new = 0.662244 j_new = 1.052484 index = (1, 0, 0)
+2021-09-08 17:14:44,266 (main.py:310) [__main__][WARNING] i_new = 0.833333 j_new = 1.000465 index = (0, 0, 0)
+2021-09-08 17:14:44,266 (main.py:310) [__main__][WARNING] i_new = 0.662244 j_new = 1.052484 index = (0, 0, 0)
+2021-09-08 17:16:40,149 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:16:40,152 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:16:40,864 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.036806 index = (0, 1, 0)
+2021-09-08 17:16:40,864 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.036806 index = (1, 1, 0)
+2021-09-08 17:16:40,868 (main.py:310) [__main__][WARNING] i_new = 0.111111 j_new = -0.006304 index = (0, 1, 0)
+2021-09-08 17:16:40,868 (main.py:310) [__main__][WARNING] i_new = 0.111111 j_new = -0.006304 index = (1, 1, 0)
+2021-09-08 17:16:40,871 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021407 index = (0, 1, 0)
+2021-09-08 17:16:40,871 (main.py:310) [__main__][WARNING] i_new = 0.226645 j_new = -0.018588 index = (0, 1, 0)
+2021-09-08 17:16:40,871 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021407 index = (1, 1, 0)
+2021-09-08 17:16:40,872 (main.py:310) [__main__][WARNING] i_new = 0.226645 j_new = -0.018588 index = (1, 1, 0)
+2021-09-08 17:16:40,872 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.081898 index = (0, 1, 0)
+2021-09-08 17:16:40,873 (main.py:310) [__main__][WARNING] i_new = 0.166667 j_new = -0.017895 index = (0, 1, 0)
+2021-09-08 17:16:40,873 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.081898 index = (1, 0, 0)
+2021-09-08 17:16:40,873 (main.py:310) [__main__][WARNING] i_new = 0.166667 j_new = -0.017895 index = (1, 1, 0)
+2021-09-08 17:16:40,874 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.061473 index = (0, 1, 0)
+2021-09-08 17:16:40,874 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.061473 index = (1, 0, 0)
+2021-09-08 17:16:40,874 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.085027 index = (0, 1, 0)
+2021-09-08 17:16:40,875 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.085027 index = (1, 0, 0)
+2021-09-08 17:16:40,875 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.086158 index = (0, 1, 0)
+2021-09-08 17:16:40,875 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.360280 index = (1, 0, 0)
+2021-09-08 17:16:40,876 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.086158 index = (1, 0, 0)
+2021-09-08 17:16:40,876 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.360280 index = (0, 0, 0)
+2021-09-08 17:16:40,876 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.079548 index = (0, 1, 0)
+2021-09-08 17:16:40,877 (main.py:310) [__main__][WARNING] i_new = 0.059979 j_new = -0.303799 index = (1, 0, 0)
+2021-09-08 17:16:40,877 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.079548 index = (1, 0, 0)
+2021-09-08 17:16:40,877 (main.py:310) [__main__][WARNING] i_new = 0.059979 j_new = -0.303799 index = (0, 0, 0)
+2021-09-08 17:16:40,878 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.072793 index = (0, 1, 0)
+2021-09-08 17:16:40,878 (main.py:310) [__main__][WARNING] i_new = 0.115534 j_new = -0.247416 index = (1, 0, 0)
+2021-09-08 17:16:40,878 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.072793 index = (1, 0, 0)
+2021-09-08 17:16:40,879 (main.py:310) [__main__][WARNING] i_new = 0.115534 j_new = -0.247416 index = (0, 0, 0)
+2021-09-08 17:16:40,886 (main.py:310) [__main__][WARNING] i_new = -0.148168 j_new = 0.086566 index = (0, 1, 0)
+2021-09-08 17:16:40,887 (main.py:310) [__main__][WARNING] i_new = -0.148168 j_new = 0.086566 index = (1, 0, 0)
+2021-09-08 17:16:40,890 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.029475 index = (0, 1, 0)
+2021-09-08 17:16:40,891 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.170842 index = (0, 1, 0)
+2021-09-08 17:16:40,891 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.029475 index = (1, 1, 0)
+2021-09-08 17:16:40,892 (main.py:310) [__main__][WARNING] i_new = 0.222222 j_new = -0.170842 index = (1, 1, 0)
+2021-09-08 17:16:40,893 (main.py:310) [__main__][WARNING] i_new = 0.333333 j_new = -0.120762 index = (0, 1, 0)
+2021-09-08 17:16:40,894 (main.py:310) [__main__][WARNING] i_new = 0.333333 j_new = -0.120762 index = (1, 1, 0)
+2021-09-08 17:16:40,894 (main.py:310) [__main__][WARNING] i_new = 0.388889 j_new = -0.068630 index = (0, 1, 0)
+2021-09-08 17:16:40,895 (main.py:310) [__main__][WARNING] i_new = 0.388889 j_new = -0.068630 index = (1, 1, 0)
+2021-09-08 17:16:40,896 (main.py:310) [__main__][WARNING] i_new = 0.444444 j_new = -0.016876 index = (0, 1, 0)
+2021-09-08 17:16:40,897 (main.py:310) [__main__][WARNING] i_new = 0.444444 j_new = -0.016876 index = (1, 1, 0)
+2021-09-08 17:16:40,898 (main.py:310) [__main__][WARNING] i_new = -0.171090 j_new = 0.037102 index = (0, 1, 0)
+2021-09-08 17:16:40,899 (main.py:310) [__main__][WARNING] i_new = -0.171090 j_new = 0.037102 index = (1, 1, 0)
+2021-09-08 17:16:40,900 (main.py:310) [__main__][WARNING] i_new = -0.115534 j_new = 0.153954 index = (0, 1, 0)
+2021-09-08 17:16:40,901 (main.py:310) [__main__][WARNING] i_new = -0.115534 j_new = 0.153954 index = (1, 1, 0)
+2021-09-08 17:16:40,903 (main.py:310) [__main__][WARNING] i_new = -0.059979 j_new = 0.215459 index = (0, 1, 0)
+2021-09-08 17:16:40,903 (main.py:310) [__main__][WARNING] i_new = -0.059979 j_new = 0.215459 index = (1, 1, 0)
+2021-09-08 17:16:40,903 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.097076 index = (0, 1, 0)
+2021-09-08 17:16:40,904 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.096053 index = (0, 1, 0)
+2021-09-08 17:16:40,904 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.097076 index = (1, 0, 0)
+2021-09-08 17:16:40,905 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.096053 index = (1, 1, 0)
+2021-09-08 17:16:40,907 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.084545 index = (0, 1, 0)
+2021-09-08 17:16:40,907 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.084545 index = (1, 0, 0)
+2021-09-08 17:16:40,908 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.006928 index = (0, 1, 0)
+2021-09-08 17:16:40,909 (main.py:310) [__main__][WARNING] i_new = -0.085545 j_new = 0.006928 index = (1, 0, 0)
+2021-09-08 17:16:40,912 (main.py:310) [__main__][WARNING] i_new = 0.611111 j_new = 1.053661 index = (1, 0, 0)
+2021-09-08 17:16:40,913 (main.py:310) [__main__][WARNING] i_new = 0.611111 j_new = 1.053661 index = (0, 0, 0)
+2021-09-08 17:16:40,916 (main.py:310) [__main__][WARNING] i_new = 0.666667 j_new = 1.151500 index = (1, 0, 0)
+2021-09-08 17:16:40,917 (main.py:310) [__main__][WARNING] i_new = 0.666667 j_new = 1.151500 index = (0, 0, 0)
+2021-09-08 17:16:40,923 (main.py:310) [__main__][WARNING] i_new = 0.782201 j_new = 1.095452 index = (1, 0, 0)
+2021-09-08 17:16:40,924 (main.py:310) [__main__][WARNING] i_new = 0.782201 j_new = 1.095452 index = (0, 0, 0)
+2021-09-08 17:16:40,924 (main.py:310) [__main__][WARNING] i_new = 0.893312 j_new = 1.050375 index = (1, 0, 0)
+2021-09-08 17:16:40,925 (main.py:310) [__main__][WARNING] i_new = 0.893312 j_new = 1.050375 index = (0, 0, 0)
+2021-09-08 17:16:40,928 (main.py:310) [__main__][WARNING] i_new = 0.777778 j_new = 1.000926 index = (1, 0, 0)
+2021-09-08 17:16:40,928 (main.py:310) [__main__][WARNING] i_new = 0.777778 j_new = 1.000926 index = (0, 0, 0)
+2021-09-08 17:16:40,931 (main.py:310) [__main__][WARNING] i_new = 0.833333 j_new = 1.000465 index = (1, 0, 0)
+2021-09-08 17:16:40,931 (main.py:310) [__main__][WARNING] i_new = 0.662244 j_new = 1.052484 index = (1, 0, 0)
+2021-09-08 17:16:40,932 (main.py:310) [__main__][WARNING] i_new = 0.833333 j_new = 1.000465 index = (0, 0, 0)
+2021-09-08 17:16:40,932 (main.py:310) [__main__][WARNING] i_new = 0.662244 j_new = 1.052484 index = (0, 0, 0)
+2021-09-08 17:17:18,529 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:17:18,532 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:17:36,239 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:17:36,243 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:17:36,952 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 17:17:36,952 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-09-08 17:17:36,953 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-09-08 17:17:36,954 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-09-08 17:17:36,958 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 17:17:36,958 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (1, 1, 0)
+2021-09-08 17:25:17,269 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:25:17,272 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:25:17,971 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 17:25:17,971 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-09-08 17:25:17,972 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-09-08 17:25:17,973 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-09-08 17:25:17,980 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 17:25:17,981 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (1, 1, 0)
+2021-09-08 17:51:18,359 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:51:18,362 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:51:19,089 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 17:51:19,089 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (1, 0, 0)
+2021-09-08 17:51:19,091 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (1, 0, 0)
+2021-09-08 17:51:19,091 (main.py:310) [__main__][WARNING] i_new = 0.004423 j_new = -0.003558 index = (0, 0, 0)
+2021-09-08 17:51:19,103 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 17:51:19,104 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (1, 1, 0)
+2021-09-08 17:55:44,282 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:55:44,284 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:56:26,263 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:56:26,266 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:57:27,207 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:57:27,210 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:57:45,181 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 17:57:45,185 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:23:00,206 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:23:00,209 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:23:00,891 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 18:23:00,897 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 18:23:24,842 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:23:24,846 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:23:25,490 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 18:23:25,492 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 18:24:34,979 (main.py:499) [__main__][INFO] Load the structure information.
+2021-09-08 18:24:34,982 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:24:34,982 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:25:08,261 (main.py:507) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 18:25:08,263 (main.py:509) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 18:25:08,280 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
+2021-09-08 18:25:08,308 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.019498 index = (1, 0, 0)
+2021-09-08 18:25:08,309 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.040325 index = (1, 1, 0)
+2021-09-08 18:25:08,309 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.021231 index = (0, 0, 0)
+2021-09-08 18:25:08,317 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012214 index = (0, 0, 0)
+2021-09-08 18:25:08,318 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.005082 index = (1, 0, 0)
+2021-09-08 18:25:08,318 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.011341 index = (1, 1, 0)
+2021-09-08 18:25:08,318 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.010343 index = (0, 0, 0)
+2021-09-08 18:25:08,319 (main.py:310) [__main__][WARNING] i_new = 0.055556 j_new = -0.012756 index = (1, 0, 0)
+2021-09-08 18:25:08,321 (main.py:310) [__main__][WARNING] i_new = -0.000735 j_new = 0.000081 index = (1, 0, 0)
+2021-09-08 18:25:08,321 (main.py:310) [__main__][WARNING] i_new = -0.001396 j_new = 0.001130 index = (1, 0, 0)
+2021-09-08 18:25:08,332 (main.py:310) [__main__][WARNING] i_new = 0.000047 j_new = -0.001388 index = (0, 0, 0)
+2021-09-08 18:25:08,333 (main.py:310) [__main__][WARNING] i_new = 0.000017 j_new = -0.001068 index = (0, 0, 0)
+2021-09-08 18:25:08,334 (main.py:310) [__main__][WARNING] i_new = 0.000211 j_new = -0.001106 index = (0, 0, 0)
+2021-09-08 18:25:08,334 (main.py:310) [__main__][WARNING] i_new = 0.000008 j_new = -0.000901 index = (0, 0, 0)
+2021-09-08 18:25:08,334 (main.py:310) [__main__][WARNING] i_new = 0.000458 j_new = -0.000809 index = (0, 0, 0)
+2021-09-08 18:25:08,335 (main.py:310) [__main__][WARNING] i_new = 0.000267 j_new = -0.000961 index = (0, 0, 0)
+2021-09-08 18:25:08,335 (main.py:310) [__main__][WARNING] i_new = 0.000003 j_new = -0.001069 index = (0, 0, 0)
+2021-09-08 18:25:08,336 (main.py:310) [__main__][WARNING] i_new = 0.000001 j_new = -0.001393 index = (0, 1, 0)
+2021-09-08 18:25:08,336 (main.py:310) [__main__][WARNING] i_new = 0.000012 j_new = -0.000469 index = (0, 1, 0)
+2021-09-08 18:25:08,336 (main.py:310) [__main__][WARNING] i_new = 0.000023 j_new = -0.001830 index = (0, 1, 0)
+2021-09-08 18:25:08,336 (main.py:310) [__main__][WARNING] i_new = 0.000004 j_new = -0.001816 index = (0, 1, 0)
+2021-09-08 18:25:08,337 (main.py:310) [__main__][WARNING] i_new = 0.000173 j_new = -0.001218 index = (0, 1, 0)
+2021-09-08 18:25:08,337 (main.py:310) [__main__][WARNING] i_new = 0.000015 j_new = -0.000821 index = (0, 1, 0)
+2021-09-08 18:25:08,338 (main.py:310) [__main__][WARNING] i_new = 0.000074 j_new = -0.001486 index = (1, 1, 0)
+2021-09-08 18:25:08,338 (main.py:310) [__main__][WARNING] i_new = 0.000006 j_new = -0.000030 index = (1, 1, 0)
+2021-09-08 18:25:08,338 (main.py:310) [__main__][WARNING] i_new = 0.000142 j_new = -0.000533 index = (1, 1, 0)
+2021-09-08 18:25:08,338 (main.py:310) [__main__][WARNING] i_new = 0.000467 j_new = -0.000275 index = (1, 1, 0)
+2021-09-08 18:25:08,339 (main.py:310) [__main__][WARNING] i_new = 0.000029 j_new = -0.000200 index = (1, 1, 0)
+2021-09-08 18:25:08,339 (main.py:310) [__main__][WARNING] i_new = 0.000320 j_new = -0.001007 index = (1, 1, 0)
+2021-09-08 18:25:08,339 (main.py:310) [__main__][WARNING] i_new = -0.000006 j_new = 0.000264 index = (1, 1, 0)
+2021-09-08 18:25:08,339 (main.py:310) [__main__][WARNING] i_new = -0.000000 j_new = 0.000441 index = (0, 0, 0)
+2021-09-08 18:25:08,340 (main.py:310) [__main__][WARNING] i_new = -0.000085 j_new = 0.000107 index = (0, 0, 0)
+2021-09-08 18:25:08,340 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000033 index = (0, 0, 0)
+2021-09-08 18:25:08,340 (main.py:310) [__main__][WARNING] i_new = 0.000035 j_new = -0.000085 index = (0, 0, 0)
+2021-09-08 18:25:08,340 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.000280 index = (0, 0, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000290 j_new = 0.001098 index = (0, 1, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000005 j_new = 0.000834 index = (0, 1, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000002 j_new = 0.001318 index = (0, 1, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000234 j_new = 0.000800 index = (0, 1, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000094 j_new = 0.000368 index = (0, 1, 0)
+2021-09-08 18:25:08,341 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000701 index = (0, 1, 0)
+2021-09-08 18:25:08,342 (main.py:310) [__main__][WARNING] i_new = 0.000018 j_new = -0.000077 index = (1, 1, 0)
+2021-09-08 18:25:08,342 (main.py:310) [__main__][WARNING] i_new = 0.000046 j_new = -0.000031 index = (1, 1, 0)
+2021-09-08 18:25:08,344 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.000417 index = (1, 0, 0)
+2021-09-08 18:25:08,344 (main.py:310) [__main__][WARNING] i_new = -0.000012 j_new = 0.000404 index = (1, 0, 0)
+2021-09-08 18:25:08,344 (main.py:310) [__main__][WARNING] i_new = -0.000010 j_new = 0.001412 index = (1, 0, 0)
+2021-09-08 18:25:08,344 (main.py:310) [__main__][WARNING] i_new = -0.000024 j_new = 0.001010 index = (1, 0, 0)
+2021-09-08 18:25:08,404 (main.py:516) [__main__][INFO] Data Shape: (3000, 38, 3)
+2021-09-08 18:25:08,404 (main.py:518) [__main__][INFO] Shuffle the data.
+2021-09-08 18:25:29,740 (main.py:535) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 18:29:12,772 (main.py:539) [__main__][INFO] mae = 0.01752297393977642
+2021-09-08 18:29:12,776 (main.py:540) [__main__][INFO] loss = 0.0008566428441554308
+2021-09-08 18:29:12,778 (main.py:487) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 18:31:47,133 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:37:19,269 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:37:19,272 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:37:19,830 (main.py:310) [__main__][WARNING] i_new = 0.019265 j_new = -0.008754 index = (0, 1, 0)
+2021-09-08 18:37:19,831 (main.py:310) [__main__][WARNING] i_new = 0.197934 j_new = -0.017947 index = (1, 1, 0)
+2021-09-08 18:37:19,831 (main.py:310) [__main__][WARNING] i_new = -0.024951 j_new = 0.279539 index = (1, 1, 0)
+2021-09-08 18:37:19,832 (main.py:310) [__main__][WARNING] i_new = 0.387662 j_new = -0.042615 index = (0, 0, 0)
+2021-09-08 18:37:19,833 (main.py:310) [__main__][WARNING] i_new = 0.248176 j_new = -0.031017 index = (0, 1, 0)
+2021-09-08 18:37:19,833 (main.py:310) [__main__][WARNING] i_new = 0.106900 j_new = -0.011596 index = (1, 0, 0)
+2021-09-08 18:37:19,834 (main.py:310) [__main__][WARNING] i_new = -0.068912 j_new = 0.190228 index = (1, 1, 0)
+2021-09-08 18:37:19,835 (main.py:310) [__main__][WARNING] i_new = 0.209491 j_new = -0.120397 index = (1, 0, 0)
+2021-09-08 18:37:19,835 (main.py:310) [__main__][WARNING] i_new = 0.108181 j_new = -0.001447 index = (1, 0, 0)
+2021-09-08 18:37:19,836 (main.py:310) [__main__][WARNING] i_new = -0.065268 j_new = 0.433830 index = (0, 0, 0)
+2021-09-08 18:37:19,837 (main.py:310) [__main__][WARNING] i_new = 0.220095 j_new = -0.021766 index = (1, 0, 0)
+2021-09-08 18:37:19,837 (main.py:310) [__main__][WARNING] i_new = 0.175503 j_new = -0.013618 index = (0, 1, 0)
+2021-09-08 18:37:19,838 (main.py:310) [__main__][WARNING] i_new = -0.015103 j_new = 0.110251 index = (1, 0, 0)
+2021-09-08 18:37:19,839 (main.py:310) [__main__][WARNING] i_new = 0.246145 j_new = -0.008127 index = (1, 1, 0)
+2021-09-08 18:37:19,839 (main.py:310) [__main__][WARNING] i_new = 0.344130 j_new = -0.139952 index = (1, 1, 0)
+2021-09-08 18:37:19,840 (main.py:310) [__main__][WARNING] i_new = 0.356627 j_new = -0.028620 index = (1, 0, 0)
+2021-09-08 18:37:19,840 (main.py:310) [__main__][WARNING] i_new = 0.027905 j_new = -0.445064 index = (1, 1, 0)
+2021-09-08 18:37:19,841 (main.py:310) [__main__][WARNING] i_new = -0.043941 j_new = 0.152508 index = (0, 0, 0)
+2021-09-08 18:37:19,841 (main.py:310) [__main__][WARNING] i_new = -0.054179 j_new = 0.285519 index = (0, 0, 0)
+2021-09-08 18:37:19,842 (main.py:310) [__main__][WARNING] i_new = 0.074542 j_new = -0.045454 index = (1, 0, 0)
+2021-09-08 18:37:19,842 (main.py:310) [__main__][WARNING] i_new = 0.107860 j_new = -0.068560 index = (0, 0, 0)
+2021-09-08 18:37:19,843 (main.py:310) [__main__][WARNING] i_new = 0.263678 j_new = -0.047665 index = (0, 0, 0)
+2021-09-08 18:37:19,843 (main.py:310) [__main__][WARNING] i_new = 0.242702 j_new = -0.063393 index = (0, 1, 0)
+2021-09-08 18:37:19,843 (main.py:310) [__main__][WARNING] i_new = 0.239452 j_new = -0.010798 index = (0, 1, 0)
+2021-09-08 18:37:19,844 (main.py:310) [__main__][WARNING] i_new = 0.061423 j_new = -0.054475 index = (0, 1, 0)
+2021-09-08 18:37:19,844 (main.py:310) [__main__][WARNING] i_new = 0.221177 j_new = -0.027881 index = (0, 0, 0)
+2021-09-08 18:37:19,845 (main.py:310) [__main__][WARNING] i_new = 0.331991 j_new = -0.006293 index = (1, 1, 0)
+2021-09-08 18:37:19,845 (main.py:310) [__main__][WARNING] i_new = 0.154279 j_new = -0.168399 index = (0, 0, 0)
+2021-09-08 18:37:19,845 (main.py:310) [__main__][WARNING] i_new = -0.029481 j_new = 0.054197 index = (0, 1, 0)
+2021-09-08 18:37:19,846 (main.py:310) [__main__][WARNING] i_new = 0.339895 j_new = -0.015802 index = (1, 0, 0)
+2021-09-08 18:37:19,848 (main.py:310) [__main__][WARNING] i_new = 0.562407 j_new = 1.052710 index = (1, 0, 0)
+2021-09-08 18:39:57,912 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:39:57,915 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:39:58,485 (main.py:310) [__main__][WARNING] i_new = 0.019265 j_new = -0.008754 index = (0, 1, 0)
+2021-09-08 18:39:58,487 (main.py:310) [__main__][WARNING] i_new = 0.197934 j_new = -0.017947 index = (1, 1, 0)
+2021-09-08 18:39:58,487 (main.py:310) [__main__][WARNING] i_new = -0.024951 j_new = 0.279539 index = (1, 1, 0)
+2021-09-08 18:39:58,488 (main.py:310) [__main__][WARNING] i_new = 0.387662 j_new = -0.042615 index = (0, 0, 0)
+2021-09-08 18:39:58,488 (main.py:310) [__main__][WARNING] i_new = 0.248176 j_new = -0.031017 index = (0, 1, 0)
+2021-09-08 18:39:58,489 (main.py:310) [__main__][WARNING] i_new = 0.106900 j_new = -0.011596 index = (1, 0, 0)
+2021-09-08 18:39:58,490 (main.py:310) [__main__][WARNING] i_new = -0.068912 j_new = 0.190228 index = (1, 1, 0)
+2021-09-08 18:39:58,490 (main.py:310) [__main__][WARNING] i_new = 0.209491 j_new = -0.120397 index = (1, 0, 0)
+2021-09-08 18:39:58,491 (main.py:310) [__main__][WARNING] i_new = 0.108181 j_new = -0.001447 index = (1, 0, 0)
+2021-09-08 18:39:58,492 (main.py:310) [__main__][WARNING] i_new = -0.065268 j_new = 0.433830 index = (0, 0, 0)
+2021-09-08 18:39:58,492 (main.py:310) [__main__][WARNING] i_new = 0.220095 j_new = -0.021766 index = (1, 0, 0)
+2021-09-08 18:39:58,493 (main.py:310) [__main__][WARNING] i_new = 0.175503 j_new = -0.013618 index = (0, 1, 0)
+2021-09-08 18:39:58,493 (main.py:310) [__main__][WARNING] i_new = -0.015103 j_new = 0.110251 index = (1, 0, 0)
+2021-09-08 18:39:58,494 (main.py:310) [__main__][WARNING] i_new = 0.246145 j_new = -0.008127 index = (1, 1, 0)
+2021-09-08 18:39:58,495 (main.py:310) [__main__][WARNING] i_new = 0.344130 j_new = -0.139952 index = (1, 1, 0)
+2021-09-08 18:39:58,496 (main.py:310) [__main__][WARNING] i_new = 0.356627 j_new = -0.028620 index = (1, 0, 0)
+2021-09-08 18:39:58,496 (main.py:310) [__main__][WARNING] i_new = 0.027905 j_new = -0.445064 index = (1, 1, 0)
+2021-09-08 18:39:58,497 (main.py:310) [__main__][WARNING] i_new = -0.043941 j_new = 0.152508 index = (0, 0, 0)
+2021-09-08 18:39:58,497 (main.py:310) [__main__][WARNING] i_new = -0.054179 j_new = 0.285519 index = (0, 0, 0)
+2021-09-08 18:39:58,498 (main.py:310) [__main__][WARNING] i_new = 0.074542 j_new = -0.045454 index = (1, 0, 0)
+2021-09-08 18:39:58,498 (main.py:310) [__main__][WARNING] i_new = 0.107860 j_new = -0.068560 index = (0, 0, 0)
+2021-09-08 18:39:58,498 (main.py:310) [__main__][WARNING] i_new = 0.263678 j_new = -0.047665 index = (0, 0, 0)
+2021-09-08 18:39:58,499 (main.py:310) [__main__][WARNING] i_new = 0.242702 j_new = -0.063393 index = (0, 1, 0)
+2021-09-08 18:39:58,499 (main.py:310) [__main__][WARNING] i_new = 0.239452 j_new = -0.010798 index = (0, 1, 0)
+2021-09-08 18:39:58,499 (main.py:310) [__main__][WARNING] i_new = 0.061423 j_new = -0.054475 index = (0, 1, 0)
+2021-09-08 18:39:58,500 (main.py:310) [__main__][WARNING] i_new = 0.221177 j_new = -0.027881 index = (0, 0, 0)
+2021-09-08 18:39:58,500 (main.py:310) [__main__][WARNING] i_new = 0.331991 j_new = -0.006293 index = (1, 1, 0)
+2021-09-08 18:39:58,501 (main.py:310) [__main__][WARNING] i_new = 0.154279 j_new = -0.168399 index = (0, 0, 0)
+2021-09-08 18:39:58,501 (main.py:310) [__main__][WARNING] i_new = -0.029481 j_new = 0.054197 index = (0, 1, 0)
+2021-09-08 18:39:58,502 (main.py:310) [__main__][WARNING] i_new = 0.339895 j_new = -0.015802 index = (1, 0, 0)
+2021-09-08 18:39:58,505 (main.py:310) [__main__][WARNING] i_new = 0.562407 j_new = 1.052710 index = (1, 0, 0)
+2021-09-08 18:41:51,394 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:41:51,397 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:41:52,108 (main.py:310) [__main__][WARNING] i_new = 0.085545 j_new = -0.007979 index = (0, 1, 0)
+2021-09-08 18:41:52,113 (main.py:310) [__main__][WARNING] i_new = -0.004423 j_new = 0.030913 index = (0, 1, 0)
+2021-09-08 18:43:00,085 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:43:00,089 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:45:04,124 (main.py:499) [__main__][INFO] Load the structure information.
+2021-09-08 18:45:04,126 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:45:04,132 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-08 18:45:37,767 (main.py:507) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
+2021-09-08 18:45:37,769 (main.py:509) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
+2021-09-08 18:45:37,805 (main.py:516) [__main__][INFO] Data Shape: (3000, 38, 3)
+2021-09-08 18:45:37,805 (main.py:518) [__main__][INFO] Shuffle the data.
+2021-09-08 18:45:58,911 (main.py:535) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
+2021-09-08 18:50:18,552 (main.py:539) [__main__][INFO] mae = 0.007754452060908079
+2021-09-08 18:50:18,556 (main.py:540) [__main__][INFO] loss = 0.0008676624274812639
+2021-09-08 18:50:18,556 (main.py:487) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-08 18:51:06,577 (main.py:151) [__main__][INFO] Molecule was align to 37-38 location.

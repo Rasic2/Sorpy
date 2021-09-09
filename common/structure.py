@@ -7,7 +7,7 @@ from utils import distance
 
 class Atom:
 
-    def __init__(self, formula: str=None, order:int =None, frac_coord=None, cart_coord=None):
+    def __init__(self, formula: str = None, order: int = None, frac_coord=None, cart_coord=None):
         self.formula = formula
         self.order = order
         self.frac_coord = frac_coord
@@ -23,18 +23,37 @@ class Atom:
         return self.formula >= other.formula or self.order >= other.order
 
     def __hash__(self):
-        return hash(self.formula+str(self.order))
+        return hash(self.formula + str(self.order))
 
     def __repr__(self):
         return f"<Atom {self.order}: {self.formula}>"
 
+class Lattice:
+
+    def __init__(self, matrix):
+        self.matrix = matrix
+
+    @property
+    def inverse(self):
+        return np.linalg.inv(self.matrix)
+
+    @staticmethod
+    def read_from_string(string):
+        """
+        :param string:      POSCAR文件中的3行Lattice矢量
+        :return:
+        """
+        matrix = np.array([[float(ii) for ii in item.split()] for item in string])
+        return Lattice(matrix)
+
 class Molecule:
 
-    def __init__(self, formulas=[], frac_coords=[], cart_coords=[]):
+    def __init__(self, formulas=None, frac_coords=None, cart_coords=None, anchor=None):
 
-        self.formulas = formulas
-        self.frac_coords = frac_coords # TODO check_pbc
-        self.cart_coords = cart_coords
+        self.formulas = formulas if formulas is not None else []
+        self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+        self.frac_coords = frac_coords if frac_coords is not None else [] # TODO check_pbc
+        self.cart_coords = cart_coords if cart_coords is not None else []
         self.atoms = [Atom(formula, order, frac_coord, cart_coord) \
                       for formula, order, frac_coord, cart_coord in \
                       zip(self.formulas, range(len(self.frac_coords)), self.frac_coords, self.cart_coords)]
@@ -58,78 +77,61 @@ class Molecule:
 
     @property
     def vector(self):
-        vector_dict = defaultdict(list)
-        for atom_i in self.atoms:
-            for atom_j in self.atoms:
-                if atom_j != atom_i:
-                    vector_dict[atom_i].append((atom_j, atom_j.cart_coord-atom_i.cart_coord))
-        return vector_dict
-
-m =Molecule(formulas=["C", "O"], frac_coords=np.array([[0,0,0],[0,0,0.5]]), cart_coords=np.array([[0,0,0],[0,0,1]]))
-print(m.pair)
-#for key, value in m.vector.items():
-#    print(key, value)
-exit()
-
-#    @property
-#    def frac_coords(self):
-#        frac_vector = self.coords[1] -self.coords[0]
-#        self.coords[1] = np.where(frac_vector > 0.5, self.coords[1] - 1, self.coords[1])
-#        self.coords[1] = np.where(frac_vector < -0.5, self.coords[1] + 1, self.coords[1])
-#        return self.coords
-#
-#    @property
-#    def cart_coords(self):
-#        return np.dot(self.frac_coords, self.latt)
-#
-#    @property
-#    def vector(self):
-#        return self.cart_coords[1] - self.cart_coords[0]
-#
-#    @property
-#    def bond_length(self):
-#        return np.linalg.norm(self.vector)
-#
-#    @property
-#    def theta(self):
-#        z = self.vector[2]
-#        r = self.bond_length
-#        return math.degrees(math.atan2(math.sqrt(r**2-z**2), z))
-#
-#    @property
-#    def phi(self):
-#        x = self.vector[0]
-#        y = self.vector[1]
-#        return math.degrees(math.atan2(y, x))
-
-
-class Latt:
-
-    def __init__(self, matrix):
-        """
-        TODO inverse of matrix
-        :param string:
-        """
-        assert type(matrix) == np.ndarray
-
-        self.matrix = matrix
+        """ vector in Cartesian format """
+        return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in self.pair]
 
     @property
-    def inverse(self):
-        return np.linalg.inv(self.matrix)
+    def dist(self):
+        if self.anchor: # anchor Atom and Reset vector
+            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+            return [(atom_j, atom_i, np.linalg.norm(vector)) \
+                    for atom_i, vector in zip(self.atoms, vectors) if atom_i != atom_j]
+        else:
+            return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
 
-    @staticmethod
-    def read_from_string(string):
-        """
-        :param string:      POSCAR文件中的3行Lattice矢量
-        :return:
-        """
+    @property
+    def theta(self):
+        if self.anchor: # anchor Atom and Reset vector
+            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+            return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2]))) \
+                    for (vector), (_, atom_i, dist) in zip(vectors, self.dist) if atom_i != atom_j]
+        else:
+            return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2]))) \
+                    for (atom_i, atom_j, vector), (_, _, dist) in zip(self.vector, self.dist)]
 
-        assert isinstance(string, list)
-        assert len(string) == 3
+    @property
+    def phi(self):
+        if self.anchor: # anchor Atom and Reset vector
+            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+            return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0]))) \
+                    for (_, atom_i, _), (vector) in zip(self.theta, vectors)]
+        else:
+            return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0]))) \
+                    for (atom_i, atom_j, vector) in self.vector]
 
-        matrix = np.array([[float(ii) for ii in item.split()] for item in string])
-        return Latt(matrix)
+    @property
+    def inter_coords(self):
+        return [(atom_i, atom_j, [dist, theta, phi]) \
+                for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
+
+
+#m = Molecule(formulas=["C", "O"], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
+# print(m.pair)
+# print(m.vector)
+#print(m.dist)
+#print(m.theta)
+#print(m.phi)
+##print(m.frac_coords)
+#print(m.cart_coords)
+#print(m.inter_coords)
+exit()
+
+
+
 
 class POSCAR:
 
@@ -158,7 +160,7 @@ class POSCAR:
 
     def _frac_coors(self):
         if self.selective:
-            return np.array([[float(ii) for ii in item.split()[:3]] for item in self.cfg[9:9+self.ele_count]])
+            return np.array([[float(ii) for ii in item.split()[:3]] for item in self.cfg[9:9 + self.ele_count]])
         else:
             return None
 
@@ -170,7 +172,7 @@ class POSCAR:
 
     def _TF(self):
         if self.selective:
-            return np.array([item.split()[3:6] for item in self.cfg[9:9+self.ele_count]])
+            return np.array([item.split()[3:6] for item in self.cfg[9:9 + self.ele_count]])
         else:
             return None
 
@@ -188,7 +190,7 @@ class POSCAR:
         # sorted NNT
         sorted_NNT = defaultdict(list)
         for key, value in NNT.items():
-            sorted_NNT[key] = sorted(value, key = lambda x : x[1])
+            sorted_NNT[key] = sorted(value, key=lambda x: x[1])
 
         setattr(self, "NNT", sorted_NNT)
         return sorted_NNT
@@ -202,14 +204,14 @@ class POSCAR:
         total_index = list(range(len(array)))
         frac_index = list(set(total_index).difference(set(intercoor_index)))
         anchor_cart_coor = np.dot(array[anchor], latt.matrix)
-        intercoor = array[intercoor_index] * [1, 180, 360] + [1.142, 0, 0] # TODO setting.yaml modify
+        intercoor = array[intercoor_index] * [1, 180, 360] + [1.142, 0, 0]  # TODO setting.yaml modify
         intercoor = intercoor.reshape(3)
         r, theta, phi = intercoor[0], math.radians(intercoor[1]), math.radians(intercoor[2])
         x = r * math.sin(theta) * math.cos(phi)
         y = r * math.sin(theta) * math.sin(phi)
         z = r * math.cos(theta)
         mol_cart_coor = anchor_cart_coor + [x, y, z]
-        mol_frac_coor = np.dot(mol_cart_coor, latt.inverse).reshape((1,3))
+        mol_frac_coor = np.dot(mol_cart_coor, latt.inverse).reshape((1, 3))
         return np.concatenate((array[frac_index], mol_frac_coor), axis=0)
 
     def write(self, template, coor):
@@ -224,13 +226,13 @@ class POSCAR:
                 f.write(item)
 
     def align(self, template):
-        indicator = 0 # 第二次对齐的原子
-        repeat = 2 # supercell
+        indicator = 0  # 第二次对齐的原子
+        repeat = 2  # supercell
         slab_coor = self.frac_coors[:36]
         mol_coor = self.frac_coors[36:38]
-        model_region = np.array([1/repeat, 1/repeat])
+        model_region = np.array([1 / repeat, 1 / repeat])
         mass_center = np.mean(mol_coor, axis=0)[:2]
-        search_vector = np.arange(-1, 1+1/repeat, 1/repeat)
+        search_vector = np.arange(-1, 1 + 1 / repeat, 1 / repeat)
         search_matrix = itertools.product(search_vector, search_vector)
         for ii in search_matrix:
             if 0 <= (mass_center + ii)[0] <= model_region[0] and 0 <= (mass_center + ii)[1] <= model_region[1]:
@@ -244,10 +246,10 @@ class POSCAR:
 
         for ii, jj in zip(self.elements, template.elements):
             if ii[0] != jj[0] or ii[1] != jj[1]:
-                raise NotImplementedError # TODO 3x3 or len(atoms) 不相等
+                raise NotImplementedError  # TODO 3x3 or len(atoms) 不相等
 
         self.frac_coors = coor_first
-        self.cart_coors = self._cart_coors() # Reset the cart_coords
+        self.cart_coors = self._cart_coors()  # Reset the cart_coords
 
         NNT = defaultdict(list)
         for ii in range(self.ele_count):
@@ -266,14 +268,14 @@ class POSCAR:
         for ii, jj, kk in sorted(min_NNT, key=lambda x: x[2]):
             print(ii, jj)
         #    if mass_center + model_region * i
-        #print(model_region)
+        # print(model_region)
+
 
 if __name__ == "__main__":
 
     for ii in range(50):
-        print(f"POSCAR_ML_{ii+1}")
-        p = POSCAR(f"../test/ML-2/POSCAR_ML_{ii+1}")
+        print(f"POSCAR_ML_{ii + 1}")
+        p = POSCAR(f"../test/ML-2/POSCAR_ML_{ii + 1}")
         p.nearest_neighbour_table()
         print(36, p.NNT[36])
         print(37, p.NNT[37])
-

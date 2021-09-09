@@ -7,53 +7,100 @@ from utils import distance
 
 class Atom:
 
-    def __init__(self, frac_coord):
+    def __init__(self, formula: str=None, order:int =None, frac_coord=None, cart_coord=None):
+        self.formula = formula
+        self.order = order
         self.frac_coord = frac_coord
+        self.cart_coord = cart_coord
+
+    def __eq__(self, other):
+        return self.formula == other.formula and self.order == other.order
+
+    def __lt__(self, other):
+        return self.formula < other.formula or self.order < other.order
+
+    def __ge__(self, other):
+        return self.formula >= other.formula or self.order >= other.order
+
+    def __hash__(self):
+        return hash(self.formula+str(self.order))
+
+    def __repr__(self):
+        return f"<Atom {self.order}: {self.formula}>"
 
 class Molecule:
 
-    def __init__(self, coords, latt):
+    def __init__(self, formulas=[], frac_coords=[], cart_coords=[]):
 
-        assert type(coords) == np.ndarray # only accept the np array
-        assert len(coords) == 2 # only consider the CO molecule
-
-        self.coords = coords
-        self.latt = latt
-        self.Atoms = [Atom(coord) for coord in self.frac_coords]
+        self.formulas = formulas
+        self.frac_coords = frac_coords # TODO check_pbc
+        self.cart_coords = cart_coords
+        self.atoms = [Atom(formula, order, frac_coord, cart_coord) \
+                      for formula, order, frac_coord, cart_coord in \
+                      zip(self.formulas, range(len(self.frac_coords)), self.frac_coords, self.cart_coords)]
 
     def __getitem__(self, index):
-        return self.Atoms[index]
+        return self.atoms[index]
 
     @property
-    def frac_coords(self):
-        frac_vector = self.coords[1] -self.coords[0]
-        self.coords[1] = np.where(frac_vector > 0.5, self.coords[1] - 1, self.coords[1])
-        self.coords[1] = np.where(frac_vector < -0.5, self.coords[1] + 1, self.coords[1])
-        return self.coords
+    def count(self):
+        return len(self.atoms)
 
     @property
-    def cart_coords(self):
-        return np.dot(self.frac_coords, self.latt)
+    def pair(self):
+        pair_list = []
+        for ii in itertools.product(self.atoms, self.atoms):
+            if ii[0] != ii[1]:
+                pair_list.append(ii)
+        pair_list = (tuple(sorted(item)) for item in pair_list)
+
+        return set(pair_list)
 
     @property
     def vector(self):
-        return self.cart_coords[1] - self.cart_coords[0]
+        vector_dict = defaultdict(list)
+        for atom_i in self.atoms:
+            for atom_j in self.atoms:
+                if atom_j != atom_i:
+                    vector_dict[atom_i].append((atom_j, atom_j.cart_coord-atom_i.cart_coord))
+        return vector_dict
 
-    @property
-    def bond_length(self):
-        return np.linalg.norm(self.vector)
+m =Molecule(formulas=["C", "O"], frac_coords=np.array([[0,0,0],[0,0,0.5]]), cart_coords=np.array([[0,0,0],[0,0,1]]))
+print(m.pair)
+#for key, value in m.vector.items():
+#    print(key, value)
+exit()
 
-    @property
-    def theta(self):
-        z = self.vector[2]
-        r = self.bond_length
-        return math.degrees(math.atan2(math.sqrt(r**2-z**2), z))
-
-    @property
-    def phi(self):
-        x = self.vector[0]
-        y = self.vector[1]
-        return math.degrees(math.atan2(y, x))
+#    @property
+#    def frac_coords(self):
+#        frac_vector = self.coords[1] -self.coords[0]
+#        self.coords[1] = np.where(frac_vector > 0.5, self.coords[1] - 1, self.coords[1])
+#        self.coords[1] = np.where(frac_vector < -0.5, self.coords[1] + 1, self.coords[1])
+#        return self.coords
+#
+#    @property
+#    def cart_coords(self):
+#        return np.dot(self.frac_coords, self.latt)
+#
+#    @property
+#    def vector(self):
+#        return self.cart_coords[1] - self.cart_coords[0]
+#
+#    @property
+#    def bond_length(self):
+#        return np.linalg.norm(self.vector)
+#
+#    @property
+#    def theta(self):
+#        z = self.vector[2]
+#        r = self.bond_length
+#        return math.degrees(math.atan2(math.sqrt(r**2-z**2), z))
+#
+#    @property
+#    def phi(self):
+#        x = self.vector[0]
+#        y = self.vector[1]
+#        return math.degrees(math.atan2(y, x))
 
 
 class Latt:
@@ -191,6 +238,9 @@ class POSCAR:
                 break
         coor_m = mol_coor + vector_m
         coor_first = np.concatenate((slab_coor, coor_m), axis=0)
+
+        return vector_m, coor_first
+        exit()
 
         for ii, jj in zip(self.elements, template.elements):
             if ii[0] != jj[0] or ii[1] != jj[1]:

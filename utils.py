@@ -3,7 +3,8 @@ import numpy as np
 """
 Utils functions
 
-- format_dict: 格式化字典输出
+- format_dict:  格式化字典输出
+- distance:     计算欧氏距离
 """
 
 def format_dict(dict_i):

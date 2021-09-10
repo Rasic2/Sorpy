@@ -4,6 +4,7 @@ import itertools
 import numpy as np
 from collections import defaultdict, Counter
 
+from _logger import *
 from utils import distance
 
 yaml.warnings({'YAMLLoadWarning': False})
@@ -31,41 +32,20 @@ class Element:
         return hash(self.number)
 
     def __repr__(self):
-        return self.formula
+        return f"<Element {self.formula}>"
 
     @property
     def number(self) -> int:
         return Element.elements[f'Element {self.formula}']['number']
 
 
-class Atom:
-
-    def __init__(self, element: Element= None, order: int = None, frac_coord=None, cart_coord=None):
-        self.element = element
-        self.order = order
-        self.frac_coord = frac_coord
-        self.cart_coord = cart_coord
-
-    def __eq__(self, other):
-        return self.element == other.element and self.order == other.order
-
-    def __lt__(self, other):
-        return self.element < other.element or self.order < other.order
-
-    def __ge__(self, other):
-        return self.element >= other.element or self.order >= other.order
-
-    def __hash__(self):
-        return hash(self.element) + hash(str(self.order))
-
-    def __repr__(self):
-        return f"<Atom {self.order}: {self.element}>"
-
-
 class Lattice:
 
     def __init__(self, matrix):
         self.matrix = matrix
+
+    def __repr__(self):
+        return f"{self.matrix}"
 
     @property
     def inverse(self):
@@ -87,27 +67,121 @@ class Lattice:
         return Lattice.read_from_string(cfg[2:5])
 
 
+class Coordinates:
+    def __init__(self, frac_coords=None, cart_coords=None, lattice: Lattice=None):
+        self.frac_coords = frac_coords if frac_coords is not None else np.array([])
+        self.cart_coords = cart_coords if cart_coords is not None else np.array([])
+        self.lattice = lattice
+        self.index = 0
+        self.__set_coords()
+
+    def __getitem__(self, index):
+        try:
+            return Coordinates(self.frac_coords[index], self.cart_coords[index], self.lattice)
+        except IndexError:
+            return Coordinates(lattice=self.lattice)
+
+    def __iter__(self):
+        return self
+
+    def __len__(self):
+        assert len(self.frac_coords) == len(self.frac_coords)
+        return len(self.frac_coords)
+
+    def __next__(self):
+        if self.index < len(self):
+            parameter = (self.frac_coords[self.index], self.cart_coords[self.index], self.lattice)
+            self.index += 1
+            return Coordinates(*parameter)
+        else:
+            self.index = 0
+            raise StopIteration
+
+    def __repr__(self):
+        return f"<Coordinates {self.frac_coords.shape}>"
+
+    def __set_coords(self):
+        self.__set_cart_coords()
+        self.__set_frac_coords()
+
+    def __set_frac_coords(self):
+        if self.cart_coords.size > 0 and self.lattice is not None and self.frac_coords.size == 0:
+            self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
+
+    def __set_cart_coords(self):
+        if self.frac_coords.size > 0 and self.lattice is not None and self.cart_coords.size == 0:
+            self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
+
+
+class Atom:
+    """Periodic System in Solid"""
+    def __init__(self, element: Element= None, order: int = None, coord: Coordinates=None):
+        self.element = element
+        self.order = order
+        self.coord = coord
+
+    def __eq__(self, other):
+        return self.element == other.element and self.order == other.order
+
+    def __lt__(self, other):
+        return self.element < other.element or self.order < other.order
+
+    def __ge__(self, other):
+        return self.element >= other.element or self.order >= other.order
+
+    def __hash__(self):
+        return hash(self.element) + hash(str(self.order))
+
+    def __repr__(self):
+        return f"(Atom {self.order} : {self.element} : {self.coord})"
+
+    @property
+    def frac_coord(self):
+        return self.coord.frac_coords
+
+    @property
+    def cart_coord(self):
+        return self.coord.cart_coords
+
+
 class AtomSetBase:
 
-    def __init__(self, elements=None, frac_coords=None, cart_coords=None, **kargs):
+    def __init__(self, elements=None, coords: Coordinates=None, **kargs):
 
-        self.elements = elements if elements is not None else []
-        self.frac_coords = frac_coords if frac_coords is not None else []
-        self.cart_coords = cart_coords if cart_coords is not None else []
+        self.elements = elements if elements is not None else np.array([])
+        self.coords = coords
 
         for key, value in kargs.items():
             if getattr(self, key, None) is None:
                 setattr(self, key, value)
 
+    def __len__(self):
+        assert len(self.elements) == len(self.coords)
+        return len(self.elements)
+
+    def __contains__(self, item):
+        if item is self.atoms:
+            return True
+        else:
+            return False
+
+    @property
+    def frac_coords(self):
+        return self.coords.frac_coords
+
+    @property
+    def cart_coords(self):
+        return self.coords.cart_coords
+
     @property
     def atoms(self):
-        return [Atom(element, order, frac_coord, cart_coord) \
-                for element, order, frac_coord, cart_coord in \
-                zip(self.elements, range(len(self.frac_coords)), self.frac_coords, self.cart_coords)]
+        return np.array([Atom(element, order, coord) \
+                for element, order, coord in \
+                itertools.zip_longest(self.elements, range(len(self)), self.coords)])
 
     @property
     def atoms_total(self) -> int:
-        return len(self.atoms)
+        return len(self)
 
     @property
     def atoms_formulas(self):
@@ -117,12 +191,20 @@ class AtomSetBase:
     def atoms_count(self) -> Counter:
         return Counter(list(self.atoms_formulas))
 
+
 class Molecule(AtomSetBase):
 
-    def __init__(self, elements=None, frac_coords=None, cart_coords=None, anchor=None, **kargs):
+    def __init__(self, elements=None, coords:Coordinates=None, anchor=None, **kargs):
 
-        super().__init__(elements=elements, frac_coords=frac_coords, cart_coords=cart_coords, **kargs)
+        super().__init__(elements=elements, coords=coords, **kargs)
         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+
+    def __repr__(self):
+        return f"------------------------------------------------------------\n" \
+               f"<Molecule>                                                  \n" \
+               f"-Atoms-                                                     \n" \
+               f"{self.atoms}                                                \n" \
+               f"------------------------------------------------------------" \
 
     def __getitem__(self, index):
         return self.atoms[index]
@@ -179,33 +261,116 @@ class Molecule(AtomSetBase):
         return [(atom_i, atom_j, [dist, theta, phi]) \
                 for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
 
+m = Molecule(elements=[Element("C"), Element("O")], coords=Coordinates(frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]])))
+
 
 class Slab(AtomSetBase):
 
-    def __init__(self, elements=None, frac_coords=None, cart_coords=None, lattice: Lattice=None, **kargs):
+    def __init__(self, elements=None, coords: Coordinates=None, lattice: Lattice=None, **kargs):
 
-        super().__init__(elements=elements, frac_coords=frac_coords, cart_coords=cart_coords, **kargs)
+        super().__init__(elements=elements, coords=coords, **kargs)
         self.lattice = lattice
-        self.__set_coords() # Rewrite the frac_coords, cart_coords and atoms
 
         assert len(self.elements) == len(self.frac_coords) == len(self.cart_coords), \
             "The shape of <formulas>, <frac_coords>, <cart_coords> are not equal."
 
-    def __set_coords(self):
-        self.__set_cart_coords()
-        self.__set_frac_coords()
-
-    def __set_frac_coords(self):
-        if self.cart_coords and self.lattice is not None and self.frac_coords is None:
-            self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
-
-    def __set_cart_coords(self):
-        if self.frac_coords and self.lattice is not None and self.cart_coords is None:
-            self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
+    def __repr__(self):
+        return f"------------------------------------------------------------\n" \
+               f"<Slab>                                                      \n" \
+               f"-Lattice-                                                   \n" \
+               f"{self.lattice.matrix}                                       \n" \
+               f"-Atoms-                                                     \n" \
+               f"{self.atoms}                                                \n" \
+               f"------------------------------------------------------------" \
+            if self.lattice is not None else f"<Slab object>"
 
 
-m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
-             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
+class Structure(AtomSetBase):
+    """TODO <class Coordinates including the frac, cart transfer>"""
+    styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
+    extra_attrs = ("TF",)
+
+    def __init__(self, style, elements=None, coords: Coordinates=None, lattice: Lattice=None, mol_index=None, **kargs):
+        self.style = style
+        if self.style not in Structure.styles:
+            raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
+
+        super().__init__(elements=elements, coords=coords, **kargs)
+        self.lattice = lattice
+
+        mol_index = mol_index if mol_index is not None else []
+        self.index = list(range(len(self.atoms)))
+        self.mol_index = mol_index if isinstance(mol_index, (list, np.ndarray)) else [mol_index]
+        self.slab_index = list(set(self.index).difference(set(self.mol_index))) if mol_index is not None else self.index
+
+        self.kargs = {attr: getattr(self, attr, None) for attr in Structure.extra_attrs}
+
+    def __repr__(self):
+        return f"------------------------------------------------------------\n" \
+               f"<Structure>                                                 \n" \
+               f"-Lattice-                                                   \n" \
+               f"{self.lattice.matrix}                                       \n" \
+               f"-Atoms-                                                     \n" \
+               f"{self.atoms}                                                \n" \
+               f"------------------------------------------------------------" \
+            if self.lattice is not None else f"<Structure object>"
+
+    @property
+    def slab(self):
+        if self.style.startswith("Slab"):
+            kargs = {key: np.array(value)[self.slab_index] for key, value in self.kargs.items() if value is not None}
+            return Slab(elements=np.array(self.elements)[self.slab_index],
+                        coords=self.coords[self.slab_index],
+                        lattice=self.lattice, **kargs)
+        else:
+            return None
+
+    @property
+    def molecule(self):
+        if self.style.endswith("Mol") and self.mol_index and set(self.index).difference(self.mol_index):
+            kargs = {key: np.array(value)[self.mol_index] for key, value in self.kargs.items() if value is not None}
+            return Molecule(elements=np.array(self.elements)[self.mol_index],
+                            coords=self.coords[self.mol_index],
+                            lattice=self.lattice, **kargs)
+        else:
+            return None
+
+    @staticmethod
+    def read_from_POSCAR(fname, style=None, mol_index=None):
+        with open(fname) as f:
+            cfg = f.readlines()
+        lattice = Lattice.read_from_string(cfg[2:5])
+
+        elements = [(name, int(count)) for name, count in zip(cfg[5].split(), cfg[6].split())]
+        elements = sum([[formula]*count for (formula, count) in elements], [])
+        elements = [Element(formula) for formula in elements]
+
+        selective = cfg[7].lower()[0] == "s"
+        if selective:
+            coor_type = cfg[8].rstrip()
+            coords = np.array(list([float(item) for item in coor.split()[:3]] for coor in cfg[9:9+len(elements)]))
+
+            frac_coords = coords if coor_type.lower()[0] == "d" else None
+            cart_coords = coords if coor_type.lower()[0] == "c" else None
+
+            TF = np.array(list([item.split()[3:6] for item in cfg[9:9+len(elements)]]))
+        else:
+            raise NotImplementedError\
+                ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
+        coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
+
+        return Structure(style, mol_index=mol_index,
+                         elements=elements, coords=coords, lattice=lattice, TF=TF)
+
+
+class POSCAR:
+
+    def __init__(self):
+        pass
+
+#m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+#             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
 #print(m.pair)
 #print(m.vector)
 #print(m.dist)
@@ -215,7 +380,14 @@ m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0,
 #print(m.cart_coords)
 #print(m.inter_coords)
 #print(m.atoms_count)
-print(m.TF)
+#print(m.TF)
+#s = Structure("Slab+Mol", elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+#             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]), mol_index=[0])
+s = Structure.read_from_POSCAR(style="Slab+Mol", fname=f"{current_dir}/input/POSCAR_1-1", mol_index=[36, 37])
+#print(s)
+#print(s.style)
+#print(s.slab)
+print(s.molecule)
 exit()
 
 

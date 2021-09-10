@@ -1,32 +1,66 @@
 import math
+import yaml
 import itertools
 import numpy as np
-from collections import defaultdict
+from collections import defaultdict, Counter
 
 from utils import distance
 
+yaml.warnings({'YAMLLoadWarning': False})
+
+
+class Element:
+
+    with open("element.yaml") as f:
+        cfg = f.read()
+    elements = yaml.load(cfg)
+
+    def __init__(self, formula):
+        self.formula = formula
+
+    def __eq__(self, other):
+        return self.number == other.number
+
+    def __lt__(self, other):
+        return self.number < other.number
+
+    def __ge__(self, other):
+        return self.number >= other.number
+
+    def __hash__(self):
+        return hash(self.number)
+
+    def __repr__(self):
+        return self.formula
+
+    @property
+    def number(self) -> int:
+        return Element.elements[f'Element {self.formula}']['number']
+
+
 class Atom:
 
-    def __init__(self, formula: str = None, order: int = None, frac_coord=None, cart_coord=None):
-        self.formula = formula
+    def __init__(self, element: Element= None, order: int = None, frac_coord=None, cart_coord=None):
+        self.element = element
         self.order = order
         self.frac_coord = frac_coord
         self.cart_coord = cart_coord
 
     def __eq__(self, other):
-        return self.formula == other.formula and self.order == other.order
+        return self.element == other.element and self.order == other.order
 
     def __lt__(self, other):
-        return self.formula < other.formula or self.order < other.order
+        return self.element < other.element or self.order < other.order
 
     def __ge__(self, other):
-        return self.formula >= other.formula or self.order >= other.order
+        return self.element >= other.element or self.order >= other.order
 
     def __hash__(self):
-        return hash(self.formula + str(self.order))
+        return hash(self.element) + hash(str(self.order))
 
     def __repr__(self):
-        return f"<Atom {self.order}: {self.formula}>"
+        return f"<Atom {self.order}: {self.element}>"
+
 
 class Lattice:
 
@@ -46,24 +80,52 @@ class Lattice:
         matrix = np.array([[float(ii) for ii in item.split()] for item in string])
         return Lattice(matrix)
 
-class Molecule:
+    @staticmethod
+    def read_from_POSCAR(fname):
+        with open(fname) as f:
+            cfg = f.readlines()
+        return Lattice.read_from_string(cfg[2:5])
 
-    def __init__(self, formulas=None, frac_coords=None, cart_coords=None, anchor=None):
 
-        self.formulas = formulas if formulas is not None else []
-        self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
-        self.frac_coords = frac_coords if frac_coords is not None else [] # TODO check_pbc
+class AtomSetBase:
+
+    def __init__(self, elements=None, frac_coords=None, cart_coords=None, **kargs):
+
+        self.elements = elements if elements is not None else []
+        self.frac_coords = frac_coords if frac_coords is not None else []
         self.cart_coords = cart_coords if cart_coords is not None else []
-        self.atoms = [Atom(formula, order, frac_coord, cart_coord) \
-                      for formula, order, frac_coord, cart_coord in \
-                      zip(self.formulas, range(len(self.frac_coords)), self.frac_coords, self.cart_coords)]
+
+        for key, value in kargs.items():
+            if getattr(self, key, None) is None:
+                setattr(self, key, value)
+
+    @property
+    def atoms(self):
+        return [Atom(element, order, frac_coord, cart_coord) \
+                for element, order, frac_coord, cart_coord in \
+                zip(self.elements, range(len(self.frac_coords)), self.frac_coords, self.cart_coords)]
+
+    @property
+    def atoms_total(self) -> int:
+        return len(self.atoms)
+
+    @property
+    def atoms_formulas(self):
+        return [element.formula for element in self.elements]
+
+    @property
+    def atoms_count(self) -> Counter:
+        return Counter(list(self.atoms_formulas))
+
+class Molecule(AtomSetBase):
+
+    def __init__(self, elements=None, frac_coords=None, cart_coords=None, anchor=None, **kargs):
+
+        super().__init__(elements=elements, frac_coords=frac_coords, cart_coords=cart_coords, **kargs)
+        self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
 
     def __getitem__(self, index):
         return self.atoms[index]
-
-    @property
-    def count(self):
-        return len(self.atoms)
 
     @property
     def pair(self):
@@ -118,16 +180,42 @@ class Molecule:
                 for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
 
 
-#m = Molecule(formulas=["C", "O"], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+class Slab(AtomSetBase):
+
+    def __init__(self, elements=None, frac_coords=None, cart_coords=None, lattice: Lattice=None, **kargs):
+
+        super().__init__(elements=elements, frac_coords=frac_coords, cart_coords=cart_coords, **kargs)
+        self.lattice = lattice
+        self.__set_coords() # Rewrite the frac_coords, cart_coords and atoms
+
+        assert len(self.elements) == len(self.frac_coords) == len(self.cart_coords), \
+            "The shape of <formulas>, <frac_coords>, <cart_coords> are not equal."
+
+    def __set_coords(self):
+        self.__set_cart_coords()
+        self.__set_frac_coords()
+
+    def __set_frac_coords(self):
+        if self.cart_coords and self.lattice is not None and self.frac_coords is None:
+            self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
+
+    def __set_cart_coords(self):
+        if self.frac_coords and self.lattice is not None and self.cart_coords is None:
+            self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
+
+
+m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
              cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
-# print(m.pair)
-# print(m.vector)
+#print(m.pair)
+#print(m.vector)
 #print(m.dist)
 #print(m.theta)
 #print(m.phi)
-##print(m.frac_coords)
+#print(m.frac_coords)
 #print(m.cart_coords)
 #print(m.inter_coords)
+#print(m.atoms_count)
+print(m.TF)
 exit()
 
 

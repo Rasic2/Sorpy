@@ -12,7 +12,7 @@ from pymatgen.core.surface import generate_all_slabs
 from pymatgen.core.sites import Site
 from pymatgen.io.vasp import Poscar
 
-from _logger import *
+from logger import *
 from load_yaml import ParameterManager
 from utils import format_dict
 

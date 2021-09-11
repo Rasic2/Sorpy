@@ -3,6 +3,8 @@ import itertools
 from collections import Counter
 import numpy as np
 
+from logger import current_dir
+
 yaml.warnings({'YAMLLoadWarning': False})
 
 
@@ -98,7 +100,7 @@ class Coordinates:
 
 
 class Element:
-    with open("element.yaml") as f:
+    with open(f"{current_dir}/common/element.yaml") as f:
         cfg = f.read()
     elements = yaml.load(cfg)
 

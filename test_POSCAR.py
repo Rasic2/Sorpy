@@ -17,8 +17,7 @@ def test_structure():
 
 def test_filemanager():
     #print(f"{current_dir}/input/POSCAR_1-1")
-    fm = FileManager(fname=f"input/POSCAR_1-1", style="Slab+Mol")
-    print(fm.fname)
+    fm = FileManager(fname=f"{current_dir}/input/POSCAR_1-1", style="Slab+Mol")
     print(fm.file)
     print(fm.structure)
 

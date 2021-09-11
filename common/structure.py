@@ -3,7 +3,7 @@ import numpy as np
 import itertools
 from collections import defaultdict
 
-from base import Element, Atom, AtomSetBase, Lattice, Coordinates
+from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
 from utils import distance
 from logger import current_dir
 
@@ -104,7 +104,7 @@ class Structure(AtomSetBase):
     styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
     extra_attrs = ("TF",)
 
-    def __init__(self, style, elements=None, coords: Coordinates=None, lattice: Lattice=None, mol_index=None, **kargs):
+    def __init__(self, style=None, elements=None, coords: Coordinates=None, lattice: Lattice=None, mol_index=None, **kargs):
         self.style = style
         if self.style not in Structure.styles:
             raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
@@ -320,8 +320,8 @@ class Structure(AtomSetBase):
 #    @staticmethod
 #    def mcoord_to_coord(array, latt, anchor, intercoor_index):
 #
-#        assert type(array) == np.ndarray
-#        assert type(latt) == Latt
+#        assert ftype(array) == np.ndarray
+#        assert ftype(latt) == Latt
 #
 #        total_index = list(range(len(array)))
 #        frac_index = list(set(total_index).difference(set(intercoor_index)))
@@ -338,7 +338,7 @@ class Structure(AtomSetBase):
 #
 #    def write(self, template, coor):
 #
-#        assert type(template) == POSCAR
+#        assert ftype(template) == POSCAR
 #        assert self.action == "w"
 #
 #        with open(self.fname, self.action) as f:
@@ -396,11 +396,11 @@ class Structure(AtomSetBase):
 #if __name__ == "__main__":
 #
 #    for ii in range(50):
-        print(f"POSCAR_ML_{ii + 1}")
-        p = POSCAR(f"../test/ML-2/POSCAR_ML_{ii + 1}")
-        p.nearest_neighbour_table()
-        print(36, p.NNT[36])
-        p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
-        p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
-        print(p1 - p2)
-        print(37, p.NNT[37])
+#        print(f"POSCAR_ML_{ii + 1}")
+#        p = POSCAR(f"../test/ML-2/POSCAR_ML_{ii + 1}")
+#        p.nearest_neighbour_table()
+#        print(36, p.NNT[36])
+#        p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
+#        p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
+#        print(p1 - p2)
+#        print(37, p.NNT[37])

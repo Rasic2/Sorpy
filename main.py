@@ -46,13 +46,13 @@ class FileManager:
         self.atom_dict = defaultdict(list)
 
     def __eq__(self, other):
-        return self.type == other.type and self.index == other.index
+        return self.type == other.ftype and self.index == other.index
 
     def __le__(self, other):
-        return self.type == other.type and self.index <= other.index
+        return self.type == other.ftype and self.index <= other.index
 
     def __gt__(self, other):
-        return self.type == other.type and self.index > other.index
+        return self.type == other.ftype and self.index > other.index
 
     def __repr__(self):
         return f"{self.type}: {self.index}"

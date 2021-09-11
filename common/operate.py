@@ -1,7 +1,8 @@
 import numpy as np
 from utils import Format_defaultdist
 
-from structure import AtomSetBase
+from common.structure import AtomSetBase
+
 
 class Operator:
     def __init__(self):

@@ -1,5 +1,5 @@
 import numpy as np
-from structure import Structure
+from common.structure import Structure
 
 
 class POSCAR:
@@ -8,7 +8,7 @@ class POSCAR:
         self.fname = fname
 
     def __repr__(self):
-        return f"'{self.fname}'"
+        return f"<{self.ftype} '{self.fname}'>"
 
     def __getitem__(self, index):
         return self.to_strings[index]
@@ -22,6 +22,10 @@ class POSCAR:
             raise ArithmeticError(f"{self} and {other} not have the same lattice vector!")
 
     @property
+    def ftype(self):
+        return self.__class__.__name__
+
+    @property
     def to_strings(self):
         with open(self.fname) as f:
             cfg = f.readlines()
@@ -29,3 +33,8 @@ class POSCAR:
 
     def to_structure(self, style=None, mol_index=None):
         return Structure.read_from_POSCAR(self.fname, style=style, mol_index=mol_index)
+
+
+class CONTCAR(POSCAR):
+    def __init__(self, fname):
+        super().__init__(fname=fname)

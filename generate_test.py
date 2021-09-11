@@ -1,6 +1,6 @@
 #!/usr/bin/env python
 
-from _logger import *
+from logger import *
 from common.structure import POSCAR
 from main import DirManager
 

@@ -1,34 +1,41 @@
+import re
 import os
-import sys
 import numpy as np
-#from pymatgen.io.vasp import Poscar
+from pathlib import Path
 
-from common.structure import Lattice, Molecule
 from common.io_file import POSCAR, CONTCAR
 from logger import logger
+from utils import Format_list
 
 
 class FileManager:
-    """
-        single POSCAR-like file Manager
-    """
     files = {'POSCAR': POSCAR,
              'CONTCAR': CONTCAR
     }
 
-    def __init__(self, fname: str, style=None, mol_index=None):
-        """
-        :param fname:   file name
-        """
-        self.fname = fname
-        try:
-            self.ftype = fname.split("_")[0].split("/")[-1]
-            self.ftype = FileManager.files[self.ftype]
-        except KeyError:
-            logger.error(f"The '{self.ftype}' is not including in this version.")
-            sys.exit()
+    def __new__(cls, *args, **kargs):
+        ftype = args[0].name.split("_")[0]
+        dname = args[0].parent.name
+        if ftype in FileManager.files:
+            return super().__new__(cls)
+        else:
+            logger.error(f"The '{ftype}' is excluding in the <{dname}> directory.")
+            return None
 
-        self.index = fname.split("_")[-1]
+    def __init__(self, fname: Path, style=None, mol_index=None):
+
+        self.fname = fname
+
+        self.ftype = fname.name.split("_")[0]
+        self.ftype = FileManager.files[self.ftype]
+
+        self.index = fname.name.split("_")[-1]
+        try:
+            self.num_index = int(self.index)
+        except ValueError:
+            self.num_index = [int(item) for item in re.split("[^0-9]", self.index)]
+        except:
+            self.num_index = self.index
 
         if isinstance(mol_index, list):
             self.mol_index = mol_index
@@ -48,13 +55,13 @@ class FileManager:
         self.atom_dict = defaultdict(list)
 
     def __eq__(self, other):
-        return self.ftype == other.ftype and self.index == other.index
+        return self.ftype == other.ftype and self.num_index == other.num_index
 
     def __le__(self, other):
-        return self.ftype == other.ftype and self.index <= other.index
+        return self.ftype == other.ftype and self.num_index <= other.num_index
 
     def __gt__(self, other):
-        return self.ftype == other.ftype and self.index > other.index
+        return self.ftype == other.ftype and self.num_index > other.num_index
 
     def __repr__(self):
         return f"{self.ftype}: {self.index}"
@@ -66,119 +73,43 @@ class FileManager:
     @property
     def structure(self):
         return self.file.to_structure(style=self.style, mol_index=self.mol_index)
-#
-#    @property
-#    def latt(self):
-#        return Latt(self.structure.lattice.matrix)
-#
-#    @property
-#    def sites(self):
-#        return self.structure.sites
-#
-#    @property
-#    def species(self):
-#        return self.structure.species
-#
-#    @property
-#    def coords(self):
-#        return self.structure.frac_coords
-#
-#    @property
-#    def atom_num(self):
-#        return len(self.coords)
-#
-#    @property
-#    def molecule(self):
-#        if type(self.mol_index) == list and len(self.mol_index):
-#            return [(ii + 1, site) for ii, site in zip(self.mol_index, np.array(self.structure)[self.mol_index])]
-#        else:
-#            return None
-#
-#    def _setter_slab_index(self):
-#        if self.molecule:
-#            self.slab_index = list(set(list(range(self.atom_num))).difference(set(self.mol_index)))
-#        else:
-#            self.slab_index = list(range(self.atom_num))
-#
-#    @property
-#    def slab(self):
-#        self._setter_slab_index()
-#        return [(ii, site) for ii, site in zip(self.slab_index, np.array(self.structure)[self.slab_index])]
-#
-#    def align_the_element(self):
-#
-#        self._setter_slab_index()
-#        for ii, item in enumerate(self.species):
-#            if ii in self.slab_index:
-#                self.atom_dict[item].append(ii)
-#            elif ii in self.mol_index:
-#                self.atom_dict["mol"].append(ii)
-#
-#    @property
-#    def mcoords(self):
-#        """
-#        Cal Slab frac_coors + Mol <anchor_frac + bond length + theta + phi>
-#        """
-#        self._setter_slab_index()
-#
-#        if self.molecule:
-#            m = Molecule(self.coords[self.mol_index], self.latt.matrix)
-#            slab_coor = self.coords[self.slab_index]
-#            m_anchor = m[0].frac_coord.reshape((1, 3))
-#            m.phi_m = m.phi if m.phi >= 0 else 360 + m.phi
-#            m_intercoor = np.array([m.bond_length, m.theta, m.phi_m]).reshape((1, 3))
-#            m_intercoor = (m_intercoor/ [[1, 180, 360]] - [[1.142, 0, 0]])
-#            return np.concatenate((slab_coor, m_anchor, m_intercoor), axis=0)
-#
-#
-#class DirManager:
-#    """
-#        Input/Output directory manager
-#    """
-#
-#    def __init__(self, dname: str, ftype: str, mol_index=None):
-#        """
-#        :param dname:       directory name
-#        :param ftype:        determine which ctype of file including (e.g. POSCAR or CONTCAR)
-#        """
-#        self.dname = dname
-#        self.type = ftype
-#        self.mol_index = mol_index
-#        if self.mol_index:
-#            logger.info(f"Molecule was align to {self.mol_index} location.")
-#
-#    def one_file(self, fname):
-#        """
-#        The single file manager
-#
-#        :param fname:   file name
-#        :return:        FileManager(fname)
-#        """
-#        return FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
-#
-#
-#    def __all_files(self):
-#        for fname in os.listdir(self.dname):
-#            if fname.startswith(self.type):
-#                yield FileManager(f"{self.dname}/{fname}", mol_index=self.mol_index)
-#
-#    @property
-#    def all_files(self):
-#        return sorted(list(self.__all_files()))
-#
-#    @property
-#    def count(self):
-#        return len(self.all_files)
-#
-#    @property
-#    def coords(self):
-#        return np.array([file.coords for file in self.all_files])
-#
-#    def split_slab_mol(self):
-#        for file in self.all_files:
-#            file.align_the_element()
-#            return file.atom_dict
-#
-#    @property
-#    def mcoords(self):
-#        return np.array([file.mcoords for file in self.all_files])
+
+class DirManager:
+
+    def __init__(self, dname: Path, style=None, mol_index=None):
+
+        self.dname = dname
+        self.style = style
+        self.mol_index = mol_index
+        if self.mol_index:
+            logger.info(f"Molecule was align to {self.mol_index} location.")
+
+    def __len__(self):
+        return len(self.all_files)
+
+    def single_file(self, fname: Path):
+        return FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index)
+
+    @property
+    def all_files(self):
+        all_files = [FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index)
+               for fname in os.listdir(self.dname)]
+        all_files = [file for file in all_files if file is not None]
+        return Format_list(sorted(all_files, key=lambda x : x))
+
+    @property
+    def coords(self):
+        return Format_list([file.structure.coords for file in self.all_files])
+
+    @property
+    def frac_coords(self):
+        return np.array([coord.frac_coords for coord in self.coords])
+
+    @property
+    def cart_coords(self):
+        return np.array([coord.cart_coords for coord in self.coords])
+
+    @property
+    def inter_coords(self):
+        return np.array([[inter_coord for _, _, inter_coord in file.structure.molecule.inter_coords]
+                         for file in self.all_files])

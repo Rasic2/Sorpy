@@ -1,0 +1,23 @@
+2021-09-11 19:59:03,378 (manager.py:27) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:00:07,599 (manager.py:27) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:00:29,543 (manager.py:28) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:01:29,950 (manager.py:28) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:01:47,418 (manager.py:28) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:02:07,460 (manager.py:28) [__main__][ERROR] The 'C:\Users\10519\Desktop\ML' is not including in this version.
+2021-09-11 20:04:21,763 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:04:33,678 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:04:51,313 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:05:47,769 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:06:29,808 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:06:37,127 (manager.py:42) [__main__][WARNING] Can't align the Molecule.
+2021-09-11 20:07:11,165 (manager.py:42) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:13:43,381 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:14:16,716 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:16:14,733 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:16:36,788 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:17:14,216 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:17:49,264 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:19:31,769 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:20:55,454 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:22:27,867 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:23:25,303 (manager.py:44) [__main__][WARNING] The Molecule was not align.

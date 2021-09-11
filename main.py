@@ -7,7 +7,7 @@ import itertools
 import numpy as np
 from pymatgen.io.vasp import Poscar
 
-from _logger import *
+from logger import *
 from common.structure import Molecule, Latt
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"  # 屏蔽TF日志输出
@@ -142,7 +142,7 @@ class DirManager:
     def __init__(self, dname: str, ftype: str, mol_index=None):
         """
         :param dname:       directory name
-        :param ftype:        determine which type of file including (e.g. POSCAR or CONTCAR)
+        :param ftype:        determine which ctype of file including (e.g. POSCAR or CONTCAR)
         """
         self.dname = dname
         self.type = ftype

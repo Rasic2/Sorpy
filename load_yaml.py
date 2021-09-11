@@ -17,7 +17,7 @@ class ParameterManager:
 
     def __init__(self, filename):
         """
-        TODO default value and type split!!!
+        TODO default value and ctype split!!!
 
         :param filename:            setting_110.yaml
         """

@@ -1,4 +1,5 @@
 import numpy as np
+from collections import defaultdict
 
 """
 Utils functions
@@ -14,5 +15,17 @@ def format_dict(dict_i):
 
     return strings.rstrip()
 
+def format_defaultdist(dist_i):
+    for key, value in dist_i.items():
+        yield (key, value[0])
+
 def distance(array_i, array_j):
     return np.linalg.norm(array_i-array_j)
+
+
+class Format_defaultdist(defaultdict):
+    def __repr__(self):
+        strings=""
+        for key, value in self.items():
+            strings += f"{key} <---> {value[0]} \n"
+        return strings

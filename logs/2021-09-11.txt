@@ -23,3 +23,89 @@
 2021-09-11 20:23:25,303 (manager.py:44) [__main__][WARNING] The Molecule was not align.
 2021-09-11 20:37:15,848 (manager.py:44) [__main__][WARNING] The Molecule was not align.
 2021-09-11 20:37:26,473 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:51:25,292 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 20:52:39,690 (manager.py:44) [__main__][WARNING] The Molecule was not align.
+2021-09-11 21:01:17,292 (manager.py:73) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:04:09,107 (manager.py:73) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:05:30,150 (manager.py:73) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:08:00,405 (manager.py:73) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:26:14,308 (manager.py:74) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:27:05,030 (manager.py:74) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:28:48,237 (manager.py:75) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:41:13,574 (manager.py:81) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:42:27,892 (manager.py:81) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:51:53,293 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:53:13,386 (manager.py:91) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:55:13,922 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 21:55:32,012 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:00:03,231 (manager.py:86) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:00:41,880 (manager.py:86) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:00:41,886 (manager.py:23) [__main__][ERROR] The 'XDATCAR' is not including in this version.
+2021-09-11 22:09:51,826 (manager.py:87) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:10:36,090 (manager.py:87) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:10:36,100 (manager.py:24) [__main__][ERROR] The 'XDATCAR' is excluding in this directory.
+2021-09-11 22:11:14,550 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:11:27,082 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:11:27,105 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in this directory.
+2021-09-11 22:12:32,317 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:12:32,327 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in this input.
+2021-09-11 22:13:44,165 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:13:44,175 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the 'input' directory.
+2021-09-11 22:14:00,819 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:14:00,829 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:14:20,006 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:14:20,016 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:16:34,589 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:16:34,599 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:16:34,610 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:17:59,627 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:17:59,637 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:17:59,649 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:18:15,285 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:18:15,294 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:18:28,274 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:18:28,283 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:19:34,927 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:19:34,936 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:19:45,402 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:19:58,147 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:19:58,157 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:20:09,477 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:20:09,488 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:20:18,205 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:20:18,215 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:20:37,064 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:20:37,073 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:20:51,755 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:20:51,765 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:21:03,327 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:21:03,337 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:21:17,039 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:21:17,049 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:22:21,130 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:22:21,140 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:22:21,418 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:22:49,142 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:22:49,151 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:23:06,982 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:23:06,991 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:24:31,964 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:24:31,973 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:27:11,575 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:27:11,586 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:29:01,843 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:29:01,852 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:29:02,124 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:29:35,003 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:29:35,012 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:30:10,557 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:30:10,567 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:30:22,097 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:30:22,107 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:30:48,897 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:30:48,907 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:32:36,733 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:32:42,237 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:32:42,246 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-11 22:32:53,319 (manager.py:88) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-11 22:32:53,328 (manager.py:25) [__main__][ERROR] The 'XDATCAR' is excluding in the <input> directory.

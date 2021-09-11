@@ -29,3 +29,10 @@ class Format_defaultdist(defaultdict):
         for key, value in self.items():
             strings += f"{key} <---> {value[0]} \n"
         return strings
+
+class Format_list(list):
+    def __repr__(self):
+        strings=""
+        for item in self:
+            strings += f"{item} \n"
+        return strings.rstrip()

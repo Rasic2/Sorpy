@@ -16,6 +16,9 @@ class Lattice:
     def __repr__(self):
         return f"{self.matrix}"
 
+    def __eq__(self, other):
+        return np.all(self.matrix == other.matrix)
+
     @property
     def inverse(self):
         return np.linalg.inv(self.matrix)
@@ -161,9 +164,10 @@ class Atom:
 
 class AtomSetBase:
 
-    def __init__(self, elements=None, coords: Coordinates = None, **kargs):
+    def __init__(self, elements=None, orders=None, coords: Coordinates = None, **kargs):
 
         self.elements = elements if elements is not None else np.array([])
+        self.orders = orders
         self.coords = coords
 
         for key, value in kargs.items():
@@ -191,7 +195,7 @@ class AtomSetBase:
     @property
     def atoms(self):
         return np.array([Atom(element, order, coord) for element, order, coord in
-                         itertools.zip_longest(self.elements, range(len(self)), self.coords)])
+                         itertools.zip_longest(self.elements, self.orders, self.coords)])
 
     @property
     def atoms_total(self) -> int:

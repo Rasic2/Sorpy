@@ -31,8 +31,8 @@ class POSCAR:
             cfg = f.readlines()
         return cfg
 
-    def to_structure(self, style=None, mol_index=None):
-        return Structure.read_from_POSCAR(self.fname, style=style, mol_index=mol_index)
+    def to_structure(self, style=None, mol_index=None, **kargs):
+        return Structure.read_from_POSCAR(self.fname, style=style, mol_index=mol_index, **kargs)
 
 
 class CONTCAR(POSCAR):

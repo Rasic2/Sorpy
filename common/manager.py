@@ -4,6 +4,7 @@ import numpy as np
 from pathlib import Path
 
 from common.io_file import POSCAR, CONTCAR
+from common.operate import Operator as op
 from logger import logger
 from utils import Format_list
 
@@ -22,9 +23,10 @@ class FileManager:
             logger.error(f"The '{ftype}' is excluding in the <{dname}> directory.")
             return None
 
-    def __init__(self, fname: Path, style=None, mol_index=None):
+    def __init__(self, fname: Path, style=None, mol_index=None, **kargs):
 
         self.fname = fname
+        self.kargs = kargs
 
         self.ftype = fname.name.split("_")[0]
         self.ftype = FileManager.files[self.ftype]
@@ -72,34 +74,54 @@ class FileManager:
 
     @property
     def structure(self):
-        return self.file.to_structure(style=self.style, mol_index=self.mol_index)
+        return self.file.to_structure(style=self.style, mol_index=self.mol_index, **self.kargs)
 
 class DirManager:
 
-    def __init__(self, dname: Path, style=None, mol_index=None):
+    def __init__(self, dname: Path, template=None, style=None, mol_index=None, **kargs):
 
         self.dname = dname
+        self.template = template
         self.style = style
         self.mol_index = mol_index
+        self.kargs =kargs
         if self.mol_index:
             logger.info(f"Molecule was align to {self.mol_index} location.")
+
+        self._all_files=None
+
+    def __getitem__(self, index):
+        return self.all_files[index].structure
 
     def __len__(self):
         return len(self.all_files)
 
     def single_file(self, fname: Path):
-        return FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index)
+        return FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index, **self.kargs)
 
     @property
     def all_files(self):
-        all_files = [FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index)
-               for fname in os.listdir(self.dname)]
-        all_files = [file for file in all_files if file is not None]
-        return Format_list(sorted(all_files, key=lambda x : x))
+        if self._all_files is None:
+            all_files = [FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index, **self.kargs)
+                         for fname in os.listdir(self.dname)]
+            all_files = [file for file in all_files if file is not None]
+            self._all_files = Format_list(sorted(all_files, key=lambda x : x))
+        return self._all_files
 
     @property
     def coords(self):
-        return Format_list([file.structure.coords for file in self.all_files])
+        return Format_list([op.align(self.template, file.structure.coords) for file in self.all_files])
+
+    @property
+    def mcoords(self):
+        """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
+        if len(self.mol_index) > 0 and "anchor" in self.kargs:
+            mindex = list(set(self.mol_index).difference({self.kargs["anchor"]}))
+            _mcoords = np.copy(self.frac_coords)
+            _mcoords[:, mindex, :] = self.inter_coords[:, :, :]
+            return _mcoords
+        else:
+            return None
 
     @property
     def frac_coords(self):

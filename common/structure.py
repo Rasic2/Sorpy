@@ -4,16 +4,19 @@ import itertools
 from collections import defaultdict
 
 from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
-from utils import distance
-from logger import current_dir
+from utils import Format_defaultdist
+#from logger import current_dir
 
 
 class Molecule(AtomSetBase):
 
-    def __init__(self, elements=None, coords:Coordinates=None, anchor=None, **kargs):
+    def __init__(self, elements=None, orders=None, coords:Coordinates=None, anchor=None, **kargs):
 
-        super().__init__(elements=elements, coords=coords, **kargs)
+        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+        for index, atom in enumerate(self.atoms):
+            if self.anchor == atom.order:
+                self.anchor = index
 
     def __repr__(self):
         return f"------------------------------------------------------------\n" \
@@ -80,9 +83,9 @@ class Molecule(AtomSetBase):
 
 class Slab(AtomSetBase):
 
-    def __init__(self, elements=None, coords: Coordinates=None, lattice: Lattice=None, **kargs):
+    def __init__(self, elements=None, orders=None, coords: Coordinates=None, lattice: Lattice=None, **kargs):
 
-        super().__init__(elements=elements, coords=coords, **kargs)
+        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.lattice = lattice
 
         assert len(self.elements) == len(self.frac_coords) == len(self.cart_coords), \
@@ -109,7 +112,8 @@ class Structure(AtomSetBase):
         if self.style not in Structure.styles:
             raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
 
-        super().__init__(elements=elements, coords=coords, **kargs)
+        orders = list(range(len(elements)))
+        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.lattice = lattice
 
         mol_index = mol_index if mol_index is not None else []
@@ -137,6 +141,7 @@ class Structure(AtomSetBase):
         if self.style.startswith("Slab"):
             kargs = {key: np.array(value)[self.slab_index] for key, value in self.kargs.items() if value is not None}
             return Slab(elements=np.array(self.elements)[self.slab_index],
+                        orders=self.slab_index,
                         coords=self.coords[self.slab_index],
                         lattice=self.lattice, **kargs)
         else:
@@ -144,16 +149,19 @@ class Structure(AtomSetBase):
 
     @property
     def molecule(self):
+        self.anchor = getattr(self, "anchor", None)
         if self.style.endswith("Mol") and self.mol_index and set(self.index).difference(self.mol_index):
             kargs = {key: np.array(value)[self.mol_index] for key, value in self.kargs.items() if value is not None}
             return Molecule(elements=np.array(self.elements)[self.mol_index],
+                            orders=self.mol_index,
                             coords=self.coords[self.mol_index],
-                            lattice=self.lattice, **kargs)
+                            lattice=self.lattice,
+                            anchor=self.anchor,**kargs)
         else:
             return None
 
     def find_nearest_neighbour_table(self, cut_radius=3.0):
-        NNT = defaultdict(list)
+        NNT = Format_defaultdist(list)
         for atom_i in self.atoms:
             for atom_j in self.atoms:
                 if atom_j != atom_i:
@@ -161,7 +169,7 @@ class Structure(AtomSetBase):
                     if distance <= cut_radius:
                         NNT[atom_i].append((atom_j, distance))
 
-        sorted_NNT = defaultdict(list)
+        sorted_NNT = Format_defaultdist(list)
         for key, value in NNT.items():
             sorted_NNT[key] = sorted(value, key=lambda x: x[1])
 
@@ -169,7 +177,7 @@ class Structure(AtomSetBase):
 
 
     @staticmethod
-    def read_from_POSCAR(fname, style=None, mol_index=None):
+    def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):
         with open(fname) as f:
             cfg = f.readlines()
         lattice = Lattice.read_from_string(cfg[2:5])
@@ -193,7 +201,7 @@ class Structure(AtomSetBase):
         coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
 
         return Structure(style, mol_index=mol_index,
-                         elements=elements, coords=coords, lattice=lattice, TF=TF)
+                         elements=elements, coords=coords, lattice=lattice, TF=TF, **kargs)
 
     def write_to_POSCAR(self, fname, system=None, factor=1):
         system = system if system is not None else " ".join([item[0]+str(item[1]) for item in self.atoms_count])

@@ -3,7 +3,7 @@ from common.io_file import POSCAR, CONTCAR
 from common.manager import FileManager, DirManager
 from logger import current_dir
 from pathlib import Path
-from utils import Format_defaultdist
+from utils import Format_defaultdict
 import numpy as np
 
 def test_poscar():
@@ -39,15 +39,21 @@ def test_dirmanager():
     #print(fm.structure.molecule.inter_coords)
 
 def test_operator():
-    s1 = POSCAR(fname=Path(current_dir)/"examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol", mol_index=[36,37])
-    s2 = POSCAR(fname=Path(current_dir)/"test/ori/POSCAR_ori_1").to_structure(style="Slab+Mol", mol_index=[36,37])
+    kargs={"style":"Slab+Mol", "mol_index": [36,37], "anchor": 36, "ignore_mol": True}
+    s1 = POSCAR(fname=Path(current_dir)/"examples/CeO2_111/POSCAR_template").to_structure(**kargs)
+    s2 = POSCAR(fname=Path(current_dir)/"test/ori/POSCAR_ori_1").to_structure(**kargs)
     template = s1.coords
     coords = s2.coords
     s1.find_nearest_neighbour_table()
     s2.find_nearest_neighbour_table()
     #print(s1.NNT)
-    print(op.dist(s1, s2))
-    #print(op.align(template, coords).cart_coords-template.cart_coords)
+    #print(op.dist(s1, s2))
+    #print(s2.coords.cart_coords-s1.coords.cart_coords)
+    print(op.align(s1, s2).coords.cart_coords-s1.coords.cart_coords)
+    #print(s1.bonds)
+    #print(op.align(s1, s2))
+    #print(op.__dict__)
+    #op._Operator__tailor_atom_order(s1, s2)
 
 def test_main():
 
@@ -72,9 +78,22 @@ def test_main():
     #setattr(input_dm[0].molecule, "anchor", 36)
     #print(input_dm[1].molecule.anchor)
 
+def test_mass_center():
+    kargs = {"style": "Slab+Mol", "mol_index": [36, 37], "anchor": 36, "ignore_mol": True}
+
+    template = POSCAR(fname=Path(current_dir) / "examples/CeO2_111/POSCAR_template").to_structure(**kargs)
+    p2 = CONTCAR(fname=Path(current_dir) / "output/CONTCAR_1-1").to_structure(**kargs)
+    print(template.mass_center)
+    #print(template.slab.mass_center)
+    #print(p2.slab.mass_center)
+
+    #print(np.where(np.abs(p2.frac_coords-template.frac_coords)>0.5))
+    #print((p2.frac_coords-template.frac_coords)[5])
+
 if __name__ == "__main__":
     #test_filemanager()
     #test_dirmanager()
-    #test_operator()
-    test_main()
+    test_operator()
+    #test_main()
+    #test_mass_center()
     pass

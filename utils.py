@@ -23,7 +23,7 @@ def distance(array_i, array_j):
     return np.linalg.norm(array_i-array_j)
 
 
-class Format_defaultdist(defaultdict):
+class Format_defaultdict(defaultdict):
     def __repr__(self):
         strings=""
         for key, value in self.items():

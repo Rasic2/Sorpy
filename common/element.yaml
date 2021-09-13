@@ -1,11 +1,23 @@
 Element C:
     formula: C
     number: 6
+    bonds:
+        - formula: O
+          bond length: 1.142
 
 Element O:
     formula: O
     number: 8
+    bonds:
+        - formula: C
+          bond length: 1.142
+
+        - formula: Ce
+          bond length: 2.356
 
 Element Ce:
     formula: Ce
     number: 58
+    bonds:
+        - formula: O
+          bond length: 2.356

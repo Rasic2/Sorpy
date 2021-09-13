@@ -1,9 +1,12 @@
+import collections
+
 import yaml
 import itertools
 from collections import Counter
 import numpy as np
 
 from logger import current_dir
+from utils import Format_defaultdict
 
 yaml.warnings({'YAMLLoadWarning': False})
 
@@ -129,6 +132,10 @@ class Element:
     def number(self) -> int:
         return Element.elements[f'Element {self.formula}']['number']
 
+    @property
+    def bonds(self):
+        return {Element(bond['formula']):bond['bond length'] for bond in Element.elements[f'Element {self.formula}']['bonds']}
+
 
 class Atom:
     """Periodic System in Solid"""
@@ -208,3 +215,20 @@ class AtomSetBase:
     @property
     def atoms_count(self):
         return sorted(Counter(self.atoms_formulas).items(), key=lambda x: Element(x[0]).number)
+
+    @property
+    def bonds(self):
+        min_factor, max_factor = 0.8, 1.2
+        bonds = Format_defaultdict(list)
+        for atom_i in self.atoms:
+            for atom_j in self.atoms:
+                if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
+                    bond_length = np.linalg.norm(self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
+                    if min_factor <= bond_length/atom_i.element.bonds[atom_j.element] <= max_factor:
+                        bonds[atom_i].append((atom_j, bond_length))
+
+        sorted_bonds = Format_defaultdict(list)
+        for key, value in bonds.items():
+            sorted_bonds[key] = sorted(value, key=lambda x: x[1])
+
+        return bonds

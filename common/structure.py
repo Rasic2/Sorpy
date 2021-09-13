@@ -4,13 +4,15 @@ import itertools
 from collections import defaultdict
 
 from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
-from utils import Format_defaultdist
-#from logger import current_dir
+from utils import Format_defaultdict
+
+
+# from logger import current_dir
 
 
 class Molecule(AtomSetBase):
 
-    def __init__(self, elements=None, orders=None, coords:Coordinates=None, anchor=None, **kargs):
+    def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, **kargs):
 
         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
@@ -23,7 +25,7 @@ class Molecule(AtomSetBase):
                f"<Molecule>                                                  \n" \
                f"-Atoms-                                                     \n" \
                f"{self.atoms}                                                \n" \
-               f"------------------------------------------------------------" \
+               f"------------------------------------------------------------"
 
     def __getitem__(self, index):
         return self.atoms[index]
@@ -45,46 +47,45 @@ class Molecule(AtomSetBase):
 
     @property
     def dist(self):
-        if self.anchor: # anchor Atom and Reset vector
+        if self.anchor:  # anchor Atom and Reset vector
             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, np.linalg.norm(vector)) \
+            return [(atom_j, atom_i, np.linalg.norm(vector))
                     for atom_i, vector in zip(self.atoms, vectors) if atom_i != atom_j]
         else:
             return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
 
     @property
     def theta(self):
-        if self.anchor: # anchor Atom and Reset vector
+        if self.anchor:  # anchor Atom and Reset vector
             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2]))) \
+            return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
                     for (vector), (_, atom_i, dist) in zip(vectors, self.dist) if atom_i != atom_j]
         else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2]))) \
+            return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
                     for (atom_i, atom_j, vector), (_, _, dist) in zip(self.vector, self.dist)]
 
     @property
     def phi(self):
-        if self.anchor: # anchor Atom and Reset vector
+        if self.anchor:  # anchor Atom and Reset vector
             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0]))) \
+            return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0])))
                     for (_, atom_i, _), (vector) in zip(self.theta, vectors)]
         else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0]))) \
+            return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0])))
                     for (atom_i, atom_j, vector) in self.vector]
 
     @property
     def inter_coords(self):
-        return [(atom_i, atom_j, [dist, theta, phi]) \
+        return [(atom_i, atom_j, [dist, theta, phi])
                 for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
 
 
 class Slab(AtomSetBase):
 
-    def __init__(self, elements=None, orders=None, coords: Coordinates=None, lattice: Lattice=None, **kargs):
-
+    def __init__(self, elements=None, orders=None, coords: Coordinates = None, lattice: Lattice = None, **kargs):
         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.lattice = lattice
 
@@ -101,13 +102,26 @@ class Slab(AtomSetBase):
                f"------------------------------------------------------------" \
             if self.lattice is not None else f"<Slab object>"
 
+    @property
+    def mass_center(self):
+        return np.sum(self.coords.frac_coords, axis=0) / len(self)
+
 
 class Structure(AtomSetBase):
     """TODO <class Coordinates including the frac, cart transfer>"""
     styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
     extra_attrs = ("TF",)
 
-    def __init__(self, style=None, elements=None, coords: Coordinates=None, lattice: Lattice=None, mol_index=None, **kargs):
+    def __init__(self, style=None, elements=None, coords: Coordinates = None, lattice: Lattice = None, mol_index=None,
+                 **kargs):
+        """
+        :param style:           <Required> Indicate the system style: <"Crystal", "Slab", "Mol", "Slab+Mol">
+        :param elements:        <Required> The system Elements list: [Element, Element, etc]
+        :param coords:          <Required> The system Coordinates
+        :param lattice:         <Required> The Lattice vector
+        :param mol_index:       <Optional> The molecule index
+        :param kargs:           <Optional> <TF, anchor, ignore_mol, ignore_index>
+        """
         self.style = style
         if self.style not in Structure.styles:
             raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
@@ -137,6 +151,18 @@ class Structure(AtomSetBase):
         return self.coords - other.coords
 
     @property
+    def mass_center(self):
+        self.ignore_index = getattr(self, "ignore_index", None)
+        self.ignore_mol = getattr(self, "ignore_mol", None)
+        if self.ignore_mol:
+            return self.slab.mass_center
+        elif isinstance(self.ignore_index, list):
+            index = list(set(self.index).difference(set(self.ignore_index)))
+            return np.sum(self.coords.frac_coords[index], axis=0) / len(index)
+        else:
+            return np.sum(self.coords.frac_coords, axis=0) / len(self)
+
+    @property
     def slab(self):
         if self.style.startswith("Slab"):
             kargs = {key: np.array(value)[self.slab_index] for key, value in self.kargs.items() if value is not None}
@@ -156,12 +182,12 @@ class Structure(AtomSetBase):
                             orders=self.mol_index,
                             coords=self.coords[self.mol_index],
                             lattice=self.lattice,
-                            anchor=self.anchor,**kargs)
+                            anchor=self.anchor, **kargs)
         else:
             return None
 
     def find_nearest_neighbour_table(self, cut_radius=3.0):
-        NNT = Format_defaultdist(list)
+        NNT = Format_defaultdict(list)
         for atom_i in self.atoms:
             for atom_j in self.atoms:
                 if atom_j != atom_i:
@@ -169,12 +195,11 @@ class Structure(AtomSetBase):
                     if distance <= cut_radius:
                         NNT[atom_i].append((atom_j, distance))
 
-        sorted_NNT = Format_defaultdist(list)
+        sorted_NNT = Format_defaultdict(list)
         for key, value in NNT.items():
             sorted_NNT[key] = sorted(value, key=lambda x: x[1])
 
         setattr(self, "NNT", sorted_NNT)
-
 
     @staticmethod
     def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):
@@ -183,20 +208,20 @@ class Structure(AtomSetBase):
         lattice = Lattice.read_from_string(cfg[2:5])
 
         elements = [(name, int(count)) for name, count in zip(cfg[5].split(), cfg[6].split())]
-        elements = sum([[formula]*count for (formula, count) in elements], [])
-        elements = [Element(formula) for formula in elements]
+        elements = sum([[formula] * count for (formula, count) in elements], [])
+        elements = np.array([Element(formula) for formula in elements])
 
         selective = cfg[7].lower()[0] == "s"
         if selective:
             coor_type = cfg[8].rstrip()
-            coords = np.array(list([float(item) for item in coor.split()[:3]] for coor in cfg[9:9+len(elements)]))
+            coords = np.array(list([float(item) for item in coor.split()[:3]] for coor in cfg[9:9 + len(elements)]))
 
             frac_coords = coords if coor_type.lower()[0] == "d" else None
             cart_coords = coords if coor_type.lower()[0] == "c" else None
 
-            TF = np.array(list([item.split()[3:6] for item in cfg[9:9+len(elements)]]))
+            TF = np.array(list([item.split()[3:6] for item in cfg[9:9 + len(elements)]]))
         else:
-            raise NotImplementedError\
+            raise NotImplementedError \
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
         coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
 
@@ -204,7 +229,7 @@ class Structure(AtomSetBase):
                          elements=elements, coords=coords, lattice=lattice, TF=TF, **kargs)
 
     def write_to_POSCAR(self, fname, system=None, factor=1):
-        system = system if system is not None else " ".join([item[0]+str(item[1]) for item in self.atoms_count])
+        system = system if system is not None else " ".join([item[0] + str(item[1]) for item in self.atoms_count])
         lattice = self.lattice.to_strings
         elements = [(key.formula, len(list(value))) for key, value in itertools.groupby(self.elements)]
         element_name = " ".join([item[0] for item in elements])
@@ -212,7 +237,7 @@ class Structure(AtomSetBase):
         selective = getattr(self, "TF", None) is not None
         coords = self.coords.to_strings(ctype="frac").split("\n")
         if selective:
-            coords = "".join([coord+ "\t" + "   ".join(TF) + "\n" for coord, TF in zip(coords, self.TF)])
+            coords = "".join([coord + "\t" + "   ".join(TF) + "\n" for coord, TF in zip(coords, self.TF)])
 
         with open(fname, "w") as f:
             f.write(f"{system}\n")
@@ -225,29 +250,25 @@ class Structure(AtomSetBase):
             f.write("Direct\n")
             f.write(coords)
 
-
-
-
-
-#m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+# m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
 #             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
-#print(m.pair)
-#print(m.vector)
-#print(m.dist)
-#print(m.theta)
-#print(m.phi)
-#print(m.frac_coords)
-#print(m.cart_coords)
-#print(m.inter_coords)
-#print(m.atoms_count)
-#print(m.TF)
-#s = Structure("Slab+Mol", elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+# print(m.pair)
+# print(m.vector)
+# print(m.dist)
+# print(m.theta)
+# print(m.phi)
+# print(m.frac_coords)
+# print(m.cart_coords)
+# print(m.inter_coords)
+# print(m.atoms_count)
+# print(m.TF)
+# s = Structure("Slab+Mol", elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
 #             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]), mol_index=[0])
-#exit()
-#s = Structure.read_from_POSCAR(style="Slab+Mol", fname=f"{current_dir}/input/POSCAR_1-1", mol_index=[36, 37])
-#p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
-#p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
-#print(p1-p2)
+# exit()
+# s = Structure.read_from_POSCAR(style="Slab+Mol", fname=f"{current_dir}/input/POSCAR_1-1", mol_index=[36, 37])
+# p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
+# p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
+# print(p1-p2)
 ##print(ctype(p[2]))
 ##s.find_nearest_neighbour_table()
 ##for key, value in s.NNT.items():
@@ -258,12 +279,12 @@ class Structure(AtomSetBase):
 ##print(s.slab)
 ##print(s.molecule)
 ##s.write_to_POSCAR(f"{current_dir}/POSCAR_test")
-#exit()
+# exit()
 #
 #
 #
 #
-#class POSCAR:
+# class POSCAR:
 #
 #    def __init__(self, fname, action="r"):
 #        self.fname = fname
@@ -401,7 +422,7 @@ class Structure(AtomSetBase):
 #        # print(model_region)
 #
 #
-#if __name__ == "__main__":
+# if __name__ == "__main__":
 #
 #    for ii in range(50):
 #        print(f"POSCAR_ML_{ii + 1}")

@@ -110,7 +110,7 @@ class DirManager:
 
     @property
     def coords(self):
-        return Format_list([op.align(self.template, file.structure.coords) for file in self.all_files])
+        return Format_list([op.align(self.template, file.structure).coords for file in self.all_files])
 
     @property
     def mcoords(self):

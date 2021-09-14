@@ -25,7 +25,8 @@ COLORS = {
     'ERROR': RED
 }
 
-def formatter_message(message, use_color = True):
+
+def formatter_message(message, use_color=True):
     if use_color:
         message = message.replace("$RESET", RESET_SEQ).replace("$BOLD", BOLD_SEQ)
     else:
@@ -33,15 +34,14 @@ def formatter_message(message, use_color = True):
 
     return message
 
+
 class ColoredFormatter(logging.Formatter):
 
-    def __init__(self, msg, use_color = False):
-
+    def __init__(self, msg, use_color=False):
         logging.Formatter.__init__(self, msg)
         self.use_color = use_color
 
     def format(self, record):
-
         levelname = record.levelname
 
         if self.use_color and levelname in COLORS:
@@ -50,14 +50,13 @@ class ColoredFormatter(logging.Formatter):
 
         return logging.Formatter.format(self, record)
 
-class ColoredLogger(logging.Logger):
 
+class ColoredLogger(logging.Logger):
     FORMAT = "%(asctime)s ($BOLD%(filename)s$RESET:%(lineno)d) [$BOLD%(name)s$RESET][%(levelname)s] %(message)s"
     COLOR_FORMAT = formatter_message(FORMAT, True)
     FILE_FORMAT = formatter_message(FORMAT, False)
 
     def __init__(self, name):
-
         logging.Logger.__init__(self, name)
         file_formatter = ColoredFormatter(self.FILE_FORMAT, False)
         color_formatter = ColoredFormatter(self.COLOR_FORMAT, True)
@@ -70,6 +69,7 @@ class ColoredLogger(logging.Logger):
 
         self.addHandler(fh)
         self.addHandler(ch)
+
 
 logging.setLoggerClass(ColoredLogger)
 logger = logging.getLogger("__main__")

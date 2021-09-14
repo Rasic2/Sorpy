@@ -1,10 +1,16 @@
+import os
+
 from common.operate import Operator as op
 from common.io_file import POSCAR, CONTCAR
 from common.manager import FileManager, DirManager
+from common.model import Model
+
 from logger import current_dir
 from pathlib import Path
 from utils import Format_defaultdict
 import numpy as np
+
+os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 def test_poscar():
     p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
@@ -57,26 +63,26 @@ def test_operator():
 
 def test_main():
 
-    kargs = {"style":"Slab+Mol", "mol_index": [36,37], "anchor": 36}
+    kargs = {"style":"Slab+Mol",
+             "mol_index": [36,37],
+             "anchor": 36,
+             "ignore_mol": True,
+             'expand':{'expand_z':{'boundary': 0.2, 'expand_num': 2, 'ignore_index': [37]}}}
 
     template = POSCAR(fname=Path(current_dir)/"examples/CeO2_111/POSCAR_template").to_structure(**kargs)
-    #print(template)
-    #exit()
-    input_dm = DirManager(dname=Path(current_dir)/"input", template=template.coords, **kargs)
-    output_dm = DirManager(dname=Path(current_dir)/"output", template=template.coords, **kargs)
-    #for coord_i, coord_o in zip(input_dm.coords, output_dm.coords):
-    #    print(np.where(np.abs(coord_i.frac_coords - template.frac_coords) > 0.5))
-    #    print(np.where(np.abs(coord_o.frac_coords - template.frac_coords) > 0.5))
-    #    print()
-    #for file in input_dm:
-    #    file.molecule.anchor = 36
-    for mcoord in input_dm.mcoords[:, :37, :]:
-        print(np.where(np.abs(mcoord - template.frac_coords[:37, :])>0.5))
-    #print()
-    ###print(output_dm.mcoords[:, , :])
-    #input_dm[0].molecule.anchor = 36
-    #setattr(input_dm[0].molecule, "anchor", 36)
-    #print(input_dm[1].molecule.anchor)
+
+    input_dm = DirManager(dname=Path(current_dir)/"input", template=template, **kargs)
+    output_dm = DirManager(dname=Path(current_dir)/"output", template=template, **kargs)
+
+    data_input, data_output = np.copy(input_dm.mcoords), np.copy(output_dm.mcoords)
+
+    from keras import models, layers
+    model = models.Sequential()
+    model.add(layers.Dense(1024, activation='relu', input_shape=(38 * 3,)))
+    model.add(layers.Dense(114))
+    model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
+    m = Model(model, data_input, data_output, normalization="mcoord", expand=kargs['expand'])
+    print(m("hold out"))
 
 def test_mass_center():
     kargs = {"style": "Slab+Mol", "mol_index": [36, 37], "anchor": 36, "ignore_mol": True}
@@ -93,7 +99,7 @@ def test_mass_center():
 if __name__ == "__main__":
     #test_filemanager()
     #test_dirmanager()
-    test_operator()
-    #test_main()
+    #test_operator()
+    test_main()
     #test_mass_center()
     pass

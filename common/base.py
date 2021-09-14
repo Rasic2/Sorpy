@@ -1,9 +1,8 @@
-import collections
-
-import yaml
 import itertools
 from collections import Counter
+
 import numpy as np
+import yaml
 
 from logger import current_dir
 from utils import Format_defaultdict
@@ -134,7 +133,8 @@ class Element:
 
     @property
     def bonds(self):
-        return {Element(bond['formula']):bond['bond length'] for bond in Element.elements[f'Element {self.formula}']['bonds']}
+        return {Element(bond['formula']): bond['bond length'] for bond in
+                Element.elements[f'Element {self.formula}']['bonds']}
 
 
 class Atom:
@@ -223,8 +223,9 @@ class AtomSetBase:
         for atom_i in self.atoms:
             for atom_j in self.atoms:
                 if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
-                    bond_length = np.linalg.norm(self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
-                    if min_factor <= bond_length/atom_i.element.bonds[atom_j.element] <= max_factor:
+                    bond_length = np.linalg.norm(
+                        self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
+                    if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
                         bonds[atom_i].append((atom_j, bond_length))
 
         sorted_bonds = Format_defaultdict(list)

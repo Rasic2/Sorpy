@@ -22,6 +22,9 @@ class ParameterManager:
         :param filename:            setting_110.yaml
         """
         self.fname = filename
+        self.MillerIndex = None
+        self.TestNum = None
+        self.z_height = None
 
         self.load()
         self.check_trans()

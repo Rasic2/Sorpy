@@ -22,6 +22,11 @@ def format_defaultdist(dist_i):
 def distance(array_i, array_j):
     return np.linalg.norm(array_i-array_j)
 
+def normalize_coord(data):
+    data[:, 37, 2] = np.where(data[:, 37, 2] >= 0, data[:, 37, 2], 360 + data[:, 37, 2])
+    data[:, 37, :] = data[:, 37, :] / [1, 180, 360] - [1.142, 0, 0]
+    return data
+
 
 class Format_defaultdict(defaultdict):
     def __repr__(self):

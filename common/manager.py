@@ -12,7 +12,7 @@ from utils import Format_list
 class FileManager:
     files = {'POSCAR': POSCAR,
              'CONTCAR': CONTCAR
-    }
+             }
 
     def __new__(cls, *args, **kargs):
         ftype = args[0].name.split("_")[0]
@@ -20,7 +20,7 @@ class FileManager:
         if ftype in FileManager.files:
             return super().__new__(cls)
         else:
-            logger.error(f"The '{ftype}' is excluding in the <{dname}> directory.")
+            logger.warning(f"The '{ftype}' is excluding in the <{dname}> directory.")
             return None
 
     def __init__(self, fname: Path, style=None, mol_index=None, **kargs):
@@ -32,12 +32,11 @@ class FileManager:
         self.ftype = FileManager.files[self.ftype]
 
         self.index = fname.name.split("_")[-1]
+        self.num_index = self.index
         try:
             self.num_index = int(self.index)
         except ValueError:
             self.num_index = [int(item) for item in re.split("[^0-9]", self.index)]
-        except:
-            self.num_index = self.index
 
         if isinstance(mol_index, list):
             self.mol_index = mol_index
@@ -76,6 +75,7 @@ class FileManager:
     def structure(self):
         return self.file.to_structure(style=self.style, mol_index=self.mol_index, **self.kargs)
 
+
 class DirManager:
 
     def __init__(self, dname: Path, template=None, style=None, mol_index=None, **kargs):
@@ -84,11 +84,11 @@ class DirManager:
         self.template = template
         self.style = style
         self.mol_index = mol_index
-        self.kargs =kargs
+        self.kargs = kargs
         if self.mol_index:
             logger.info(f"Molecule was align to {self.mol_index} location.")
 
-        self._all_files=None
+        self._all_files = None
 
     def __getitem__(self, index):
         return self.all_files[index].structure
@@ -97,15 +97,15 @@ class DirManager:
         return len(self.all_files)
 
     def single_file(self, fname: Path):
-        return FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index, **self.kargs)
+        return FileManager(self.dname / fname, style=self.style, mol_index=self.mol_index, **self.kargs)
 
     @property
     def all_files(self):
         if self._all_files is None:
-            all_files = [FileManager(self.dname/fname, style=self.style, mol_index=self.mol_index, **self.kargs)
+            all_files = [FileManager(self.dname / fname, style=self.style, mol_index=self.mol_index, **self.kargs)
                          for fname in os.listdir(self.dname)]
             all_files = [file for file in all_files if file is not None]
-            self._all_files = Format_list(sorted(all_files, key=lambda x : x))
+            self._all_files = Format_list(sorted(all_files, key=lambda x: x))
         return self._all_files
 
     @property

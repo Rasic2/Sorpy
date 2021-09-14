@@ -1,13 +1,10 @@
 import math
 import numpy as np
 import itertools
-from collections import defaultdict
 
 from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
 from utils import Format_defaultdict
-
-
-# from logger import current_dir
+from logger import logger
 
 
 class Molecule(AtomSetBase):
@@ -41,7 +38,7 @@ class Molecule(AtomSetBase):
         return set(pair_list)
 
     @property
-    def vector(self):
+    def vector(self): # TODO PBC apply not considered important error
         """ vector in Cartesian format """
         return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in self.pair]
 
@@ -155,11 +152,14 @@ class Structure(AtomSetBase):
         self.ignore_index = getattr(self, "ignore_index", None)
         self.ignore_mol = getattr(self, "ignore_mol", None)
         if self.ignore_mol:
+            logger.debug("<ignore_mol> set, Calculate the slab masss center")
             return self.slab.mass_center
         elif isinstance(self.ignore_index, list):
             index = list(set(self.index).difference(set(self.ignore_index)))
+            logger.debug("<ignore_index> set, Calculate the structure mass center which excluding the ignore_index")
             return np.sum(self.coords.frac_coords[index], axis=0) / len(index)
         else:
+            logger.debug("Calculate the structure mass center")
             return np.sum(self.coords.frac_coords, axis=0) / len(self)
 
     @property
@@ -203,6 +203,7 @@ class Structure(AtomSetBase):
 
     @staticmethod
     def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):
+        logger.debug(f"Handle the {fname}")
         with open(fname) as f:
             cfg = f.readlines()
         lattice = Lattice.read_from_string(cfg[2:5])
@@ -224,6 +225,16 @@ class Structure(AtomSetBase):
             raise NotImplementedError \
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
         coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
+
+        # if "expand" in kargs.keys():
+        #    expand_func = list(kargs['expand'].keys())[0]
+        #    if expand_func in Structure.ExpandFunc.keys():
+        #        coords = Structure.ExpandFunc[expand_func](frac_coords, lattice=lattice)
+        #        for coord in coords:
+        #            yield Structure(style, mol_index=mol_index, elements=elements,
+        #                            coords=coord, lattice=lattice, TF=TF, **kargs)
+        #    else:
+        #        logger.warning("Expand step may not happen.")
 
         return Structure(style, mol_index=mol_index,
                          elements=elements, coords=coords, lattice=lattice, TF=TF, **kargs)

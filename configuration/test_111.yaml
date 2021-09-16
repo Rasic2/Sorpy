@@ -13,5 +13,5 @@ supercell: (2, 2, 1)
 # adsorbate information
 z_height: 20.5
 
-# test-set number
+# test_set-set number
 TestNum: 50

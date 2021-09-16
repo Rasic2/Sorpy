@@ -5,13 +5,14 @@ from common.io_file import POSCAR
 from common.manager import DirManager
 from common.model import Model, Ploter
 
-from logger import logger, current_dir
+from common.logger import logger, current_dir
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 input_dir = Path(current_dir) / "input"
 output_dir = Path(current_dir) / "output"
 
 if __name__ == "__main__":
+
     kargs = {"style": "Slab+Mol",
              "mol_index": [36, 37],
              "anchor": 36,
@@ -26,26 +27,14 @@ if __name__ == "__main__":
 
     logger.info("Calculate the mcoords")
     data_input, data_output = copy.deepcopy(input_dm.mcoords), copy.deepcopy(output_dm.mcoords)
-    #import numpy as np
-    #print(np.where((data_output[:, 37, 0]-1.142)>0.2))
-    #print(output_dm[300].molecule.inter_coords)
-    #exit()
-
 
     from keras import models, layers
-
     model = models.Sequential()
     model.add(layers.Dense(1024, activation='relu', input_shape=(38 * 3,)))
     model.add(layers.Dense(114))
     model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
     train_model = Model(model, data_input, data_output, normalization="mcoord", expand=kargs['expand'])
-    #print(train_model.train_input[300, 37, :])
-    #print(train_model.train_output[300, 37, :])
-    #print()
-    #import numpy as np
-    #print(np.where(np.abs(train_model.train_input[:, 37, 0]-train_model.train_output[:, 37, 0])>0.5))
-    #exit()
     history = train_model("hold out", mname="CeO2_111_CO_test.h5")
 
     p = Ploter(history)

@@ -228,3 +228,23 @@
 2021-09-16 13:22:35,682 (generate_test.py:62) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-16 13:22:35,848 (generate_test.py:74) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-16 13:22:35,849 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 21:39:09,763 (generate_test.py:35) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 21:39:09,922 (generate_test.py:47) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 21:39:09,923 (generate_test.py:55) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-16 21:39:09,923 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 21:39:11,265 (generate_test.py:59) [__main__][INFO] Step 1. Normalization the data.
+2021-09-16 21:39:11,265 (generate_test.py:62) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-16 21:39:11,267 (generate_test.py:66) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-16 21:39:15,536 (generate_test.py:73) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR frac_coord.
+2021-09-16 21:39:15,537 (generate_test.py:76) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.
+2021-09-16 21:50:00,344 (manager.py:178) [__main__][WARNING] 'TestNum' in test_111.yaml is ignored.
+2021-09-16 21:50:01,001 (generate_test.py:34) [__main__][INFO] Generate None random POSCAR.
+2021-09-16 21:51:01,874 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 21:51:02,018 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 21:51:02,019 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-16 21:51:02,019 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 21:51:03,350 (generate_test.py:58) [__main__][INFO] Step 1. Normalization the data.
+2021-09-16 21:51:03,350 (generate_test.py:61) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-16 21:51:03,352 (generate_test.py:65) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-16 21:51:07,633 (generate_test.py:72) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR fractional coordinates.
+2021-09-16 21:51:07,634 (generate_test.py:75) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.

@@ -12,11 +12,11 @@ from pymatgen.core.surface import generate_all_slabs
 from pymatgen.core.sites import Site
 from pymatgen.io.vasp import Poscar
 
-from logger import *
+from common.logger import *
 from load_yaml import ParameterManager
-from utils import format_dict
+from common.utils import format_dict
 
-CAL_DIR = os.path.join(current_dir, "cal")
+CAL_DIR = os.path.join(current_dir, "train_set/guess")
 surface_111_DIR = os.path.join(CAL_DIR, "111")
 surface_110_DIR = os.path.join(CAL_DIR, "110")
 

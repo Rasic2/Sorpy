@@ -1,14 +1,11 @@
-import numpy as np
-
-from main import DirManager, CoorTailor
-from utils import distance
+from train_model import DirManager, CoorTailor
 
 if __name__ == "__main__":
-    #ori_DM = DirManager("test/ori", "POSCAR", mol_index="37-38")
-    #ML_DM = DirManager("test/ML-2", "POSCAR", mol_index="37-38")
+    #ori_DM = DirManager("test_set/ori", "POSCAR", mol_index="37-38")
+    #ML_DM = DirManager("test_set/ML-2", "POSCAR", mol_index="37-38")
 
-    ori_DM = DirManager("input-test", "POSCAR", mol_index="37-38")
-    ML_DM = DirManager("output-test", "CONTCAR", mol_index="37-38")
+    ori_DM = DirManager("input-test_set", "POSCAR", mol_index="37-38")
+    ML_DM = DirManager("output-test_set", "CONTCAR", mol_index="37-38")
 
     ori_coor = ori_DM.coords
     ML_coor = ML_DM.coords

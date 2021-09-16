@@ -1,4 +1,5 @@
 import copy
+import itertools
 import numpy as np
 from utils import Format_defaultdict
 
@@ -31,6 +32,10 @@ class Operator:
     def __pbc_apply(template, for_pbc):
         """Apply the Periodic Boundary Condition <PBC_apply>"""
         index = np.where(np.abs(for_pbc.coords.frac_coords - template.coords.frac_coords) > 0.5)
+        temp_index = [(i, j) for i, j in zip(index[0], index[1])]
+        final_index = [item for item in temp_index if item[0] not in for_pbc.mol_index]
+        index = (np.array([i for i, _ in final_index], dtype=np.int64), np.array([i for _, i in final_index], dtype=np.int64))
+
         new_frac_coords = np.copy(for_pbc.coords.frac_coords)
         logger.debug("PBC Apply")
         for (i, j) in zip(*index):
@@ -132,3 +137,23 @@ class Operator:
                 raise StopIteration("Iter over than 10 times, Something wrong happens!")
 
         return new_struct
+
+    @staticmethod
+    def find_trans_vector(coord: np.ndarray):
+        repeat = 2 # Make repeat to be a parameter in future
+        ori_coord = copy.deepcopy(coord)
+
+        anchor = ori_coord[:, 36, :2]
+        model_region = np.array([1 / repeat, 1 / repeat])
+        search_vector = np.arange(-1, 1 + 1 / repeat, 1 / repeat)
+        trans_vectors = []
+        for index, item in enumerate(anchor):
+            search_matrix = itertools.product(search_vector, search_vector)
+            for ii in search_matrix:
+                if 0 <= (item + ii)[0] <= model_region[0] and 0 <= (item + ii)[1] <= model_region[1]:
+                    vector_m = [ii[0], ii[1], 0]
+                    ori_coord[index, 36, :] += vector_m
+                    trans_vectors.append(vector_m)
+                    break
+
+        return ori_coord, trans_vectors

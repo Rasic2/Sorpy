@@ -1,30 +1,3 @@
-#!/usr/bin/env python
-
-#from logger import *
-#from common.io_file import POSCAR
-#from common.manager import DirManager
-#
-#template = POSCAR("input/POSCAR_1-1", action="r")
-#TEMP_DM = DirManager("test/ori", "POSCAR", mol_index='37-38')
-#files = [file.fname for file in TEMP_DM.all_files]
-#vectors, indexs = [], []
-#
-#TEMP_DIR = os.path.join(current_dir, "temp")
-#if not os.path.exists(TEMP_DIR):
-#    os.mkdir(TEMP_DIR)
-#
-#for file in files:
-#    index = file.split("_")[-1]
-#    vector, coor = POSCAR(file, action="r").align(template)
-#    #POSCAR(f"{TEMP_DIR}/POSCAR_ML_{index}", action="w").write(template, coor)
-#    vectors.append(vector)
-#    indexs.append(index)
-#
-#import random
-#import numpy as np
-#from pymatgen.io.vasp import Poscar
-#####
-
 import os
 import random
 from pathlib import Path
@@ -37,6 +10,8 @@ from common.io_file import POSCAR
 from common.model import Model
 from common.structure import Structure
 from common.base import Coordinates
+from common.operate import Operator as op
+
 from utils import normalize_coord
 from logger import current_dir, logger
 from load_yaml import ParameterManager
@@ -60,7 +35,7 @@ latt = asf_CeO2_surf.slab.lattice.matrix[:2, :2]
 logger.info(f"Generate {PM.TestNum} random POSCAR.")
 for ii in range(PM.TestNum):
     molecule = random_molecule_getter()
-    j = np.random.random((1, 2)) / 2
+    j = np.random.random((1, 2))
     Mat2 = np.dot(j, latt)
     shiftz = 2 * random.random() - 1
     CO_ads = asf_CeO2_surf.add_adsorbate(molecule, [Mat2[0, 0], Mat2[0, 1], PM.z_height + shiftz])
@@ -81,12 +56,15 @@ template = POSCAR(fname=Path(current_dir) / "examples/CeO2_111/POSCAR_template")
 test_ori_DM = DirManager(dname=Path(test_ori_dir), template=template, **kargs)
 test_ori_coor = test_ori_DM.mcoords
 test_ori_coor = normalize_coord(test_ori_coor)
+test_ori_coor, trans_vectors = op.find_trans_vector(test_ori_coor) # Translate the molecule and record the vectors
 test_ori_coor = test_ori_coor.reshape((test_ori_coor.shape[0], 38*3))
 
 # Model predict the input_coor
 model = load_model("CeO2_111_CO_test.h5")
 test_ML_coor = model.predict(test_ori_coor)
 test_ML_coor = test_ML_coor.reshape((test_ML_coor.shape[0], 38, 3))
+for index in range(test_ML_coor.shape[0]):
+    test_ML_coor[index, 36, :] -= trans_vectors[index]
 test_ML_coor = Model.decode_mcoord(test_ML_coor, template.lattice)
 
 # write to POSCAR
@@ -94,6 +72,3 @@ style, elements, lattice, TF = template.style, template.elements, template.latti
 for index, item in enumerate(test_ML_coor):
     s = Structure(style=style, elements=elements, coords=Coordinates(frac_coords=item, lattice=lattice), lattice=lattice, TF=TF)
     s.write_to_POSCAR(fname=f'{test_ML_dir}/POSCAR_ML_{index+1}')
-
-exit()
-

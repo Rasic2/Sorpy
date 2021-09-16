@@ -1,0 +1,137 @@
+2021-09-16 09:47:04,787 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 09:47:04,787 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:47:04,787 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:47:04,787 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 09:47:04,797 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 09:48:23,665 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 09:48:23,666 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:48:23,674 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:48:23,674 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 09:48:23,684 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 09:48:54,150 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 09:48:54,150 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:48:54,150 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:48:54,150 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 09:48:54,160 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 09:49:11,124 (model.py:79) [__main__][INFO] Data Shape: (3000, 38, 3)
+2021-09-16 09:49:11,125 (model.py:80) [__main__][INFO] Shuffle the data.
+2021-09-16 09:49:11,129 (model.py:102) [__main__][INFO] Train and test the model applying the hold-out method. <train:test = 80:20>
+2021-09-16 09:50:54,591 (model.py:121) [__main__][INFO] mae = 0.008471290580928326
+2021-09-16 09:50:54,591 (model.py:122) [__main__][INFO] loss = 0.0014956161612644792
+2021-09-16 09:50:54,615 (model.py:200) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-16 09:59:45,067 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 09:59:45,068 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:59:45,068 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 09:59:45,068 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 09:59:45,076 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 10:00:02,961 (model.py:207) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-16 10:01:44,733 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 10:01:44,733 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:01:44,733 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:01:44,733 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 10:01:44,742 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 10:02:02,384 (model.py:207) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-16 10:03:05,067 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 10:03:05,067 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:03:05,067 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:03:05,067 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 10:03:05,076 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 10:03:22,627 (model.py:207) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-16 10:07:45,748 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-16 10:07:45,749 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:07:45,749 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:07:45,749 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-16 10:07:45,758 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-16 10:08:03,239 (model.py:81) [__main__][INFO] Data Shape: (3000, 38, 3)
+2021-09-16 10:08:03,239 (model.py:82) [__main__][INFO] Shuffle the data.
+2021-09-16 10:08:03,243 (model.py:104) [__main__][INFO] Train and test the model applying the hold-out method. <train:test = 80:20>
+2021-09-16 10:09:48,424 (model.py:123) [__main__][INFO] mae = 0.008453966118395329
+2021-09-16 10:09:48,424 (model.py:124) [__main__][INFO] loss = 0.0014726462541148067
+2021-09-16 10:09:48,481 (model.py:203) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-16 10:12:28,897 (generate_test.py:57) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:12:29,064 (generate_test.py:69) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:12:29,065 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:13:11,665 (generate_test.py:57) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:13:11,836 (generate_test.py:69) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:13:11,837 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:24:33,314 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:24:33,466 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:24:33,467 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:26:52,279 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:26:52,445 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:26:52,446 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:29:30,168 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:29:30,328 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:29:30,329 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:32:36,994 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:32:37,156 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:32:37,156 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:35:13,831 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:35:13,988 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:35:13,988 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:37:01,608 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:37:01,758 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:37:01,760 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:37:17,127 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:37:17,290 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:37:17,291 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:38:02,259 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:38:02,416 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:38:02,417 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:38:36,462 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:38:36,633 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:38:36,634 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:40:23,757 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:40:23,919 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:40:23,920 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:41:22,910 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:41:23,058 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:41:23,059 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:42:21,294 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:42:21,455 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:42:21,456 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:43:04,124 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:43:04,268 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:43:04,269 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:44:40,246 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:44:40,410 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:44:40,411 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:47:02,724 (generate_test.py:58) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:47:02,885 (generate_test.py:70) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:47:02,886 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:55:47,311 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:55:47,471 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:55:47,471 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:58:50,073 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:58:50,231 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:58:50,232 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 10:59:45,138 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 10:59:45,296 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 10:59:45,296 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:00:19,349 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:00:19,504 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:00:19,505 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:02:08,736 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:02:08,900 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:02:08,901 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:02:53,927 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:02:54,066 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:02:54,067 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:03:24,558 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:03:24,723 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:03:24,724 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:05:43,116 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:05:43,273 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:05:43,274 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:05:59,474 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:05:59,641 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:05:59,642 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:06:32,314 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:06:32,492 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:06:32,493 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:07:36,976 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:07:37,175 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:07:37,176 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-16 11:08:19,761 (generate_test.py:60) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-16 11:08:19,896 (generate_test.py:72) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-16 11:08:19,897 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.

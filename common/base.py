@@ -4,8 +4,8 @@ from collections import Counter
 import numpy as np
 import yaml
 
-from logger import current_dir
-from utils import Format_defaultdict
+from common.logger import current_dir
+from common.utils import Format_defaultdict
 
 yaml.warnings({'YAMLLoadWarning': False})
 

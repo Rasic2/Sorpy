@@ -1,12 +1,15 @@
 import re
 import os
+import yaml
 import numpy as np
 from pathlib import Path
 
 from common.io_file import POSCAR, CONTCAR
 from common.operate import Operator as op
-from logger import logger
-from utils import Format_list
+from common.logger import logger
+from common.utils import Format_list
+
+yaml.warnings({'YAMLLoadWarning': False})
 
 
 class FileManager:
@@ -135,3 +138,50 @@ class DirManager:
     def inter_coords(self):
         return np.array([[inter_coord for _, _, inter_coord in file.structure.molecule.inter_coords]
                          for file in self.all_files])
+
+
+class ParameterManager:
+    _parameters = {'SpaceGroup': str,
+                   'LatticeParameter': float,
+                   'Species': list,
+                   'Coordinates': list,
+                   'MillerIndex': tuple,
+                   'SlabThickness': float,
+                   'VacuumHeight': float,
+                   'supercell': tuple,
+                   'z_height': float,
+                   'TestNum': int,
+                   }
+
+    def __init__(self, filename):
+        """
+        TODO default value and ctype split!!!
+
+        :param filename:            setting_110.yaml
+        """
+        self.fname = filename
+        self.MillerIndex = None
+        self.TestNum = None
+        self.z_height = None
+
+        self.load()
+        self.check_trans()
+
+    def load(self):
+        f = open(self.fname, "r", encoding='utf-8')
+        cfg = f.read()
+        parameters = yaml.load(cfg)
+        f.close()
+        for key, value in parameters.items():
+            if key in ParameterManager._parameters.keys():
+                setattr(self, key, value)
+            else:
+                logger.warning(f"'{key}' in {self.fname} is ignored.")
+
+    def check_trans(self):
+        for key, value in ParameterManager._parameters.items():
+            if hasattr(self, key) and not isinstance(self.__dict__[key], value):
+                if value == tuple:
+                    self.__dict__[key] = tuple(eval(self.__dict__[key]))
+                else:
+                    raise IndexError

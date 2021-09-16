@@ -1,13 +1,12 @@
-import math
 import copy
 import json
 import random
 import numpy as np
 from matplotlib import pyplot as plt
 
-from logger import logger
+from common.logger import logger
 from common.base import Lattice
-from utils import plot_clsss_wrap as plot_wrap
+from common.utils import plot_clsss_wrap as plot_wrap
 
 
 class Model:
@@ -124,11 +123,11 @@ class Model:
         """
         Hold-out method for the model train.
         :param mname:                   save model name
-        :param percent:                 train:test percent
+        :param percent:                 train:test_set percent
         :return:                        mae and loss
         """
         import math
-        logger.info(f"Train and test the model applying the hold-out method. <train:test = "
+        logger.info(f"Train and test_set the model applying the hold-out method. <train:test_set = "
                     f"{math.ceil(percent * 100)}:{math.ceil((1 - percent) * 100)}>")
 
         shape = self.train_input.shape
@@ -162,7 +161,7 @@ class Model:
         :param num_of_split:                    how many fold
         :return:                                avg_mae, ave loss
         """
-        logger.info("Train and test the model applying the K-fold validation method.")
+        logger.info("Train and test_set the model applying the K-fold validation method.")
         from sklearn.model_selection import KFold
 
         avg_mae = 0

@@ -1,3 +1,4 @@
+import copy
 import math
 import numpy as np
 import itertools
@@ -40,7 +41,18 @@ class Molecule(AtomSetBase):
     @property
     def vector(self): # TODO PBC apply not considered important error
         """ vector in Cartesian format """
-        return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in self.pair]
+        lattice = self.coords.lattice
+        pair = set()
+        for atom_i, atom_j in self.pair: # handle the PBC principle, Reset the molecule.atoms !!!
+            element = copy.deepcopy(atom_j.element)
+            order = copy.deepcopy(atom_j.order)
+            frac_coord = copy.deepcopy(atom_j.frac_coord)
+            frac_coord = np.where(frac_coord - atom_i.frac_coord > 0.5, frac_coord - 1, frac_coord)
+            frac_coord = np.where(frac_coord - atom_i.frac_coord < -0.5, frac_coord + 1, frac_coord)
+            coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
+            atom_j = Atom(element=element, order=order, coord=coord)
+            pair.add((atom_i, atom_j))
+        return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in pair]
 
     @property
     def dist(self):

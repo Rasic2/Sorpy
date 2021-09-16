@@ -34,6 +34,9 @@ from pymatgen.io.vasp import Poscar
 
 from common.manager import DirManager
 from common.io_file import POSCAR
+from common.model import Model
+from common.structure import Structure
+from common.base import Coordinates
 from utils import normalize_coord
 from logger import current_dir, logger
 from load_yaml import ParameterManager
@@ -67,7 +70,6 @@ for ii in range(PM.TestNum):
     p.write_file(f"{test_ori_dir}/POSCAR_ori_{ii + 1}")
 
 logger.info("Generate the ML trained POSCAR.")
-
 kargs = {"style": "Slab+Mol",
          "mol_index": [36, 37],
          "anchor": 36,
@@ -75,27 +77,23 @@ kargs = {"style": "Slab+Mol",
          'expand': {'expand_z': {'boundary': 0.2, 'expand_num': 2, 'ignore_index': [37]}}}
 template = POSCAR(fname=Path(current_dir) / "examples/CeO2_111/POSCAR_template").to_structure(**kargs)
 
+# Prepare the Model input data
 test_ori_DM = DirManager(dname=Path(test_ori_dir), template=template, **kargs)
 test_ori_coor = test_ori_DM.mcoords
 test_ori_coor = normalize_coord(test_ori_coor)
-print(test_ori_coor[:, 37, :])
 test_ori_coor = test_ori_coor.reshape((test_ori_coor.shape[0], 38*3))
 
-exit()
+# Model predict the input_coor
 model = load_model("CeO2_111_CO_test.h5")
 test_ML_coor = model.predict(test_ori_coor)
 test_ML_coor = test_ML_coor.reshape((test_ML_coor.shape[0], 38, 3))
-print(test_ML_coor[:, 37, :])
+test_ML_coor = Model.decode_mcoord(test_ML_coor, template.lattice)
+
+# write to POSCAR
+style, elements, lattice, TF = template.style, template.elements, template.lattice, template.TF
+for index, item in enumerate(test_ML_coor):
+    s = Structure(style=style, elements=elements, coords=Coordinates(frac_coords=item, lattice=lattice), lattice=lattice, TF=TF)
+    s.write_to_POSCAR(fname=f'{test_ML_dir}/POSCAR_ML_{index+1}')
+
 exit()
 
-
-
-
-
-template = POSCAR("test/ori/POSCAR_ori_1", action="r")
-lattice = template.latt
-
-for ii, item in enumerate(test_ML_coor):
-    coor = POSCAR.mcoord_to_coord(item, lattice, anchor=36, intercoor_index=[37])
-    coor_new = coor - vectors[ii]
-    POSCAR(f"{test_ML_dir}/POSCAR_ML_{indexs[ii]}", action="w").write(template, coor_new)

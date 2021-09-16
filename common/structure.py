@@ -4,8 +4,8 @@ import numpy as np
 import itertools
 
 from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
-from utils import Format_defaultdict
-from logger import logger
+from common.utils import Format_defaultdict
+from common.logger import logger
 
 
 class Molecule(AtomSetBase):
@@ -449,7 +449,7 @@ class Structure(AtomSetBase):
 #
 #    for ii in range(50):
 #        print(f"POSCAR_ML_{ii + 1}")
-#        p = POSCAR(f"../test/ML-2/POSCAR_ML_{ii + 1}")
+#        p = POSCAR(f"../test_set/ML-2/POSCAR_ML_{ii + 1}")
 #        p.nearest_neighbour_table()
 #        print(36, p.NNT[36])
 #        p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")

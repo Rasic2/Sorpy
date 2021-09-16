@@ -5,9 +5,8 @@ from common.io_file import POSCAR, CONTCAR
 from common.manager import FileManager, DirManager
 from common.model import Model
 
-from logger import current_dir
+from common.logger import current_dir
 from pathlib import Path
-from utils import Format_defaultdict
 import numpy as np
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -47,7 +46,7 @@ def test_dirmanager():
 def test_operator():
     kargs={"style":"Slab+Mol", "mol_index": [36,37], "anchor": 36, "ignore_mol": True}
     s1 = POSCAR(fname=Path(current_dir)/"examples/CeO2_111/POSCAR_template").to_structure(**kargs)
-    s2 = POSCAR(fname=Path(current_dir)/"test/ori/POSCAR_ori_1").to_structure(**kargs)
+    s2 = POSCAR(fname=Path(current_dir)/"test_set/ori/POSCAR_ori_1").to_structure(**kargs)
     template = s1.coords
     coords = s2.coords
     s1.find_nearest_neighbour_table()

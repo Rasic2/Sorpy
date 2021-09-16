@@ -28,8 +28,8 @@ if __name__ == "__main__":
     data_input, data_output = copy.deepcopy(input_dm.mcoords), copy.deepcopy(output_dm.mcoords)
     #import numpy as np
     #print(np.where((data_output[:, 37, 0]-1.142)>0.2))
-    print(output_dm[300].molecule.inter_coords)
-    exit()
+    #print(output_dm[300].molecule.inter_coords)
+    #exit()
 
 
     from keras import models, layers
@@ -40,12 +40,12 @@ if __name__ == "__main__":
     model.compile(loss='mse', optimizer='rmsprop', metrics=['mae'])
 
     train_model = Model(model, data_input, data_output, normalization="mcoord", expand=kargs['expand'])
-    print(train_model.train_input[300, 37, :])
-    print(train_model.train_output[300, 37, :])
-    print()
+    #print(train_model.train_input[300, 37, :])
+    #print(train_model.train_output[300, 37, :])
+    #print()
     #import numpy as np
     #print(np.where(np.abs(train_model.train_input[:, 37, 0]-train_model.train_output[:, 37, 0])>0.5))
-    exit()
+    #exit()
     history = train_model("hold out", mname="CeO2_111_CO_test.h5")
 
     p = Ploter(history)

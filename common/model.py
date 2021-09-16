@@ -1,8 +1,13 @@
+import math
+import copy
 import json
 import random
 import numpy as np
+from matplotlib import pyplot as plt
 
 from logger import logger
+from common.base import Lattice
+from utils import plot_clsss_wrap as plot_wrap
 
 
 class Model:
@@ -70,6 +75,30 @@ class Model:
 
         setattr(self, "train_input", normalize_inner(data_input))
         setattr(self, "train_output", normalize_inner(data_output))
+
+    @staticmethod
+    def decode_mcoord(coords, lattice: Lattice=None):
+        ori_coords = copy.deepcopy(coords)
+        anchor_cart = np.dot(ori_coords[:, 36, :], lattice.matrix)
+        inter_coords = ori_coords[:, [37], :] * [1, 180, 360] + [1.142, 0, 0]
+
+        r, theta, phi = inter_coords[:, :, 0], np.deg2rad(inter_coords[:, :, 1]), np.deg2rad(inter_coords[:, :, 2])
+        x = r * np.sin(theta) * np.cos(phi)
+        y = r * np.sin(theta) * np.sin(phi)
+        z = r * np.cos(theta)
+        #print(x[0], y[0], z[0])
+
+        xyz_cart = np.concatenate((x, y, z), axis=1)
+        #print(lattice.inverse)
+        #print(anchor_cart[0])
+        #print(xyz_cart[0])
+        inter_cart = anchor_cart + xyz_cart
+        inter_frac = np.dot(inter_cart, lattice.inverse)
+
+        trans_coords = copy.deepcopy(coords)
+        trans_coords[:, 37, :] = inter_frac
+
+        return trans_coords
 
     def __call__(self, method, mname=None, **kargs):
 
@@ -196,15 +225,19 @@ class Ploter:
         with open("history.json", "w") as f:
             json.dump(results, f)
 
+    @plot_wrap
     def plot(self, fname=None):
         logger.info("Plotting the acc and loss curve.")
 
-        from matplotlib import pyplot as plt
         plt.plot(self.epochs, self.acc, "ro", label='acc')
         plt.plot(self.epochs, self.loss, "bo", label='loss')
         plt.plot(self.epochs, self.val_acc, 'r', label='val_acc')
         plt.plot(self.epochs, self.val_loss, 'b', label='val_loss')
-        plt.legend(loc='best')
+        plt.legend(loc='best', fontsize=14)
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
+        plt.xlabel("epochs", fontsize=22)
+
         if fname is not None:
             plt.savefig(fname)
         else:

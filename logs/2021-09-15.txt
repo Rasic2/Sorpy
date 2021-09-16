@@ -1,0 +1,50 @@
+2021-09-15 08:37:56,932 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:37:56,933 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:37:56,933 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:37:56,933 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:37:56,944 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:39:33,767 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:39:33,768 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:39:33,768 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:39:33,768 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:39:33,779 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:40:13,747 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:40:13,747 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:40:13,747 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:40:13,747 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:40:13,757 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:40:43,972 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:40:43,972 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:40:43,972 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:40:43,972 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:40:43,982 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:41:10,146 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:41:10,146 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:41:10,146 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:41:10,146 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:41:10,156 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:46:09,719 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:46:09,719 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:46:09,719 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:46:09,719 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:46:09,729 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:47:58,730 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:47:58,736 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:47:58,737 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:47:58,737 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:47:58,748 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:55:38,293 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:55:38,293 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:55:38,293 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:55:38,293 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:55:38,303 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:56:05,375 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:56:05,376 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:56:05,376 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:56:05,376 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:56:05,385 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.
+2021-09-15 08:56:42,752 (main.py:23) [__main__][INFO] Load the structure information.
+2021-09-15 08:56:42,752 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:56:42,752 (manager.py:89) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-15 08:56:42,752 (main.py:27) [__main__][INFO] Calculate the mcoords
+2021-09-15 08:56:42,762 (manager.py:23) [__main__][WARNING] The 'XDATCAR' is excluding in the <input> directory.

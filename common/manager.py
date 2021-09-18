@@ -162,7 +162,14 @@ class ParameterManager:
         self.fname = filename
         self.MillerIndex = None
         self.TestNum = None
+        self.SpaceGroup = None
         self.z_height = None
+        self.LatticeParameter = None
+        self.Species = None
+        self.SlabThickness = None
+        self.Coordinates = None
+        self.VacuumHeight = None
+        self.supercell = None
 
         self.load()
         self.check_trans()

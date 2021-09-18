@@ -11,9 +11,9 @@ from common.model import Model
 from common.structure import Structure
 from common.base import Coordinates
 from common.operate import Operator as op
-
 from common.utils import normalize_coord
 from common.logger import current_dir, logger
+
 from generate_adsorbate import surface_cleave, random_molecule_getter
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"

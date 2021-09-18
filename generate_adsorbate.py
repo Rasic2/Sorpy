@@ -1,5 +1,3 @@
-#!/usr/bin/env python
-
 import math
 import random
 import warnings
@@ -13,7 +11,7 @@ from pymatgen.core.sites import Site
 from pymatgen.io.vasp import Poscar
 
 from common.logger import *
-from load_yaml import ParameterManager
+from common.manager import ParameterManager
 from common.utils import format_dict
 
 CAL_DIR = os.path.join(current_dir, "train_set/guess")

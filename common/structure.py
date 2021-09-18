@@ -39,11 +39,11 @@ class Molecule(AtomSetBase):
         return set(pair_list)
 
     @property
-    def vector(self): # TODO PBC apply not considered important error
+    def vector(self):  # TODO PBC apply not considered important error
         """ vector in Cartesian format """
         lattice = self.coords.lattice
         pair = set()
-        for atom_i, atom_j in self.pair: # handle the PBC principle, Reset the molecule.atoms !!!
+        for atom_i, atom_j in self.pair:  # handle the PBC principle, Reset the molecule.atoms !!!
             element = copy.deepcopy(atom_j.element)
             order = copy.deepcopy(atom_j.order)
             frac_coord = copy.deepcopy(atom_j.frac_coord)

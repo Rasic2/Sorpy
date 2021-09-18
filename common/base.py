@@ -1,10 +1,11 @@
 import itertools
+from pathlib import Path
 from collections import Counter
 
 import numpy as np
 import yaml
 
-from common.logger import current_dir
+from common.logger import ROOTDIR
 from common.utils import Format_defaultdict
 
 yaml.warnings({'YAMLLoadWarning': False})
@@ -103,9 +104,19 @@ class Coordinates:
         else:
             raise NotImplementedError
 
+    @staticmethod
+    def read_from_strings(strings=None, ctype="frac", lattice: Lattice=None):
+        coords = np.array([[float(ii) for ii in item.split()[:3]] for item in strings])
+        if ctype == "frac":
+            return Coordinates(frac_coords=coords, lattice=lattice)
+        elif ctype == "cart":
+            return Coordinates(cart_coords=coords, lattice=lattice)
+        else:
+            raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
+
 
 class Element:
-    with open(f"{current_dir}/common/element.yaml") as f:
+    with open(Path(f"{ROOTDIR}/configuration/element.yaml")) as f:
         cfg = f.read()
     elements = yaml.load(cfg)
 
@@ -135,6 +146,17 @@ class Element:
     def bonds(self):
         return {Element(bond['formula']): bond['bond length'] for bond in
                 Element.elements[f'Element {self.formula}']['bonds']}
+
+class Elements:
+
+    def __new__(cls, *args, **kwargs):
+        raise TypeError("Can't create the <class Elements> instance.")
+
+    @staticmethod
+    def read_from_strings(formulas, counts):
+        elements = [(formula, int(count)) for formula, count in zip(formulas.split(), counts.split())]
+        elements = sum([[formula] * count for (formula, count) in elements], [])
+        return [Element(formula) for formula in elements]
 
 
 class Atom:

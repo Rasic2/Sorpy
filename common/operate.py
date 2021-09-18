@@ -1,8 +1,8 @@
 import copy
 import itertools
 import numpy as np
-from common.utils import Format_defaultdict
 
+from common.utils import Format_defaultdict
 from common.logger import logger
 from common.base import Coordinates
 from common.structure import AtomSetBase, Structure

@@ -3,6 +3,7 @@ import os
 import yaml
 import numpy as np
 from pathlib import Path
+from multiprocessing import Pool as ProcessPool
 
 from common.io_file import POSCAR, CONTCAR
 from common.operate import Operator as op
@@ -113,7 +114,17 @@ class DirManager:
 
     @property
     def coords(self):
-        return Format_list([op.align(self.template, file.structure).coords for file in self.all_files])
+        import time
+        logger.info("Align the structure to the template structure.")
+        pool = ProcessPool(processes=os.cpu_count())
+
+        results = [pool.apply_async(op.align, args=(self.template, file.structure)) for file in self.all_files]
+        temp_coords = [result.get() for result in results]
+
+        pool.close()
+        pool.join()
+
+        return temp_coords
 
     @property
     def mcoords(self):
@@ -187,7 +198,7 @@ class ParameterManager:
 
     def check_trans(self):
         for key, value in ParameterManager._parameters.items():
-            if hasattr(self, key) and not isinstance(self.__dict__[key], value):
+            if hasattr(self, key) and getattr(self, key, None) is not None and not isinstance(self.__dict__[key], value):
                 if value == tuple:
                     self.__dict__[key] = tuple(eval(self.__dict__[key]))
                 else:

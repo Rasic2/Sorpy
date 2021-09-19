@@ -78,7 +78,7 @@ class Operator:
         # If cart-dist < 0.2, mapping such atom as the same
         for atom_i, value in dists.items():
             for atom_j, dist in value.items():
-                if dist < 0.2:
+                if dist < 0.2 and atom_i.element == atom_j.element: # Fix bug, test atom_i and atom_j is the same element
                     mapping_list.append([atom_i.order, atom_j.order])
                     break  # the shortest distance
 
@@ -93,12 +93,15 @@ class Operator:
                     if dist < min_dist:
                         min_dist, min_index = dist, index_j
             mapping_list.append([index_i, min_index])
-
         index = [i for _, i in mapping_list]
         new_kargs = copy.deepcopy(for_tailor.__dict__)
         for key in ('elements', 'coords', 'TF'):
             if key in new_kargs.keys():
-                new_kargs[key] = for_tailor.__dict__[key][index]
+                try:
+                    new_kargs[key] = for_tailor.__dict__[key][index]
+                except:
+                    print(f"key = {key}, index = {index}")
+                    raise
         if "orders" in new_kargs.keys():
             del new_kargs["orders"]
 
@@ -106,7 +109,6 @@ class Operator:
 
     @staticmethod
     def align(template, for_align):
-
         if template is None and isinstance(for_align, Structure):
             return for_align
 
@@ -135,7 +137,6 @@ class Operator:
             if count > 10:
                 logger.error("Coordinates align Error! Please check the input structure.")
                 raise StopIteration("Iter over than 10 times, Something wrong happens!")
-
         return new_struct
 
     @staticmethod

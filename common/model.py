@@ -2,9 +2,10 @@ import copy
 import json
 import random
 import numpy as np
+from pathlib import Path
 from matplotlib import pyplot as plt
 
-from common.logger import logger
+from common.logger import logger, root_dir
 from common.base import Lattice
 from common.utils import plot_clsss_wrap as plot_wrap
 
@@ -119,7 +120,7 @@ class Model:
             raise KeyError(
                 f"'{method}' method can not to train the ML model. <optional arguments: ('hold out', 'Kfold')>")
 
-    def train_hold_out(self, mname=None, percent=0.8):
+    def train_hold_out(self, mname=None, percent=0.8, epochs=50):
         """
         Hold-out method for the model train.
         :param mname:                   save model name
@@ -143,7 +144,7 @@ class Model:
         test_input_arr = test_input_arr.reshape((test_count, shape[1] * shape[2]))
         test_output_arr = test_output_arr.reshape((test_count, shape[1] * shape[2]))
 
-        history = self.model.fit(train_input_arr, train_output_arr, epochs=50, batch_size=2, validation_split=0.1)
+        history = self.model.fit(train_input_arr, train_output_arr, epochs=epochs, batch_size=2, validation_split=0.1)
         scores = self.model.evaluate(test_input_arr, test_output_arr)
 
         logger.info(f"mae = {scores[1]}")
@@ -205,7 +206,7 @@ class Ploter:
             self.val_loss = self.history.history['val_loss']
             self.epochs = list(range(1, len(self.acc) + 1))
         else:
-            self.load("history.json")
+            self.load(Path(root_dir)/"results/history.json")
 
         self.write()
 
@@ -221,7 +222,7 @@ class Ploter:
     def write(self):
         results = {'acc': self.acc, 'loss': self.loss, 'val_acc': self.val_acc, 'val_loss': self.val_loss,
                    'epochs': self.epochs}
-        with open("history.json", "w") as f:
+        with open(Path(root_dir)/"results/history.json", "w") as f:
             json.dump(results, f)
 
     @plot_wrap

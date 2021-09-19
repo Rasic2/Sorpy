@@ -1,6 +1,14 @@
+import os
+import time
 import numpy as np
+from pathlib import Path
+from multiprocessing import Pool as ProcessPool
+from multiprocessing.dummy import Pool as ThreadPool
+
 from common.base import Lattice, Elements, Coordinates
 from common.structure import Structure
+from common.logger import logger
+
 
 class VASPFile:
 
@@ -69,11 +77,35 @@ class XDATCAR(VASPFile):
     def structures(self):
         cfg = self.to_strings
         for frame in self.frames:
-            coor = Coordinates.read_from_strings(strings=cfg[frame+1: frame+1+len(self.elements)], ctype="frac", lattice=self.lattice)
+            coor = Coordinates.read_from_strings(strings=cfg[frame + 1: frame + 1 + len(self.elements)], ctype="frac",
+                                                 lattice=self.lattice)
             yield Structure(elements=self.elements, coords=coor, lattice=self.lattice, **self.kargs)
 
-    def to_POSCAR(self):
-        pass
+    def to_POSCAR_thread(self, index, prefix, dname):
+        print(time.time())
+        fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{index + 1}"
+        self[index].write_to_POSCAR(fname=dname / fname)
 
-    def to_CONTCAR(self):
-        pass
+    def to_POSCAR(self, prefix="POSCAR_", dname=None, indexes=None):
+        pool = ProcessPool(processes=4)
+        for index in indexes:
+            pool.apply_async(self.to_POSCAR_thread, args=(index, prefix, dname))
+
+        pool.close()
+        pool.join()
+        logger.info(f"{os.path.basename(self.fname)} ---> {prefix.replace('_', '')} finished!")
+
+    def to_CONCAR_thread(self, i, prefix, dname):
+        fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{i + 1}"
+        self[-1].write_to_POSCAR(fname=dname / fname)
+
+    def to_CONTCAR(self, prefix="CONTCAR_", dname=None, indexes=None):
+        if len(indexes) == 1 and -1 in indexes:
+            pool = ProcessPool(processes=4)
+            for i in range(len(self)-1):
+                pool.apply_async(self.to_CONCAR_thread, args=(i, prefix, dname))
+            pool.close()
+            pool.join()
+            logger.info(f"{os.path.basename(self.fname)} ---> {prefix.replace('_', '')} finished!")
+        else:
+            self.to_POSCAR(prefix, dname, indexes)

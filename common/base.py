@@ -5,7 +5,7 @@ from collections import Counter
 import numpy as np
 import yaml
 
-from common.logger import ROOTDIR
+from common.logger import root_dir
 from common.utils import Format_defaultdict
 
 yaml.warnings({'YAMLLoadWarning': False})
@@ -116,7 +116,7 @@ class Coordinates:
 
 
 class Element:
-    with open(Path(f"{ROOTDIR}/configuration/element.yaml")) as f:
+    with open(Path(f"{root_dir}/configuration/element.yaml")) as f:
         cfg = f.read()
     elements = yaml.load(cfg)
 

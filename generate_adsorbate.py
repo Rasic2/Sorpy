@@ -2,6 +2,7 @@ import math
 import random
 import warnings
 import itertools
+from pathlib import Path
 
 import numpy as np
 from pymatgen.core import Structure, Lattice, Molecule
@@ -20,7 +21,7 @@ surface_110_DIR = os.path.join(CAL_DIR, "110")
 
 warnings.filterwarnings("ignore")  # Ignore the warning output
 
-PM = ParameterManager("setting_110.yaml")
+PM = ParameterManager(Path(root_dir)/"configuration/setting_110.yaml")
 
 
 def surface_cleave(miller: tuple):

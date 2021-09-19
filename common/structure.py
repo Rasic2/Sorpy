@@ -273,6 +273,8 @@ class Structure(AtomSetBase):
             f.write("Direct\n")
             f.write(coords)
 
+        logger.debug(f"{fname} write finished!")
+
 # m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
 #             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
 # print(m.pair)

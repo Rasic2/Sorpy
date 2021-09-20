@@ -114,7 +114,6 @@ class DirManager:
 
     @property
     def coords(self):
-        import time
         logger.info("Align the structure to the template structure.")
         pool = ProcessPool(processes=os.cpu_count())
 

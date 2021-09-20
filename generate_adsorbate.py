@@ -21,7 +21,7 @@ surface_110_DIR = os.path.join(CAL_DIR, "110")
 
 warnings.filterwarnings("ignore")  # Ignore the warning output
 
-PM = ParameterManager(Path(root_dir)/"configuration/setting_110.yaml")
+PM = ParameterManager(Path(root_dir)/"config/setting_110.yaml")
 
 
 def surface_cleave(miller: tuple):

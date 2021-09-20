@@ -116,7 +116,7 @@ class Coordinates:
 
 
 class Element:
-    with open(Path(f"{root_dir}/configuration/element.yaml")) as f:
+    with open(Path(f"{root_dir}/config/element.yaml")) as f:
         cfg = f.read()
     elements = yaml.load(cfg)
 

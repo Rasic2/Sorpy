@@ -82,8 +82,8 @@ class XDATCAR(VASPFile):
             yield Structure(elements=self.elements, coords=coor, lattice=self.lattice, **self.kargs)
 
     def to_POSCAR_thread(self, index, prefix, dname):
-        print(time.time())
-        fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{index + 1}"
+        fname_index = index + 1 if prefix.startswith("POSCAR") else index
+        fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{fname_index}"
         self[index].write_to_POSCAR(fname=dname / fname)
 
     def to_POSCAR(self, prefix="POSCAR_", dname=None, indexes=None):

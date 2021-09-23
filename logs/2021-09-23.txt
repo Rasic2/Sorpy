@@ -1,0 +1,88 @@
+2021-09-23 15:29:44,663 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:29:44,795 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:29:44,797 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:29:44,798 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:29:44,798 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:30:02,305 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:30:02,306 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:30:02,312 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:30:08,294 (generate_test.py:85) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:30:08,295 (generate_test.py:91) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR fractional coordinates.
+2021-09-23 15:30:08,295 (generate_test.py:94) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.
+2021-09-23 15:31:37,893 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:31:37,987 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:31:37,989 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:31:37,989 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:31:37,989 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:31:54,205 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:31:54,206 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:31:54,208 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:31:59,195 (generate_test.py:85) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:33:01,989 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:33:02,075 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:33:02,076 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:33:02,076 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:33:02,076 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:33:18,012 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:33:18,012 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:33:18,014 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:33:22,782 (generate_test.py:85) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:36:38,108 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:36:38,198 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:36:38,198 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:36:38,199 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:36:38,199 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:36:52,633 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:36:52,633 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:36:52,635 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:36:57,189 (generate_test.py:85) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:37:32,307 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:37:32,395 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:37:32,396 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:37:32,396 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:37:32,396 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:37:47,696 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:37:47,696 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:37:47,698 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:38:16,602 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:38:16,682 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:38:16,683 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:38:16,683 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:38:16,683 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:38:30,956 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:38:30,956 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:38:30,958 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:38:35,619 (generate_test.py:84) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:39:50,245 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:39:50,336 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:39:50,337 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:39:50,337 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:39:50,337 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:40:06,435 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:40:06,435 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:40:06,437 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:40:11,197 (generate_test.py:83) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:40:11,198 (generate_test.py:90) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR fractional coordinates.
+2021-09-23 15:40:11,198 (generate_test.py:93) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.
+2021-09-23 15:42:18,307 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:42:18,402 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:42:18,403 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:42:18,403 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:42:18,404 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:42:34,176 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:42:34,176 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:42:34,178 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:42:39,138 (generate_test.py:83) [__main__][INFO] After 2 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:42:39,138 (generate_test.py:90) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR fractional coordinates.
+2021-09-23 15:42:39,139 (generate_test.py:93) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.
+2021-09-23 15:44:46,590 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
+2021-09-23 15:44:46,694 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
+2021-09-23 15:44:46,695 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
+2021-09-23 15:44:46,695 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-23 15:44:46,695 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
+2021-09-23 15:45:02,114 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
+2021-09-23 15:45:02,115 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.
+2021-09-23 15:45:02,117 (generate_test.py:67) [__main__][INFO] Step 3. Predict the input data from the Model.
+2021-09-23 15:45:08,309 (generate_test.py:83) [__main__][INFO] After 43 times optimizer, the diff of input and output is less than 0.01.
+2021-09-23 15:45:08,309 (generate_test.py:90) [__main__][INFO] Step 4. Decode the mcoord to the POSCAR fractional coordinates.
+2021-09-23 15:45:08,309 (generate_test.py:93) [__main__][INFO] Step 5. Write the predict coordinates to the POSCAR.

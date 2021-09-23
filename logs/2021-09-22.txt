@@ -1,0 +1,7 @@
+2021-09-22 11:05:22,938 (train_model.py:29) [__main__][INFO] Load the structure information.
+2021-09-22 11:05:22,939 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-22 11:05:22,939 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-22 11:05:22,939 (train_model.py:40) [__main__][INFO] Load data from the .h5 file.
+2021-09-22 11:05:28,963 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
+2021-09-22 11:05:28,963 (model.py:109) [__main__][INFO] Shuffle the data.
+2021-09-22 11:05:30,087 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>

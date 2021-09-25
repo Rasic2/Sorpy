@@ -1,3 +1,4 @@
+import copy
 import itertools
 from pathlib import Path
 from collections import Counter
@@ -245,8 +246,11 @@ class AtomSetBase:
         for atom_i in self.atoms:
             for atom_j in self.atoms:
                 if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
-                    bond_length = np.linalg.norm(
-                        self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
+                    atom_j_frac = copy.deepcopy(self.coords[atom_j.order].frac_coords) # Handle the PBC problem
+                    atom_j_frac = np.where((atom_j_frac - self.coords[atom_i.order].frac_coords) > 0.5, atom_j_frac - 1, atom_j_frac)
+                    atom_j_frac = np.where((atom_j_frac - self.coords[atom_i.order].frac_coords) < -0.5, atom_j_frac + 1, atom_j_frac)
+                    atom_j_cart = np.dot(atom_j_frac, self.coords.lattice.matrix)
+                    bond_length = np.linalg.norm(atom_j_cart - self.coords[atom_i.order].cart_coords)
                     if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
                         bonds[atom_i].append((atom_j, bond_length))
 

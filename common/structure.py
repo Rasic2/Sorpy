@@ -30,16 +30,20 @@ class Molecule(AtomSetBase):
 
     @property
     def pair(self):
-        pair_list = []
-        for ii in itertools.product(self.atoms, self.atoms):
-            if ii[0] != ii[1]:
-                pair_list.append(ii)
-        pair_list = (tuple(sorted(item)) for item in pair_list)
-
-        return set(pair_list)
+        if self.anchor is not None:
+            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+            pair_list = [(atom_j, atom_i) for atom_i in self.atoms if atom_i != atom_j]
+            return set(pair_list)
+        else:
+            pair_list = []
+            for ii in itertools.product(self.atoms, self.atoms):
+                if ii[0] != ii[1]:
+                    pair_list.append(ii)
+            pair_list = (tuple(sorted(item)) for item in pair_list)
+            return set(pair_list)
 
     @property
-    def vector(self):  # TODO PBC apply not considered important error
+    def vector(self):
         """ vector in Cartesian format """
         lattice = self.coords.lattice
         pair = set()
@@ -56,34 +60,16 @@ class Molecule(AtomSetBase):
 
     @property
     def dist(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, np.linalg.norm(vector))
-                    for atom_i, vector in zip(self.atoms, vectors) if atom_i != atom_j]
-        else:
-            return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
+        return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
 
     @property
     def theta(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
-                    for (vector), (_, atom_i, dist) in zip(vectors, self.dist) if atom_i != atom_j]
-        else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
+        return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
                     for (atom_i, atom_j, vector), (_, _, dist) in zip(self.vector, self.dist)]
 
     @property
     def phi(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0])))
-                    for (_, atom_i, _), (vector) in zip(self.theta, vectors)]
-        else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0])))
+        return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0])))
                     for (atom_i, atom_j, vector) in self.vector]
 
     @property
@@ -203,7 +189,11 @@ class Structure(AtomSetBase):
         for atom_i in self.atoms:
             for atom_j in self.atoms:
                 if atom_j != atom_i:
-                    distance = np.linalg.norm(atom_j.cart_coord - atom_i.cart_coord)
+                    atom_j_frac = copy.deepcopy(atom_j.frac_coord) # Handle the PBC
+                    atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) > 0.5, atom_j_frac - 1, atom_j_frac)
+                    atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) < -0.5, atom_j_frac + 1, atom_j_frac)
+                    atom_j_cart = np.dot(atom_j_frac, self.lattice.matrix)
+                    distance = np.linalg.norm(atom_j_cart - atom_i.cart_coord)
                     if distance <= cut_radius:
                         NNT[atom_i].append((atom_j, distance))
 

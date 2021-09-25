@@ -53,6 +53,10 @@ class Format_defaultdict(defaultdict):
             strings += f"{key} <---> {value[0]} \n"
         return strings
 
+    def index(self, index):
+        key = list(self.keys())[index]
+        return self[key]
+
 
 class Format_list(list):
     def __repr__(self):

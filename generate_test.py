@@ -26,7 +26,7 @@ if __name__ == "__main__":
     test_ori_dir = os.path.join(Test_DIR, "ori")
     Path(test_ori_dir).mkdir(exist_ok=True)
 
-    test_ML_dir = os.path.join(Test_DIR, "ML-xdat-m-iter")
+    test_ML_dir = os.path.join(Test_DIR, "ML-xdat-o-iter")
     Path(test_ML_dir).mkdir(exist_ok=True)
 
     PM = ParameterManager("config/test_111.yaml")
@@ -43,7 +43,7 @@ if __name__ == "__main__":
         for site in CO_ads.sites:
             site.properties['selective_dynamics'] = [True, True, True]
         p = Poscar(CO_ads)
-        #p.write_file(f"{test_ori_dir}/POSCAR_ori_{ii + 1}")
+        # p.write_file(f"{test_ori_dir}/POSCAR_ori_{ii + 1}")
 
     logger.info("Generate the ML trained POSCAR.")
     kargs = {"style": "Slab+Mol",
@@ -65,23 +65,23 @@ if __name__ == "__main__":
     test_ori_coor = test_ori_coor.reshape((test_ori_coor.shape[0], 38 * 3))
 
     logger.info("Step 3. Predict the input data from the Model.")
-    model = load_model("results/xdat_m-3layer-lr-1e-05.h5")
+    model = load_model("results/xdat_o-3layer-lr-1e-05.h5")
 
     iter_flag = True
     test_ML_coor = None
     iter_count = 0
-    while iter_flag: #and iter_count < 2:
+    criterion = 0.005
+    while iter_flag:  # and iter_count < 2:
         test_ML_coor = model.predict(test_ori_coor)
         iter_flag = False
         iter_count += 1
         for i in range(test_ori_coor.shape[0]):
             diff = test_ML_coor[i] - test_ori_coor[i]
-            if np.max(diff) > 0.005:
+            if np.max(diff) > criterion:
                 iter_flag = True
                 test_ori_coor[i] = test_ML_coor[i]
 
-    logger.info(f"After {iter_count} times optimizer, the diff of input and output is less than 0.01.")
-    #exit()
+    logger.info(f"After {iter_count} times optimizer, the diff of input and output is less than {criterion}.")
 
     test_ML_coor = test_ML_coor.reshape((test_ML_coor.shape[0], 38, 3))
     for index in range(test_ML_coor.shape[0]):

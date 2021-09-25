@@ -11,8 +11,8 @@ from common.logger import root_dir
 def df_create(dname):
     results = {}
     for ii in range(50):
-        fpath = dname / f"{ii+1}_iter"
-        gpath = dname / f"{ii+1}_force"
+        fpath = dname / f"summary/{ii + 1}_iter"
+        gpath = dname / f"summary/{ii + 1}_force"
         temp_dict = defaultdict(list)
         with open(fpath, "r") as f, open(gpath, "r") as g:
             cfg_iter = f.readlines()
@@ -21,23 +21,27 @@ def df_create(dname):
         i = 0
         length = len(cfg_iter) / 2
         while i < length:
-            temp_dict[i+1].append(int(cfg_iter[2 * i].split()[1]))
-            temp_dict[i+1].append(float(cfg_iter[2 * i + 1].split()[2]))
-            temp_dict[i+1].append(float(cfg_force[i].split()[5]))
+            temp_dict[i + 1].append(int(cfg_iter[2 * i].split()[1]))
+            temp_dict[i + 1].append(float(cfg_iter[2 * i + 1].split()[2]))
+            temp_dict[i + 1].append(float(cfg_force[i].split()[5]))
             i += 1
-        df = pd.DataFrame(pd.DataFrame(temp_dict).values.T, index=[i+1 for i in range(int(length))], columns=['iter', 'energy', 'force'])
+        df = pd.DataFrame(pd.DataFrame(temp_dict).values.T, index=[i + 1 for i in range(int(length))],
+                          columns=['iter', 'energy', 'force'])
         df['iter'] = df['iter'].astype(int)
-        results[f'file_{ii+1}'] = df
+        results[f'file_{ii + 1}'] = df
     return results
+
 
 def plot_wrap(func):
     @wraps(func)
-    def wrapper(*args,**kargs):
-        figure = plt.figure(figsize=(7,5))
-        plt.rc('font', family='Arial') # <'Times New Roman'>
-        plt.rcParams['mathtext.default']='regular' #配置数学公式字体
-        func(*args,**kargs)
+    def wrapper(*args, **kargs):
+        figure = plt.figure(figsize=(7, 5))
+        plt.rc('font', family='Arial')  # <'Times New Roman'>
+        plt.rcParams['mathtext.default'] = 'regular'  # 配置数学公式字体
+        func(*args, **kargs)
+
     return wrapper
+
 
 @plot_wrap
 def plot_steps(ori_dfs, ML_dfs):
@@ -57,49 +61,46 @@ def plot_steps(ori_dfs, ML_dfs):
         if diff > 0:
             b_min.append(j)
             b_diff.append(diff)
-            plt.bar([count],b_min[-1],width=0.35, color='#FF8025')
-            plt.bar([count],b_diff[-1],width=0.35, bottom=b_min[-1], color='#1176B2')
+            plt.bar([count], b_min[-1], width=0.35, color='#FF8025')
+            plt.bar([count], b_diff[-1], width=0.35, bottom=b_min[-1], color='#1176B2')
         else:
             b_min.append(i)
             b_diff.append(-diff)
-            plt.bar([count],b_min[-1],width=0.35, color='#1176B2')
-            plt.bar([count],b_diff[-1],width=0.35, bottom=b_min[-1], color='#FF8025')
+            plt.bar([count], b_min[-1], width=0.35, color='#1176B2')
+            plt.bar([count], b_diff[-1], width=0.35, bottom=b_min[-1], color='#FF8025')
 
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.ylabel("Steps", fontsize=22)
-    #plt.show()
+    # plt.show()
     plt.savefig("istep.svg")
 
+
 @plot_wrap
-def plot_maxforce(ori_dfs, ML_dfs):
-    ori_maxf, ml_maxf = [], []
-    for key, df in ori_dfs.items():
-        ori_maxf.append(df['force'].max())
-
-    for key, df in ML_dfs.items():
-        ml_maxf.append(df['force'].max())
-
-    plt.plot([i + 1 for i in range(50)], ori_maxf, '-o')
-    plt.plot([i + 1 for i in range(50)], ml_maxf, '-o')
+def plot_maxforce(*results, save=True):
+    for result in results:
+        maxf = []
+        for key, df in result.items():
+            maxf.append(df['force'].max())
+        plt.plot([i + 1 for i in range(len(maxf))], maxf, '-o')
 
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.ylabel("Max Force", fontsize=22)
-    #plt.show()
-    plt.savefig("mforce.svg")
+
+    if save:
+        plt.savefig(f"{root_dir}/results/mforce.svg")
+    else:
+        plt.show()
+
 
 @plot_wrap
-def plot_maxiter(ori_dfs, ML_dfs):
-    ori_maxiter, ml_maxiter = [], []
-    for key, df in ori_dfs.items():
-        ori_maxiter.append(df['iter'].mean())
-
-    for key, df in ML_dfs.items():
-        ml_maxiter.append(df['iter'].mean())
-
-    plt.plot([i + 1 for i in range(50)], ori_maxiter, '-o')
-    plt.plot([i + 1 for i in range(50)], ml_maxiter, '-o')
+def plot_maxiter(*results, save=True):
+    for result in results:
+        maxiter = []
+        for key, df in result.items():
+            maxiter.append(df['iter'].mean())
+        plt.plot([i + 1 for i in range(len(maxiter))], maxiter, '-o')
 
     ax = plt.gca()
     y_major_locator = plt.MultipleLocator(2)
@@ -108,26 +109,30 @@ def plot_maxiter(ori_dfs, ML_dfs):
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.ylabel("Mean Iter nums", fontsize=22)
-    #plt.show()
-    plt.savefig("mean_iter.svg")
+
+    if save:
+        plt.savefig(f"{root_dir}/results/mean_iter.svg")
+    else:
+        plt.show()
+
 
 @plot_wrap
-def plot_energy(ori_dfs, ML_dfs):
-    ori_energy, ml_energy = [], []
-    for key, df in ori_dfs.items():
-        ori_energy.append(df['energy'].values[-1])
-
-    for key, df in ML_dfs.items():
-        ml_energy.append(df['energy'].values[-1])
-
-    plt.plot([i + 1 for i in range(50)], ori_energy, '-o')
-    plt.plot([i + 1 for i in range(50)], ml_energy, '-o')
+def plot_energy(*results, save=True):
+    for result in results:
+        energy = []
+        for key, df in result.items():
+            energy.append(df['energy'].values[-1])
+        plt.plot([i + 1 for i in range(len(energy))], energy, '-o')
 
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.ylabel("Energy", fontsize=22)
-    plt.show()
-    #plt.savefig("mean_iter.svg")
+
+    if save:
+        plt.savefig(f"{root_dir}/results/energy.svg")
+    else:
+        plt.show()
+
 
 def plot_time():
     with open("ori_summary/cpu_spent") as f, open("ML_summary/cpu_spent") as g:
@@ -145,25 +150,26 @@ def plot_time():
         if diff > 0:
             b_min.append(j)
             b_diff.append(diff)
-            plt.bar([count],b_min[-1],width=0.35, color='#FF8025')
-            plt.bar([count],b_diff[-1],width=0.35, bottom=b_min[-1], color='#1176B2')
+            plt.bar([count], b_min[-1], width=0.35, color='#FF8025')
+            plt.bar([count], b_diff[-1], width=0.35, bottom=b_min[-1], color='#1176B2')
         else:
             b_min.append(i)
             b_diff.append(-diff)
-            plt.bar([count],b_min[-1],width=0.35, color='#1176B2')
-            plt.bar([count],b_diff[-1],width=0.35, bottom=b_min[-1], color='#FF8025')
+            plt.bar([count], b_min[-1], width=0.35, color='#1176B2')
+            plt.bar([count], b_diff[-1], width=0.35, bottom=b_min[-1], color='#FF8025')
 
     plt.xticks(fontsize=18)
     plt.yticks(fontsize=18)
     plt.ylabel("Time Spent / h", fontsize=22)
-    #plt.show()
+    # plt.show()
     plt.savefig("time_spent.svg")
+
 
 def plot_violin(*dirs, save=True):
     time_spent = []
     kind = []
     for file in dirs:
-        with open(Path(file)/"cpu_spent", "r") as f:
+        with open(Path(file) / "cpu_spent", "r") as f:
             cfg = [(float(item.split()[6]), file.name) for item in f.readlines()]
             time_spent.append([i for i, _ in cfg])
             kind.append([i for _, i in cfg])
@@ -182,48 +188,38 @@ def plot_violin(*dirs, save=True):
     else:
         plt.show()
 
-def plot_index(ori_dfs, ML_dfs, index):
-    #print(ori_dfs)
-    ori_df = ori_dfs[f'file_{index}']
-    ML_df = ML_dfs[f'file_{index}']
 
-    #plt.plot(ori_df.index, ori_df['iter'],'-o')
-    #plt.plot(ML_df.index, ML_df['iter'],'-o')
+def plot_index(index, *results, save=True):
 
-    plt.plot(ori_df.index, ori_df['energy'],'-o')
-    plt.plot(ML_df.index, ML_df['energy'],'-o')
+    for item in ['iter', 'energy', 'force']:
+        plt.figure()
+        ax=plt.subplot(111)
+        for result in results:
+            df = result[f'file_{index}']
+            ax.plot(df.index, df[item], '-o')
 
-    #plt.plot(ori_df.index, ori_df['force'],'-o')
-    #plt.plot(ML_df.index, ML_df['force'],'-o')
-
-    plt.xticks(fontsize=18)
-    plt.yticks(fontsize=18)
-
-    #plt.ylabel("Iter nums", fontsize=22)
-    #plt.savefig(f"{index}_iter.svg")
-
-    plt.ylabel("Energy", fontsize=22)
-    #plt.savefig(f"{index}_energy.svg")
-
-    #plt.ylabel("Force", fontsize=22)
-    #plt.savefig(f"{index}_force.svg")
-    plt.show()
+        plt.xticks(fontsize=18)
+        plt.yticks(fontsize=18)
+        plt.ylabel(item, fontsize=22)
+        if save:
+            plt.savefig(f"{root_dir}/results/{index}_{item}.svg")
+        else:
+            plt.show()
 
 
 if __name__ == "__main__":
-
     ori_dir = Path("test_set/summary/ori")
     ML_v2_dir = Path("test_set/summary/ML_v2")
     ML_xdat_m_dir = Path("test_set/summary/ML-xdat-m")
 
-    #ori_results = df_create(ori_dir)
-    #ML_v2_results = df_create(ML_v2_dir)
-    #ML_xdat_m_results = df_create(ML_xdat_m_dir)
+    ori_results = df_create(ori_dir)
+    ML_v2_results = df_create(ML_v2_dir)
+    ML_xdat_m_results = df_create(ML_xdat_m_dir)
 
-    #plot_steps(ori_results, ML_results)
-    #plot_maxforce(ori_results, ML_results)
-    #plot_maxiter(ori_results, ML_results)
-    #plot_energy(ori_results, ML_results)
-    #plot_time()
-    plot_violin(ori_dir, ML_v2_dir, ML_xdat_m_dir, save=True)
-    #plot_index(ori_results, ML_results, 30)
+    # plot_steps(ori_results, ML_results)
+    # plot_maxforce(ori_results, ML_v2_results, ML_xdat_m_results)
+    # plot_maxiter(ori_results, ML_v2_results, ML_xdat_m_results)
+    # plot_energy(ori_results, ML_v2_results, ML_xdat_m_results, save=False)
+    # plot_time()
+    # plot_violin(ori_dir, ML_v2_dir, ML_xdat_m_dir, save=True)
+    plot_index(30, ori_results, ML_v2_results, ML_xdat_m_results, save=False)

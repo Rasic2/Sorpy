@@ -33,7 +33,7 @@ class Molecule(AtomSetBase):
         if self.anchor is not None:
             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
             pair_list = [(atom_j, atom_i) for atom_i in self.atoms if atom_i != atom_j]
-            return set(pair_list)
+            return pair_list
         else:
             pair_list = []
             for ii in itertools.product(self.atoms, self.atoms):
@@ -46,7 +46,7 @@ class Molecule(AtomSetBase):
     def vector(self):
         """ vector in Cartesian format """
         lattice = self.coords.lattice
-        pair = set()
+        pair = []
         for atom_i, atom_j in self.pair:  # handle the PBC principle, Reset the molecule.atoms !!!
             element = copy.deepcopy(atom_j.element)
             order = copy.deepcopy(atom_j.order)
@@ -55,7 +55,7 @@ class Molecule(AtomSetBase):
             frac_coord = np.where(frac_coord - atom_i.frac_coord < -0.5, frac_coord + 1, frac_coord)
             coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
             atom_j = Atom(element=element, order=order, coord=coord)
-            pair.add((atom_i, atom_j))
+            pair.append((atom_i, atom_j))
         return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in pair]
 
     @property

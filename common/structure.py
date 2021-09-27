@@ -1,4 +1,5 @@
 import copy
+import pickle
 import math
 import numpy as np
 import itertools
@@ -48,9 +49,9 @@ class Molecule(AtomSetBase):
         lattice = self.coords.lattice
         pair = []
         for atom_i, atom_j in self.pair:  # handle the PBC principle, Reset the molecule.atoms !!!
-            element = copy.deepcopy(atom_j.element)
-            order = copy.deepcopy(atom_j.order)
-            frac_coord = copy.deepcopy(atom_j.frac_coord)
+            element = atom_j.element
+            order = atom_j.order
+            frac_coord = np.copy(atom_j.frac_coord)
             frac_coord = np.where(frac_coord - atom_i.frac_coord > 0.5, frac_coord - 1, frac_coord)
             frac_coord = np.where(frac_coord - atom_i.frac_coord < -0.5, frac_coord + 1, frac_coord)
             coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
@@ -186,22 +187,11 @@ class Structure(AtomSetBase):
 
     def find_nearest_neighbour_table(self, cut_radius=3.0):
         NNT = Format_defaultdict(list)
-        for atom_i in self.atoms:
-            for atom_j in self.atoms:
-                if atom_j != atom_i:
-                    atom_j_frac = copy.deepcopy(atom_j.frac_coord) # Handle the PBC
-                    atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) > 0.5, atom_j_frac - 1, atom_j_frac)
-                    atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) < -0.5, atom_j_frac + 1, atom_j_frac)
-                    atom_j_cart = np.dot(atom_j_frac, self.lattice.matrix)
-                    distance = np.linalg.norm(atom_j_cart - atom_i.cart_coord)
-                    if distance <= cut_radius:
-                        NNT[atom_i].append((atom_j, distance))
-
-        sorted_NNT = Format_defaultdict(list)
-        for key, value in NNT.items():
-            sorted_NNT[key] = sorted(value, key=lambda x: x[1])
-
-        setattr(self, "NNT", sorted_NNT)
+        for atom_i, value in self.pseudo_bonds.items():
+            for atom_j, dist in value:
+                if dist<= cut_radius:
+                    NNT[atom_i].append((atom_j, dist))
+        setattr(self, "NNT", NNT)
 
     @staticmethod
     def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):

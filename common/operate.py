@@ -1,6 +1,7 @@
 import copy
 import itertools
 import numpy as np
+from collections import defaultdict
 
 from common.utils import Format_defaultdict
 from common.logger import logger
@@ -13,16 +14,16 @@ class Operator:
         pass
 
     @staticmethod
-    def dist(si, sj) -> Format_defaultdict:
+    def dist(si, sj) -> defaultdict:
         assert isinstance(si, AtomSetBase) and isinstance(sj, AtomSetBase), \
             "The object A and B are not instance of the <class 'AtomSetBase'>"
-        dists = Format_defaultdict(dict)
+        dists = defaultdict(dict)
         for ai in si.atoms:
             for aj in sj.atoms:
                 dist = np.linalg.norm(aj.cart_coord - ai.cart_coord)
                 dists[ai][aj] = dist
 
-        sorted_dists = Format_defaultdict(dict)
+        sorted_dists = defaultdict(dict)
         for key, value in dists.items():
             sorted_dists[key] = {key: value for key, value in sorted(value.items(), key=lambda x: x[1])}
 

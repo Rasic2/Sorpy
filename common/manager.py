@@ -113,17 +113,21 @@ class DirManager:
         return self._all_files
 
     @property
-    def coords(self):
+    def structures(self):
         logger.info("Align the structure to the template structure.")
         pool = ProcessPool(processes=os.cpu_count())
 
         results = [pool.apply_async(op.align, args=(self.template, file.structure)) for file in self.all_files]
-        temp_coords = [result.get() for result in results]
+        temp_structures = [result.get() for result in results]
 
         pool.close()
         pool.join()
 
-        return temp_coords
+        return temp_structures
+
+    @property
+    def coords(self):
+        return [structure.coords for structure in self.structures]
 
     @property
     def mcoords(self):

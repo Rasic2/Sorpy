@@ -1,4 +1,5 @@
 import copy
+import pickle
 import itertools
 from pathlib import Path
 from collections import Counter
@@ -200,6 +201,8 @@ class AtomSetBase:
         self.orders = orders
         self.coords = coords
 
+        self._pseudo_bonds = None
+
         for key, value in kargs.items():
             if getattr(self, key, None) is None:
                 setattr(self, key, value)
@@ -240,22 +243,33 @@ class AtomSetBase:
         return sorted(Counter(self.atoms_formulas).items(), key=lambda x: Element(x[0]).number)
 
     @property
+    def pseudo_bonds(self):
+        if self._pseudo_bonds is None:
+            NNT = Format_defaultdict(list)
+            for atom_i in self.atoms:
+                for atom_j in self.atoms:
+                    if atom_j != atom_i:
+                        atom_j_frac = np.copy(atom_j.frac_coord)  # Handle the PBC
+                        atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) > 0.5, atom_j_frac - 1, atom_j_frac)
+                        atom_j_frac = np.where((atom_j_frac - atom_i.frac_coord) < -0.5, atom_j_frac + 1, atom_j_frac)
+                        atom_j_cart = np.dot(atom_j_frac, self.coords.lattice.matrix)
+                        distance = np.linalg.norm(atom_j_cart - atom_i.cart_coord)
+                        NNT[atom_i].append((atom_j, distance))
+
+            sorted_NNT = Format_defaultdict(list)
+            for key, value in NNT.items():
+                sorted_NNT[key] = sorted(value, key=lambda x: x[1])
+
+            setattr(self, "_pseudo_bonds", sorted_NNT)
+
+        return self._pseudo_bonds
+
+    @property
     def bonds(self):
         min_factor, max_factor = 0.8, 1.2
         bonds = Format_defaultdict(list)
-        for atom_i in self.atoms:
-            for atom_j in self.atoms:
-                if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
-                    atom_j_frac = copy.deepcopy(self.coords[atom_j.order].frac_coords) # Handle the PBC problem
-                    atom_j_frac = np.where((atom_j_frac - self.coords[atom_i.order].frac_coords) > 0.5, atom_j_frac - 1, atom_j_frac)
-                    atom_j_frac = np.where((atom_j_frac - self.coords[atom_i.order].frac_coords) < -0.5, atom_j_frac + 1, atom_j_frac)
-                    atom_j_cart = np.dot(atom_j_frac, self.coords.lattice.matrix)
-                    bond_length = np.linalg.norm(atom_j_cart - self.coords[atom_i.order].cart_coords)
-                    if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
-                        bonds[atom_i].append((atom_j, bond_length))
-
-        sorted_bonds = Format_defaultdict(list)
-        for key, value in bonds.items():
-            sorted_bonds[key] = sorted(value, key=lambda x: x[1])
-
+        for atom_i, value in self.pseudo_bonds.items():
+            for atom_j, dist in value:
+                if atom_j.element in atom_i.element.bonds.keys() and min_factor <= dist / atom_i.element.bonds[atom_j.element] <= max_factor:
+                    bonds[atom_i].append((atom_j, dist))
         return bonds

@@ -1,0 +1,17 @@
+2021-09-30 15:20:46,508 (train_model_inter.py:104) [__main__][INFO] Calculate the mcoords.
+2021-09-30 15:31:23,153 (train_model_inter.py:109) [__main__][INFO] Calculate the mcoords.
+2021-09-30 15:35:49,037 (train_model_inter.py:109) [__main__][INFO] Calculate the mcoords.
+2021-09-30 15:37:20,763 (train_model_inter.py:112) [__main__][INFO] Calculate the mcoords.
+2021-09-30 15:39:53,637 (train_model_inter.py:112) [__main__][INFO] Calculate the mcoords.
+2021-09-30 15:40:35,855 (train_model_inter.py:144) [__main__][INFO] Train the model.
+2021-09-30 15:43:32,181 (train_model_inter.py:121) [__main__][INFO] Load data from the .h5 file.
+2021-09-30 15:43:32,191 (train_model_inter.py:144) [__main__][INFO] Train the model.
+2021-09-30 15:44:07,519 (train_model_inter.py:121) [__main__][INFO] Load data from the .h5 file.
+2021-09-30 15:44:07,522 (train_model_inter.py:144) [__main__][INFO] Train the model.
+2021-09-30 15:44:41,125 (train_model_inter.py:121) [__main__][INFO] Load data from the .h5 file.
+2021-09-30 15:44:41,128 (train_model_inter.py:144) [__main__][INFO] Train the model.
+2021-09-30 15:46:23,826 (train_model_inter.py:123) [__main__][INFO] Load data from the .h5 file.
+2021-09-30 15:46:23,829 (train_model_inter.py:146) [__main__][INFO] Train the model.
+2021-09-30 15:46:47,450 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
+2021-09-30 15:52:56,104 (train_model_inter.py:123) [__main__][INFO] Load data from the .h5 file.
+2021-09-30 15:53:25,200 (train_model_inter.py:123) [__main__][INFO] Load data from the .h5 file.

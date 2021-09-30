@@ -116,7 +116,7 @@ if __name__ == "__main__":
 
     template = POSCAR(fname=f"{root_dir}/examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol",
                                                                                           mol_index=[36, 37])
-    ori_dir = f"{root_dir}/test_set/guess/ori"
+    ori_dir = f"{root_dir}/test_set/guess/ori-2"
     test_dir = f"{root_dir}/test_set/guess/ML-test"
     test_input, orders = inter_coord(ori_dir)
     test_input = test_input.reshape((50, 30))
@@ -124,9 +124,9 @@ if __name__ == "__main__":
     from keras.models import load_model
     model = load_model("intercoord_3layer.h5")
     test_output = model.predict(test_input)
-    print(test_input[2].reshape((10, 3)))
-    print()
-    print(test_output[2].reshape((10, 3)))
+    #print(test_input[2].reshape((10, 3)))
+    #print()
+    #print(test_output[2].reshape((10, 3)))
     print(Counter(np.where(test_output-test_input > 0.1)[1]))
     exit()
     test_output= reconstruct_coord(ori_dir, test_output, orders, template.lattice)

@@ -1,0 +1,30 @@
+2021-09-28 09:29:13,874 (train_model_inter.py:102) [__main__][INFO] Calculate the mcoords.
+2021-09-28 11:48:08,919 (train_model_inter.py:102) [__main__][INFO] Calculate the mcoords.
+2021-09-28 11:48:30,979 (train_model_inter.py:102) [__main__][INFO] Calculate the mcoords.
+2021-09-28 11:51:54,912 (train_model_inter.py:121) [__main__][INFO] Train the model.
+2021-09-28 12:01:48,779 (train_model_inter.py:115) [__main__][INFO] Calculate the mcoords.
+2021-09-28 12:02:40,141 (train_model_inter.py:134) [__main__][INFO] Train the model.
+2021-09-28 12:08:26,885 (train_model_inter.py:100) [__main__][INFO] Calculate the mcoords.
+2021-09-28 12:09:24,238 (train_model_inter.py:121) [__main__][INFO] Train the model.
+2021-09-28 14:10:56,463 (train_model_inter.py:102) [__main__][INFO] Calculate the mcoords.
+2021-09-28 15:28:40,305 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:28:58,257 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:30:30,173 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:30:54,175 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:49:42,451 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:50:04,283 (train_model_inter.py:109) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 15:50:34,230 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:14:21,208 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:14:21,212 (train_model_inter.py:132) [__main__][INFO] Train the model.
+2021-09-28 16:15:12,044 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:26:32,035 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:27:02,525 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:35:03,330 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:38:57,044 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:39:10,304 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:41:11,925 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:43:28,427 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:44:03,171 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:44:33,513 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:45:05,861 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.
+2021-09-28 16:48:09,458 (train_model_inter.py:110) [__main__][INFO] Load data from the .h5 file.

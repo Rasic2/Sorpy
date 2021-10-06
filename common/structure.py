@@ -11,10 +11,11 @@ from common.logger import logger
 
 class Molecule(AtomSetBase):
 
-    def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, **kargs):
+    def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, rotate=None, **kargs):
 
         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+        self.rotate = rotate if rotate is not None else np.identity(3)
         for index, atom in enumerate(self.atoms):
             if self.anchor == atom.order:
                 self.anchor = index
@@ -57,7 +58,7 @@ class Molecule(AtomSetBase):
             coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
             atom_j = Atom(element=element, order=order, coord=coord)
             pair.append((atom_i, atom_j))
-        return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in pair]
+        return [(atom_i, atom_j, np.dot(atom_j.cart_coord - atom_i.cart_coord, self.rotate)) for atom_i, atom_j in pair]
 
     @property
     def dist(self):

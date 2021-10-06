@@ -5,7 +5,7 @@ import pandas as pd
 from matplotlib import pyplot as plt
 from functools import wraps
 import seaborn as sns
-from common.logger import root_dir
+from common.logger import root_dir, logger
 
 
 def df_create(dname):
@@ -165,12 +165,14 @@ def plot_time():
     plt.savefig("time_spent.svg")
 
 
+@plot_wrap
 def plot_violin(*dirs, save=True):
     time_spent = []
     kind = []
     for file in dirs:
         with open(Path(file) / "cpu_spent", "r") as f:
             cfg = [(float(item.split()[6]), file.name) for item in f.readlines()]
+            logger.info(f"{Path(file).name}: avg time spent: {np.array([i for i, _ in cfg]).mean() / 3600:.3} h")
             time_spent.append([i for i, _ in cfg])
             kind.append([i for _, i in cfg])
 
@@ -211,15 +213,17 @@ if __name__ == "__main__":
     ori_dir = Path("test_set/summary/ori")
     ML_v2_dir = Path("test_set/summary/ML_v2")
     ML_xdat_m_dir = Path("test_set/summary/ML-xdat-m")
+    ML_xdat_o_dir = Path("test_set/summary/ML-xdat-o")
 
     ori_results = df_create(ori_dir)
     ML_v2_results = df_create(ML_v2_dir)
     ML_xdat_m_results = df_create(ML_xdat_m_dir)
+    ML_xdat_o_results = df_create(ML_xdat_o_dir)
 
     # plot_steps(ori_results, ML_results)
     # plot_maxforce(ori_results, ML_v2_results, ML_xdat_m_results)
     # plot_maxiter(ori_results, ML_v2_results, ML_xdat_m_results)
     # plot_energy(ori_results, ML_v2_results, ML_xdat_m_results, save=False)
     # plot_time()
-    # plot_violin(ori_dir, ML_v2_dir, ML_xdat_m_dir, save=True)
-    plot_index(30, ori_results, ML_v2_results, ML_xdat_m_results, save=False)
+    plot_violin(ori_dir, ML_v2_dir, ML_xdat_m_dir, ML_xdat_o_dir, save=False)
+    # plot_index(30, ori_results, ML_v2_results, ML_xdat_m_results, ML_xdat_o_results, save=False)

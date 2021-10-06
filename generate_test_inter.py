@@ -8,10 +8,16 @@ from common.io_file import POSCAR
 from common.base import Coordinates
 from common.structure import Molecule, Structure
 
+# factor = [1, 2, 4]
+factor = [1, 1, 1]
 
 def create_mol(s, cut_radius=5.0):
     max_length = cut_radius
     center = None
+    rotate = [[+0.433013, +0.250000, -0.866025],
+              [-0.500000, +0.866025, +0.000000],
+              [+0.750000, +0.433013, +0.500000]]
+    # rotate = None
     for index in s.mol_index:
         for atom in s.NNT.index(index):
             if atom[0].element.formula == "Ce" and atom[1] <= max_length:
@@ -30,7 +36,7 @@ def create_mol(s, cut_radius=5.0):
     coords.insert(0, center[0].coord.frac_coords)
     coords = Coordinates(frac_coords=np.array(coords), lattice=center[0].coord.lattice)
 
-    return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order)
+    return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
 
 def align(template, m):
 
@@ -69,7 +75,7 @@ def inter_coord(dname):
         s1.find_nearest_neighbour_table(cut_radius=cut_radius)
         mol_CO = s1.molecule
         mol_CO_coord = pickle.loads(pickle.dumps(mol_CO.frac_coords))
-        mol_CO_coord[1] = np.where(np.array(mol_CO.inter_coords[0][2])<0, np.array(mol_CO.inter_coords[0][2])+360, np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] - [1.142, 0, 0]
+        mol_CO_coord[1] = np.where(np.array(mol_CO.inter_coords[0][2])<0, np.array(mol_CO.inter_coords[0][2])+360, np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] / factor - [1.142, 0, 0]
         mol_slab= create_mol(s1)
         mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
         mol_slab_coord[1:] = np.where(align(m_template, mol_slab)<0, align(m_template, mol_slab)+360, align(m_template, mol_slab)) / [1, 180, 360] - [2.356, 0, 0]
@@ -81,9 +87,13 @@ def inter_coord(dname):
     return np.array(mcoords), orders
 
 def reconstruct_coord(dname, test_output, orders, lattice):
+    rotate = [[+0.433013, +0.250000, -0.866025],
+              [-0.500000, +0.866025, +0.000000],
+              [+0.750000, +0.433013, +0.500000]]
+
     test_output = test_output.reshape(50, 10, 3)
+    test_output[:, 9, :] = test_output[:, 9, :] * [1, 180, 360] * factor + [1.142, 0, 0]
     test_output[:, 1:8, :] = test_output[:, 1:8, :] * [1, 180, 360] + [2.356, 0, 0]
-    test_output[:, 9, :] = test_output[:, 9, :] * [1, 180, 360] + [1.142, 0, 0]
 
     # handle Ce-O
     Ce_anchor_cart = np.dot(test_output[:, 0, :], lattice.matrix)
@@ -92,6 +102,7 @@ def reconstruct_coord(dname, test_output, orders, lattice):
     y = r * np.sin(theta) * np.sin(phi)
     z = r * np.cos(theta)
     Ce_xyz_cart = np.concatenate((x.reshape(50,7,1), y.reshape(50,7,1), z.reshape(50,7,1)), axis=2)
+    Ce_xyz_cart = np.dot(Ce_xyz_cart, np.linalg.inv(np.array(rotate)))
     test_output[:, 1:8, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
 
     #handle C-O
@@ -127,8 +138,8 @@ if __name__ == "__main__":
     #print(test_input[2].reshape((10, 3)))
     #print()
     #print(test_output[2].reshape((10, 3)))
-    print(Counter(np.where(test_output-test_input > 0.1)[1]))
-    exit()
+    # print(Counter(np.where(test_output-test_input > 0.1)[1]))
+    # exit()
     test_output= reconstruct_coord(ori_dir, test_output, orders, template.lattice)
 
     style, elements, lattice, TF = template.style, template.elements, template.lattice, template.TF

@@ -1,0 +1,24 @@
+2021-10-04 15:18:44,801 (plot_text.py:175) [__main__][INFO] test_set\summary\ori: avg time spent: 7.259587694444446
+2021-10-04 15:18:44,802 (plot_text.py:175) [__main__][INFO] test_set\summary\ML_v2: avg time spent: 4.788154594444444
+2021-10-04 15:18:44,802 (plot_text.py:175) [__main__][INFO] test_set\summary\ML-xdat-m: avg time spent: 5.474616044444444
+2021-10-04 15:18:44,802 (plot_text.py:175) [__main__][INFO] test_set\summary\ML-xdat-o: avg time spent: 7.114617777777776
+2021-10-04 15:19:58,268 (plot_text.py:175) [__main__][INFO] ori: avg time spent: 7.259587694444446 h
+2021-10-04 15:19:58,269 (plot_text.py:175) [__main__][INFO] ML_v2: avg time spent: 4.788154594444444 h
+2021-10-04 15:19:58,278 (plot_text.py:175) [__main__][INFO] ML-xdat-m: avg time spent: 5.474616044444444 h
+2021-10-04 15:19:58,278 (plot_text.py:175) [__main__][INFO] ML-xdat-o: avg time spent: 7.114617777777776 h
+2021-10-04 15:20:28,301 (plot_text.py:175) [__main__][INFO] ori: avg time spent: 7.3 h
+2021-10-04 15:20:28,301 (plot_text.py:175) [__main__][INFO] ML_v2: avg time spent: 4.8 h
+2021-10-04 15:20:28,302 (plot_text.py:175) [__main__][INFO] ML-xdat-m: avg time spent: 5.5 h
+2021-10-04 15:20:28,302 (plot_text.py:175) [__main__][INFO] ML-xdat-o: avg time spent: 7.1 h
+2021-10-04 15:20:38,803 (plot_text.py:175) [__main__][INFO] ori: avg time spent: 7.26 h
+2021-10-04 15:20:38,804 (plot_text.py:175) [__main__][INFO] ML_v2: avg time spent: 4.79 h
+2021-10-04 15:20:38,804 (plot_text.py:175) [__main__][INFO] ML-xdat-m: avg time spent: 5.47 h
+2021-10-04 15:20:38,804 (plot_text.py:175) [__main__][INFO] ML-xdat-o: avg time spent: 7.11 h
+2021-10-04 15:20:54,508 (plot_text.py:175) [__main__][INFO] ori: avg time spent: 7.26 h
+2021-10-04 15:20:54,508 (plot_text.py:175) [__main__][INFO] ML_v2: avg time spent: 4.79 h
+2021-10-04 15:20:54,509 (plot_text.py:175) [__main__][INFO] ML-xdat-m: avg time spent: 5.47 h
+2021-10-04 15:20:54,509 (plot_text.py:175) [__main__][INFO] ML-xdat-o: avg time spent: 7.11 h
+2021-10-04 15:22:45,580 (plot_text.py:175) [__main__][INFO] ori: avg time spent: 7.26 h
+2021-10-04 15:22:45,581 (plot_text.py:175) [__main__][INFO] ML_v2: avg time spent: 4.79 h
+2021-10-04 15:22:45,581 (plot_text.py:175) [__main__][INFO] ML-xdat-m: avg time spent: 5.47 h
+2021-10-04 15:22:45,581 (plot_text.py:175) [__main__][INFO] ML-xdat-o: avg time spent: 7.11 h

@@ -1,3 +1,4 @@
+import math
 import os
 import pickle
 import h5py
@@ -14,10 +15,15 @@ from common.model import Ploter
 
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-
+# factor = [1, 2, 4]
+factor = [1, 1, 1]
 
 def create_mol(s, orders=None, cut_radius=5.0):
     max_length = cut_radius
+    rotate = [[+0.433013, +0.250000, -0.866025],
+              [-0.500000, +0.866025, +0.000000],
+              [+0.750000, +0.433013, +0.500000]]
+    # rotate = None
     if orders is None:
         center = None
         for index in s.mol_index:
@@ -37,12 +43,11 @@ def create_mol(s, orders=None, cut_radius=5.0):
         orders.insert(0, center[0].order)
         coords.insert(0, center[0].coord.frac_coords)
         coords = Coordinates(frac_coords=np.array(coords), lattice=center[0].coord.lattice)
-
-        return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order)
+        return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
     else:
         elements = np.array(s.elements)[orders]
         coords = Coordinates(frac_coords=np.array(s.coords.frac_coords)[orders], lattice=s.lattice)
-        return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0])
+        return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0], rotate=rotate)
 
 def align(template, m):
     assert len(template) == len(m), f"len(template) = {len(template)}, len(m) = {len(m)}, {m}"
@@ -74,11 +79,11 @@ def worker_inter_coord(dname, file, cut_radius, m_template, orders):
     mol_CO = s1.molecule
     mol_CO_coord = pickle.loads(pickle.dumps(mol_CO.frac_coords))
     mol_CO_coord[1] = np.where(np.array(mol_CO.inter_coords[0][2]) < 0, np.array(mol_CO.inter_coords[0][2]) + 360,
-                               np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] - [1.142, 0, 0]
+                               np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] / factor - [1.142, 0, 0] # phi angle decrease 5 times
     mol_slab = create_mol(s1, orders=orders)
     mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
     mol_slab_coord[1:] = np.where(align(m_template, mol_slab) < 0, align(m_template, mol_slab) + 360,
-                                  align(m_template, mol_slab)) / [1, 180, 360] - [2.356, 0, 0]
+                                  align(m_template, mol_slab)) / [1, 180, 360] - [2.356, 0, 0] # phi angle decrease 5 times
     mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
     return mol_coord, mol_slab.orders
 
@@ -87,6 +92,10 @@ def inter_coord(dname, orders=None):
     template = POSCAR(fname=f"{root_dir}/examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol", mol_index=[36,37])
     template.find_nearest_neighbour_table(cut_radius=cut_radius)
     m_template = create_mol(template)
+
+    # print(m_template.vector)
+    # print(m_template.inter_coords)
+    # exit()
 
     pool = ProcessPool(processes=os.cpu_count())
     if orders is not None:
@@ -108,7 +117,7 @@ def main():
     data_load_file = "data_train-test.h5"
     model_save_file = "intercoord_3layer.h5"
     plot_save_file = "intercoord_3layer.svg"
-    data_load = "f"
+    data_load = "c"
 
     if data_load == "c":
         logger.info("Calculate the mcoords.")
@@ -134,25 +143,25 @@ def main():
     data_output[:, 24:27] = np.where((data_output[:, 24:27] - data_input[:, 24:27] > 0.5), data_output[:, 24:27] - 1, data_output[:, 24:27])
     data_output[:, 24:27] = np.where((data_output[:, 24:27] - data_input[:, 24:27] < -0.5), data_output[:, 24:27] + 1, data_output[:, 24:27])
 
-    #print(data_input[8].reshape((10, 3)))
-    #print()
-    #print(data_output[8].reshape((10, 3)))
-
-    #data_input[:, 5] = 0
-    #data_output[:, 5] = 0
-    print(Counter(np.where(data_output - data_input > 0.5)[1]))
-    exit()
+    # print(data_input[8].reshape((10, 3)))
+    # print()
+    # print(data_output[8].reshape((10, 3)))
+    #
+    # #data_input[:, 5] = 0
+    # #data_output[:, 5] = 0
+    # print(Counter(np.where(data_output - data_input > 0.1)[1]))
+    # exit()
 
     logger.info("Train the model.")
-    from keras import models, layers
+    from keras import models, layers, optimizers
     model = models.Sequential()
     model.add(layers.Dense(64, activation='relu', input_shape=(10 * 3,)))
     model.add(layers.Dense(64, activation='relu'))
     model.add(layers.Dense(64, activation='relu'))
     model.add(layers.Dense(30))
     model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
-
-    history = model.fit(data_input, data_output, epochs=50, batch_size=2, validation_split=0.1)
+    # model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
+    history = model.fit(data_input, data_output, epochs=60, batch_size=2, validation_split=0.1)
     predict = model.predict(data_input)
 
     model.save(model_save_file)

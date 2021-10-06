@@ -15,8 +15,8 @@ from common.model import Ploter
 
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-factor = [1, 2, 4]
-#factor = [1, 1, 1]
+# factor = [1, 2, 4]
+factor = [1, 1, 1]
 
 def create_mol(s, orders=None, cut_radius=5.0):
     max_length = cut_radius
@@ -127,7 +127,7 @@ def main():
     data_load_file = "data_train-test.h5"
     model_save_file = "intercoord_3layer.h5"
     plot_save_file = "intercoord_3layer.svg"
-    data_load = "c"
+    data_load = "f"
 
     if data_load == "c":
         logger.info("Calculate the mcoords.")
@@ -163,16 +163,33 @@ def main():
     # exit()
 
     logger.info("Train the model.")
-    from keras import models, layers, optimizers
-    model = models.Sequential()
-    model.add(layers.Dense(64, activation='relu', input_shape=(10 * 3,)))
-    model.add(layers.Dense(64, activation='relu'))
-    model.add(layers.Dense(64, activation='relu'))
-    model.add(layers.Dense(30))
+    from keras import models, layers, optimizers, Input
+    slab_input = Input(shape=(8 * 3,))
+    mol_input = Input(shape=(2 * 3,))
+
+    slab_model = layers.Dense(64, activation='relu')(slab_input)
+    slab_model = layers.Dense(64, activation='relu')(slab_model)
+    slab_model = models.Model(inputs=slab_input, outputs=slab_model)
+
+    mol_model = layers.Dense(128, activation='relu')(mol_input)
+    mol_model = layers.Dense(128, activation='relu')(mol_model)
+    mol_model = layers.Dense(128, activation='relu')(mol_model)
+    mol_model = models.Model(inputs=mol_input, outputs=mol_model)
+    concatenated = layers.concatenate([slab_model.output, mol_model.output])
+
+    structure = layers.Dense(64, activation='relu')(concatenated)
+    structure = layers.Dense(30)(structure)
+    model = models.Model(inputs=[slab_model.input, mol_model.input], outputs=structure)
+
+    # model = models.Sequential()
+    # model.add(layers.Dense(64, activation='relu', input_shape=(10 * 3,)))
+    # model.add(layers.Dense(64, activation='relu'))
+    # model.add(layers.Dense(64, activation='relu'))
+    # model.add(layers.Dense(30))
     model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
     # model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
-    history = model.fit(data_input, data_output, epochs=60, batch_size=2, validation_split=0.1)
-    predict = model.predict(data_input)
+    history = model.fit([data_input[:, :24], data_input[:, 24:]], data_output, epochs=60, batch_size=2, validation_split=0.1)
+    #predict = model.predict(data_input)
 
     model.save(model_save_file)
 

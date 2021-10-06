@@ -8,8 +8,8 @@ from common.io_file import POSCAR
 from common.base import Coordinates, Element, Atom
 from common.structure import Molecule, Structure
 
-factor = [1, 2, 4]
-# factor = [1, 1, 1]
+# factor = [1, 2, 4]
+factor = [1, 1, 1]
 
 def create_mol(s, cut_radius=5.0):
     max_length = cut_radius
@@ -148,7 +148,7 @@ if __name__ == "__main__":
 
     from keras.models import load_model
     model = load_model("intercoord_3layer.h5")
-    test_output = model.predict(test_input)
+    test_output = model.predict([test_input[:, :24], test_input[:, 24:]])
     #print(test_input[2].reshape((10, 3)))
     #print()
     #print(test_output[2].reshape((10, 3)))

@@ -15,8 +15,8 @@ from common.model import Ploter
 
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-# factor = [1, 2, 4]
-factor = [1, 1, 1]
+factor = [1, 2, 4]
+#factor = [1, 1, 1]
 
 def create_mol(s, orders=None, cut_radius=5.0):
     max_length = cut_radius
@@ -24,7 +24,7 @@ def create_mol(s, orders=None, cut_radius=5.0):
     #           [-0.500000, +0.866025, +0.000000],
     #           [+0.750000, +0.433013, +0.500000]]
     rotate = None
-    PA = Atom(element=Element("PA"), order=-1, coord=Coordinates(lattice=s.lattice, cart_coords=np.array([10, 10, 10])))
+    # PA = Atom(element=Element("PA"), order=-1, coord=Coordinates(lattice=s.lattice, cart_coords=np.array([10, 10, 10])))
     if orders is None:
         center = None
         for index in s.mol_index:
@@ -44,17 +44,17 @@ def create_mol(s, orders=None, cut_radius=5.0):
         orders.insert(0, center[0].order)
         coords.insert(0, center[0].coord.frac_coords)
         coords = Coordinates(frac_coords=np.array(coords), lattice=center[0].coord.lattice)
-        # return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
-        return Molecule(elements=elements, orders=orders, coords=coords, anchor=PA, rotate=rotate)
+        return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
+        # return Molecule(elements=elements, orders=orders, coords=coords, anchor=PA, rotate=rotate)
     else:
         elements = np.array(s.elements)[orders]
         coords = Coordinates(frac_coords=np.array(s.coords.frac_coords)[orders], lattice=s.lattice)
-        # return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0], rotate=rotate)
-        return Molecule(elements=elements, orders=orders, coords=coords, anchor=PA, rotate=rotate)
+        return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0], rotate=rotate)
+        # return Molecule(elements=elements, orders=orders, coords=coords, anchor=PA, rotate=rotate)
 
 def align(template, m):
     assert len(template) == len(m), f"len(template) = {len(template)}, len(m) = {len(m)}, {m}"
-    index = [i for i in range(len(m))] # for align
+    index = [i for i in range(len(m)-1)] # for align
     sorted_index = []
     for _index, (_, _, item_t) in enumerate(template.inter_coords):
         distance=[(i, np.linalg.norm(np.array(m.inter_coords[i][2])-np.array(item_t))) for i in index]
@@ -65,7 +65,7 @@ def align(template, m):
 
     if len(index):
         finish_align = [i for i, _ in sorted_index]
-        remain_align = [i for i in range(len(m)) if i not in finish_align] # template
+        remain_align = [i for i in range(len(m)-1) if i not in finish_align] # template
 
         for _index in remain_align:
             distance=[(i, np.linalg.norm(np.array(m.inter_coords[i][2])-np.array(template.inter_coords[_index][2]))) for i in index]
@@ -75,7 +75,8 @@ def align(template, m):
 
     sorted_index = sorted(sorted_index, key=lambda x: x[0])
     # print(len(sorted_index))
-    return np.array([m.inter_coords[index][2] for _, index in sorted_index])
+    # return np.array([m.inter_coords[index][2] for _, index in sorted_index])
+    return np.array([m.vector[index][2] for _, index in sorted_index])
 
 def worker_inter_coord(dname, file, cut_radius, m_template, orders):
     s1 = POSCAR(fname=f"{dname}/{file}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
@@ -84,11 +85,15 @@ def worker_inter_coord(dname, file, cut_radius, m_template, orders):
     mol_CO_coord = pickle.loads(pickle.dumps(mol_CO.frac_coords))
     mol_CO_coord[1:] = np.where(np.array(mol_CO.inter_coords[0][2]) < 0, np.array(mol_CO.inter_coords[0][2]) + 360,
                                np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] / factor - [1.142, 0, 0] # phi angle decrease 5 times
+    # print((mol_CO.vector[0][2]/1.142 + 1) / 2)
+    # mol_CO_coord[1:] = (mol_CO.vector[0][2]/1.142 + 1) / 2
+    # exit()
     mol_slab = create_mol(s1, orders=orders)
     # print(len(mol_slab.inter_coords))
     mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
-    mol_slab_coord[:] = np.where(align(m_template, mol_slab) < 0, align(m_template, mol_slab) + 360,
-                                  align(m_template, mol_slab)) / [20, 180, 360] #- [2.356, 0, 0] # phi angle decrease 5 times
+    # mol_slab_coord[:] = np.where(align(m_template, mol_slab) < 0, align(m_template, mol_slab) + 360,
+    #                               align(m_template, mol_slab)) / [20, 180, 360] #- [2.356, 0, 0] # phi angle decrease 5 times
+    mol_slab_coord[1:8] = (align(m_template, mol_slab) / 2.356 + 1) /2
     mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
     return mol_coord, mol_slab.orders
 
@@ -99,7 +104,7 @@ def inter_coord(dname, orders=None):
     m_template = create_mol(template)
 
     # print(m_template.vector)
-    # print(m_template.inter_coords)
+    # # print(m_template.inter_coords)
     # exit()
 
     pool = ProcessPool(processes=os.cpu_count())
@@ -122,7 +127,7 @@ def main():
     data_load_file = "data_train-test.h5"
     model_save_file = "intercoord_3layer.h5"
     plot_save_file = "intercoord_3layer.svg"
-    data_load = "f"
+    data_load = "c"
 
     if data_load == "c":
         logger.info("Calculate the mcoords.")
@@ -155,7 +160,7 @@ def main():
     # #data_input[:, 5] = 0
     # #data_output[:, 5] = 0
     print(Counter(np.where(data_output - data_input > 0.1)[1]))
-    exit()
+    # exit()
 
     logger.info("Train the model.")
     from keras import models, layers, optimizers

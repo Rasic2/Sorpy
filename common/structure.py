@@ -17,7 +17,7 @@ class Molecule(AtomSetBase):
         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
         self.rotate = rotate if rotate is not None else np.identity(3)
         for index, atom in enumerate(self.atoms):
-            if self.anchor == atom.order:
+            if isinstance(self.anchor, int) and self.anchor == atom.order:
                 self.anchor = index
 
     def __repr__(self):

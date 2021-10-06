@@ -21,3 +21,7 @@ Element Ce:
     bonds:
         - formula: O
           bond length: 2.356
+
+Element PA:
+    formula: PA
+    number: -1

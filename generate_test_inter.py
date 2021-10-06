@@ -5,7 +5,7 @@ from collections import Counter
 
 from common.logger import root_dir
 from common.io_file import POSCAR
-from common.base import Coordinates
+from common.base import Coordinates, Element, Atom
 from common.structure import Molecule, Structure
 
 # factor = [1, 2, 4]
@@ -14,10 +14,11 @@ factor = [1, 1, 1]
 def create_mol(s, cut_radius=5.0):
     max_length = cut_radius
     center = None
-    rotate = [[+0.433013, +0.250000, -0.866025],
-              [-0.500000, +0.866025, +0.000000],
-              [+0.750000, +0.433013, +0.500000]]
-    # rotate = None
+    # rotate = [[+0.433013, +0.250000, -0.866025],
+    #           [-0.500000, +0.866025, +0.000000],
+    #           [+0.750000, +0.433013, +0.500000]]
+    rotate = None
+    PA = Atom(element=Element("PA"), order=-1, coord=Coordinates(lattice=s.lattice, cart_coords=np.array([10, 10, 10])))
     for index in s.mol_index:
         for atom in s.NNT.index(index):
             if atom[0].element.formula == "Ce" and atom[1] <= max_length:
@@ -36,12 +37,13 @@ def create_mol(s, cut_radius=5.0):
     coords.insert(0, center[0].coord.frac_coords)
     coords = Coordinates(frac_coords=np.array(coords), lattice=center[0].coord.lattice)
 
-    return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
+    # return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order, rotate=rotate)
+    return Molecule(elements=elements, orders=orders, coords=coords, anchor=PA, rotate=rotate)
 
 def align(template, m):
 
     assert len(template) == len(m), f"len(template) = {len(template)}, len(m) = {len(m)}, {m}"
-    index = [i for i in range(len(m)-1)]
+    index = [i for i in range(len(m))]
     sorted_index = []
     for _index, (_, _, item_t) in enumerate(template.inter_coords):
         distance=[(i, np.linalg.norm(np.array(m.inter_coords[i][2])-np.array(item_t))) for i in index]
@@ -52,11 +54,18 @@ def align(template, m):
 
     if len(index):
         finish_align = [i for i, _ in sorted_index]
-        remain_align = [i for i in range(len(m)-1) if i not in finish_align]
-        if len(index) == 1:
-            sorted_index.append((remain_align[0], index[0]))
-        else:
-            raise NotImplementedError("This function is not implemented now!")
+        remain_align = [i for i in range(len(m)) if i not in finish_align]
+
+        for _index in remain_align:
+            distance=[(i, np.linalg.norm(np.array(m.inter_coords[i][2])-np.array(template.inter_coords[_index][2]))) for i in index]
+            min_dist = min(distance, key=lambda x: x[1])
+            sorted_index.append((_index, min_dist[0]))
+            index.remove(min_dist[0])
+
+        # if len(index) == 1:
+        #     sorted_index.append((remain_align[0], index[0]))
+        # else:
+        #     raise NotImplementedError("This function is not implemented now!")
 
     sorted_index = sorted(sorted_index, key=lambda x: x[0])
     return np.array([m.inter_coords[index][2] for _, index in sorted_index])
@@ -78,7 +87,7 @@ def inter_coord(dname):
         mol_CO_coord[1] = np.where(np.array(mol_CO.inter_coords[0][2])<0, np.array(mol_CO.inter_coords[0][2])+360, np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] / factor - [1.142, 0, 0]
         mol_slab= create_mol(s1)
         mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
-        mol_slab_coord[1:] = np.where(align(m_template, mol_slab)<0, align(m_template, mol_slab)+360, align(m_template, mol_slab)) / [1, 180, 360] - [2.356, 0, 0]
+        mol_slab_coord[:] = np.where(align(m_template, mol_slab)<0, align(m_template, mol_slab)+360, align(m_template, mol_slab)) / [20, 180, 360] #- [2.356, 0, 0]
         mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
         mcoords.append(mol_coord)
         orders.append((mol_slab.orders+s1.mol_index))
@@ -87,23 +96,24 @@ def inter_coord(dname):
     return np.array(mcoords), orders
 
 def reconstruct_coord(dname, test_output, orders, lattice):
-    rotate = [[+0.433013, +0.250000, -0.866025],
-              [-0.500000, +0.866025, +0.000000],
-              [+0.750000, +0.433013, +0.500000]]
+    # rotate = [[+0.433013, +0.250000, -0.866025],
+    #           [-0.500000, +0.866025, +0.000000],
+    #           [+0.750000, +0.433013, +0.500000]]
 
     test_output = test_output.reshape(50, 10, 3)
     test_output[:, 9, :] = test_output[:, 9, :] * [1, 180, 360] * factor + [1.142, 0, 0]
-    test_output[:, 1:8, :] = test_output[:, 1:8, :] * [1, 180, 360] + [2.356, 0, 0]
+    test_output[:, 0:8, :] = test_output[:, 0:8, :] * [20, 180, 360] #+ [2.356, 0, 0]
 
     # handle Ce-O
     Ce_anchor_cart = np.dot(test_output[:, 0, :], lattice.matrix)
-    r, theta, phi = test_output[:, 1:8, 0], np.deg2rad(test_output[:, 1:8, 1]), np.deg2rad(test_output[:, 1:8, 2])
+    r, theta, phi = test_output[:, 0:8, 0], np.deg2rad(test_output[:, 0:8, 1]), np.deg2rad(test_output[:, 0:8, 2])
     x = r * np.sin(theta) * np.cos(phi)
     y = r * np.sin(theta) * np.sin(phi)
     z = r * np.cos(theta)
-    Ce_xyz_cart = np.concatenate((x.reshape(50,7,1), y.reshape(50,7,1), z.reshape(50,7,1)), axis=2)
-    Ce_xyz_cart = np.dot(Ce_xyz_cart, np.linalg.inv(np.array(rotate)))
-    test_output[:, 1:8, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
+    Ce_xyz_cart = np.concatenate((x.reshape(50,8,1), y.reshape(50,8,1), z.reshape(50,8,1)), axis=2)
+    # Ce_xyz_cart = np.dot(Ce_xyz_cart, np.linalg.inv(np.array(rotate)))
+    # test_output[:, 0:8, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
+    test_output[:, 0:8, :] = np.dot((np.array([10, 10, 10]) + Ce_xyz_cart), lattice.inverse)
 
     #handle C-O
     C_anchor_cart = np.dot(test_output[:, 8, :], lattice.matrix)

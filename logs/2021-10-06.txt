@@ -1,0 +1,26 @@
+2021-10-06 15:48:04,434 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:48:24,697 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:50:39,093 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:51:51,911 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:52:17,599 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:52:50,306 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:57:51,785 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 15:58:07,123 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:00:15,840 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:03:31,508 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:05:15,087 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:05:34,450 (train_model_inter.py:126) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:06:22,684 (train_model_inter.py:127) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:06:51,392 (train_model_inter.py:127) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:07:38,078 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:08:27,056 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:08:44,555 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:09:17,343 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:09:59,091 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:10:56,521 (train_model_inter.py:160) [__main__][INFO] Train the model.
+2021-10-06 16:11:19,485 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-06 16:14:51,707 (train_model_inter.py:137) [__main__][INFO] Load data from the .h5 file.
+2021-10-06 16:25:46,859 (train_model_inter.py:128) [__main__][INFO] Calculate the mcoords.
+2021-10-06 16:26:45,158 (train_model_inter.py:160) [__main__][INFO] Train the model.
+2021-10-06 16:27:08,688 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-06 16:29:17,602 (train_model_inter.py:137) [__main__][INFO] Load data from the .h5 file.

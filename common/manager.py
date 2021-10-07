@@ -53,7 +53,7 @@ class FileManager:
             self.mol_index = [mol_index]
         else:
             self.mol_index = None
-            logger.warning("The Molecule was not align.")
+            logger.warning("The Molecule was not align_structure.")
 
         self.style = style
         from collections import defaultdict
@@ -90,7 +90,7 @@ class DirManager:
         self.mol_index = mol_index
         self.kargs = kargs
         if self.mol_index:
-            logger.info(f"Molecule was align to {self.mol_index} location.")
+            logger.info(f"Molecule was align_structure to {self.mol_index} location.")
 
         self._all_files = None
 
@@ -117,7 +117,7 @@ class DirManager:
         logger.info("Align the structure to the template structure.")
         pool = ProcessPool(processes=os.cpu_count())
 
-        results = [pool.apply_async(op.align, args=(self.template, file.structure)) for file in self.all_files]
+        results = [pool.apply_async(op.align_structure, args=(self.template, file.structure)) for file in self.all_files]
         temp_structures = [result.get() for result in results]
 
         pool.close()
@@ -130,17 +130,6 @@ class DirManager:
         return [structure.coords for structure in self.structures]
 
     @property
-    def mcoords(self):
-        """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
-        if len(self.mol_index) > 0 and "anchor" in self.kargs:
-            mindex = list(set(self.mol_index).difference({self.kargs["anchor"]}))
-            _mcoords = np.copy(self.frac_coords)
-            _mcoords[:, mindex, :] = self.inter_coords[:, :, :]
-            return _mcoords
-        else:
-            return None
-
-    @property
     def frac_coords(self):
         return np.array([coord.frac_coords for coord in self.coords])
 
@@ -150,8 +139,33 @@ class DirManager:
 
     @property
     def inter_coords(self):
-        return np.array([[inter_coord for _, _, inter_coord in file.structure.molecule.inter_coords]
-                         for file in self.all_files])
+        """inter_coords<molecule>"""
+        return np.array([file.structure.inter_coord for file in self.all_files])
+
+    @property
+    def mcoords(self):
+        """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
+        return np.array([file.structure.mcoord for file in self.all_files])
+
+    def vcoords(self, orders=None, cut_radius=5.0):
+        """frac_coords<Ce1> + vector<O7> + frac_coord<anchor> + inter_coords<molecule>"""
+        m_template = self.template.create_mol(cut_radius=cut_radius)
+        pool = ProcessPool(processes=os.cpu_count())
+        if orders is not None:
+            results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, order))
+                       for file, order in zip(self.all_files, orders)]
+        else:
+            results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, orders))
+                       for file in self.all_files]
+
+        temp_results = [result.get() for result in results]
+        mcoords = [item for item, _ in temp_results]
+        orders = [item for _, item in temp_results]
+
+        pool.close()
+        pool.join()
+
+        return np.array(mcoords), orders
 
 
 class ParameterManager:

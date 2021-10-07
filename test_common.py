@@ -19,9 +19,13 @@ def test_poscar():
     print(p1 - p2)
 
 def test_structure():
-    s1 = POSCAR(fname=f"{root_dir}/input/POSCAR_1-1").to_structure(style="Slab+Mol", mol_index=[36,37])
-    s2 = POSCAR(fname=f"{root_dir}/output/CONTCAR_1-1").to_structure(style="Slab+Mol", mol_index=[36,37])
-    print(op.dist(s1, s2))
+    template = POSCAR(fname=Path(root_dir) / "examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol", mol_index=[36,37], anchor=36)
+    m_template = template.create_mol()
+    s1 = POSCAR(fname=Path(root_dir) / "train_set/input/POSCAR_1-1").to_structure(style="Slab+Mol", mol_index=[36,37], anchor=36)
+    s2 = POSCAR(fname=Path(root_dir) / "train_set/output/CONTCAR_1-1").to_structure(style="Slab+Mol", mol_index=[36,37])
+    # print(op.dist(self, s2))
+    # print(self.kargs)
+    print(s1.vcoord(m_template))
 
 def test_filemanager():
     fm = FileManager(fname=Path(root_dir)/"input/POSCAR_3-1", style="Slab+Mol", mol_index=[36, 37])
@@ -30,14 +34,18 @@ def test_filemanager():
     print(fm.structure.molecule.inter_coords)
 
 def test_dirmanager():
-    dm = DirManager(dname=Path(root_dir)/"input", style="Slab+Mol", mol_index=[36, 37])
+    dm = DirManager(dname=Path(root_dir)/"train_set/input-2", style="Slab+Mol", mol_index=[36, 37], anchor=36)
+    template = POSCAR(fname=Path(root_dir) / "examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol",
+                                                                                               mol_index=[36, 37],
+                                                                                               anchor=36)
     #print(dm.single_file("POSCAR_1-1"))
     #print(len(dm.all_files))
     #print(np.array(dm.coords)[0][0])
     #print(np.array(dm.coords))
     #print(dm.frac_coords)
 
-    print(dm.inter_coords.shape)
+    # print(dm.inter_coords.shape)
+    print(dm.vcoords(template=template))
     #for file in dm.all_files:
     #    print(file.structure.molecule.inter_coords[0][2])
     #    exit()
@@ -46,19 +54,19 @@ def test_dirmanager():
 def test_operator():
     kargs={"style":"Slab+Mol", "mol_index": [36,37], "anchor": 36, "ignore_mol": True}
     s1 = POSCAR(fname=Path(root_dir)/"examples/CeO2_111/POSCAR_template").to_structure(**kargs)
-    s2 = POSCAR(fname=Path(root_dir)/"train_set/xinput-m/POSCAR_4-31-1").to_structure(**kargs)
-    #template = s1.coords
+    s2 = POSCAR(fname=Path(root_dir)/"train_set/xinput-m_align/POSCAR_4-31-1").to_structure(**kargs)
+    #template = self.coords
     #coords = s2.coords
-    #s1.find_nearest_neighbour_table()
+    #self.find_nearest_neighbour_table()
     #s2.find_nearest_neighbour_table()
-    #print(s1.NNT)
-    #print(op.dist(s1, s2))
-    #print(s2.coords.cart_coords-s1.coords.cart_coords)
-    print(op.align(s1, s2))
-    #print(s1.bonds)
-    #print(op.align(s1, s2))
+    #print(self.NNT)
+    #print(op.dist(self, s2))
+    #print(s2.coords.cart_coords-self.coords.cart_coords)
+    print(op.align_structure(s1, s2))
+    #print(self.bonds)
+    #print(op.align_structure(self, s2))
     #print(op.__dict__)
-    #op._Operator__tailor_atom_order(s1, s2)
+    #op._Operator__tailor_atom_order(self, s2)
 
 def test_main():
 
@@ -97,8 +105,9 @@ def test_mass_center():
 
 if __name__ == "__main__":
     #test_filemanager()
-    #test_dirmanager()
-    test_operator()
+    test_dirmanager()
+    # test_operator()
     #test_main()
+    # test_structure()
     #test_mass_center()
     pass

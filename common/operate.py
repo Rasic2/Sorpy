@@ -1,12 +1,12 @@
 import copy
 import itertools
 import numpy as np
+from functools import partial
 from collections import defaultdict
 
-from common.utils import Format_defaultdict
 from common.logger import logger
 from common.base import Coordinates
-from common.structure import AtomSetBase, Structure
+from common.structure import Structure, AtomSetBase, Molecule
 
 
 class Operator:
@@ -30,14 +30,16 @@ class Operator:
         return sorted_dists
 
     @staticmethod
-    def __pbc_apply(template, for_pbc):
+    def __pbc_apply(template, s_pbc):
         """Apply the Periodic Boundary Condition <PBC_apply>"""
-        index = np.where(np.abs(for_pbc.coords.frac_coords - template.coords.frac_coords) > 0.5)
+        index = np.where(np.abs(s_pbc.coords.frac_coords - template.coords.frac_coords) > 0.5)
         temp_index = [(i, j) for i, j in zip(index[0], index[1])]
-        final_index = [item for item in temp_index if item[0] not in for_pbc.mol_index]
-        index = (np.array([i for i, _ in final_index], dtype=np.int64), np.array([i for _, i in final_index], dtype=np.int64))
+        final_index = [item for item in temp_index if item[0] not in s_pbc.mol_index]
 
-        new_frac_coords = np.copy(for_pbc.coords.frac_coords)
+        np.array_int64 = partial(np.array, dtype=np.int64)
+        index = (map(np.array_int64, zip(*final_index)))  # Use zip func unpack the <tuple list>
+
+        new_frac_coords = np.copy(s_pbc.coords.frac_coords)
         logger.debug("PBC Apply")
         for (i, j) in zip(*index):
             iter_num = 0
@@ -53,53 +55,54 @@ class Operator:
                     logger.error("Coordinates PBC-apply Error! Please check the input structure.")
                     raise StopIteration("Iter over than 10 times, Something wrong happens!")
 
-        new_struct = copy.deepcopy(for_pbc)
-        setattr(new_struct, "coords", Coordinates(frac_coords=new_frac_coords, lattice=for_pbc.lattice))
+        new_struct = copy.deepcopy(s_pbc)
+        setattr(new_struct, "coords", Coordinates(frac_coords=new_frac_coords, lattice=s_pbc.lattice))
 
         return new_struct
 
     @staticmethod
-    def __trans_mass_center(template, for_trans):
+    def __trans_mass_center(template, s_trans):
         """Translate the structure along the mass_center direction"""
         logger.debug("Trans the structure along the mass center direction")
         tmass = template.mass_center
-        nmass = for_trans.mass_center
-        new_frac_coords = for_trans.coords.frac_coords + tmass - nmass
-        new_struct = copy.deepcopy(for_trans)
-        setattr(new_struct, "coords", Coordinates(frac_coords=new_frac_coords, lattice=for_trans.lattice))
+        nmass = s_trans.mass_center
+        new_frac_coords = s_trans.coords.frac_coords + tmass - nmass
+        new_struct = copy.deepcopy(s_trans)
+        setattr(new_struct, "coords", Coordinates(frac_coords=new_frac_coords, lattice=s_trans.lattice))
 
         return new_struct
 
     @staticmethod
-    def __tailor_atom_order(template, for_tailor):
+    def __tailor_atom_order(template, s_tailor):
         """Tailor the atom order to achieve the atom mapping"""
         mapping_list = []
-        dists = Operator.dist(template, for_tailor)
+        dists = Operator.dist(template, s_tailor)
         logger.debug("Tailor the atom order to achieve the atom mapping")
         # If cart-dist < 0.2, mapping such atom as the same
         for atom_i, value in dists.items():
             for atom_j, dist in value.items():
-                if dist < 0.2 and atom_i.element == atom_j.element: # Fix bug, test atom_i and atom_j is the same element
+                # Fix bug, test atom_i and atom_j is the same element
+                if dist < 0.2 and atom_i.element == atom_j.element:
                     mapping_list.append([atom_i.order, atom_j.order])
                     break  # the shortest distance
 
         # For the atoms whose distance over than 0.2, the shortest distance atom will be mapping
         template_remain = set(template.orders).difference(set([i for (i, _) in mapping_list]))
-        for_tailor_remain = set(for_tailor.orders).difference(set([i for (_, i) in mapping_list]))
+        for_tailor_remain = set(s_tailor.orders).difference(set([i for (_, i) in mapping_list]))
         for index_i in template_remain:
             min_dist, min_index = 100, None
             for index_j in for_tailor_remain:
-                if template.atoms[index_i].element == for_tailor.atoms[index_j].element:
-                    dist = dists[template.atoms[index_i]][for_tailor.atoms[index_j]]
+                if template.atoms[index_i].element == s_tailor.atoms[index_j].element:
+                    dist = dists[template.atoms[index_i]][s_tailor.atoms[index_j]]
                     if dist < min_dist:
                         min_dist, min_index = dist, index_j
             mapping_list.append([index_i, min_index])
         index = [i for _, i in mapping_list]
-        new_kargs = copy.deepcopy(for_tailor.__dict__)
+        new_kargs = copy.deepcopy(s_tailor.__dict__)
         for key in ('elements', 'coords', 'TF'):
             if key in new_kargs.keys():
                 try:
-                    new_kargs[key] = for_tailor.__dict__[key][index]
+                    new_kargs[key] = s_tailor.__dict__[key][index]
                 except:
                     print(f"key = {key}, index = {index}")
                     raise
@@ -109,22 +112,33 @@ class Operator:
         return Structure(**new_kargs)
 
     @staticmethod
-    def align(template, for_align):
-        if template is None and isinstance(for_align, Structure):
-            return for_align
+    def align_structure(template, s_align):
+        """
+        Align the structure to the template.
 
-        assert isinstance(template, Structure) and isinstance(for_align, Structure), \
+        :func: __pbc_apply
+        :func: __tailor_atom_order
+        :func: __trans_mass_center
+
+        :param: template
+        :param: s_lign
+        :return: aligned structure
+        """
+        if template is None and isinstance(s_align, Structure):
+            return s_align
+
+        assert isinstance(template, Structure) and isinstance(s_align, Structure), \
             f"The input parameters should be the instance of the <class Structure>, \n" \
-            f"but your input parameters are {type(template)} and {type(for_align)}"
+            f"but your input parameters are {type(template)} and {type(s_align)}"
 
-        assert template.lattice == for_align.lattice, \
+        assert template.lattice == s_align.lattice, \
             "The lattice vector of input structure is not consistent with the template structure. \n" \
             f"template.lattice \n {template.lattice} \n" \
-            f"for_align.lattice \n {for_align.lattice}"
+            f"for_align.lattice \n {s_align.lattice}"
 
         fmass = template.mass_center
-        nmass = for_align.mass_center
-        new_struct = copy.deepcopy(for_align)
+        nmass = s_align.mass_center
+        new_struct = copy.deepcopy(s_align)
         count = 0
         while np.any(np.abs(fmass - nmass) > 10e-06):
             logger.debug(f"fmass = {fmass}")
@@ -136,13 +150,64 @@ class Operator:
             nmass = new_struct.mass_center
             count += 1
             if count > 10:
-                logger.error("Coordinates align Error! Please check the input structure.")
+                logger.error("Coordinates align_structure Error! Please check the input structure.")
                 raise StopIteration("Iter over than 10 times, Something wrong happens!")
         return new_struct
 
     @staticmethod
+    def align_molecule(template, m_align):  # TODO: the Ce is not consider in this func, <Ce1O7 system>
+        """
+        Align the Molecule to the template.
+
+        :param: template
+        :param: m_align
+        :return: aligned Molecule
+        """
+        if template is None and isinstance(m_align, Molecule):
+            return m_align
+
+        assert isinstance(template, Molecule) and isinstance(m_align, Molecule), \
+            f"The input parameters should be the instance of the <class Molecule>, \n" \
+            f"but your input parameters are {type(template)} and {type(m_align)}"
+
+        assert len(template) == len(m_align), \
+            f"The atoms of the input template and molecule to be aligned is not same, \n" \
+            f"len(template) = {len(template)}, len(m) = {len(m_align)} \n" \
+            f"{m_align}"
+
+        index = [item for item in m_align.inter_coords]  # m.index which remain to be sorted
+        sorted_index = []
+        for item_t in template.inter_coords:
+            distance = [(item_m, np.linalg.norm(np.array(item_m[2]) - np.array(item_t[2]))) for item_m in index]
+            min_dist = min(distance, key=lambda x: x[1])
+            if min_dist[1] < 5.0:
+                sorted_index.append((item_t[1].order, min_dist[0][1].order))  # template.index <--> m_align.index
+                index.remove(min_dist[0])  # removing the sorted m_align.index
+
+        if len(index):
+            finish_align = [i for i, _ in sorted_index]  # template.index which have been sorted
+            remain_align = [item for item in template.inter_coords if item[1].order not in finish_align]
+            # template.index which remain to be sorted
+
+            for item_t in remain_align:
+                distance = [(item_m, np.linalg.norm(np.array(item_m[2]) - np.array(item_t[2]))) for item_m in index]
+                min_dist = min(distance, key=lambda x: x[1])
+                sorted_index.append((item_t[1].order, min_dist[0][1].order))  # template.index <--> m_align.index
+                index.remove(min_dist[0])  # removing the sorted m_align.index
+
+        sorted_index = sorted(sorted_index, key=lambda x: x[0])  # Make the order following the template.index
+
+        # construct the new Molecule
+        __orders = [m_align.orders.index(index) for _, index in sorted_index]
+        __orders.insert(0, 0)
+        elements = np.array(m_align.elements)[__orders]
+        orders = [int(order) for order in np.array(m_align.orders)[__orders]]
+        coords = Coordinates(frac_coords=np.array(m_align.coords.frac_coords)[__orders], lattice=m_align.coords.lattice)
+        return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0])
+
+    @staticmethod
     def find_trans_vector(coord: np.ndarray):
-        repeat = 2 # Make repeat to be a parameter in future
+        repeat = 2  # Make repeat to be a parameter in future
         ori_coord = copy.deepcopy(coord)
 
         anchor = ori_coord[:, 36, :2]

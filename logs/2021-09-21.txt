@@ -1,13 +1,13 @@
 2021-09-21 12:37:38,105 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 12:37:38,105 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 12:37:38,105 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 12:37:38,105 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 12:37:38,105 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 12:37:38,105 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 12:37:42,835 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 12:37:42,835 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-21 12:37:43,907 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-21 12:53:40,185 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 12:53:40,185 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 12:53:40,185 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 12:53:40,185 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 12:53:40,185 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 12:53:40,185 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 12:53:43,875 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 12:53:43,875 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -16,15 +16,15 @@
 2021-09-21 13:00:12,214 (model.py:151) [__main__][INFO] loss = 0.0026630994398146868
 2021-09-21 13:00:12,339 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 13:00:21,381 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 13:00:21,381 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 13:00:21,381 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 13:00:21,381 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 13:00:21,381 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 13:00:21,381 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 13:00:25,044 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 13:00:25,045 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-21 13:00:25,921 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-21 13:03:04,126 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 13:03:04,126 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 13:03:04,126 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 13:03:04,126 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 13:03:04,126 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 13:03:04,126 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 13:03:07,720 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 13:03:07,720 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -33,8 +33,8 @@
 2021-09-21 13:09:12,904 (model.py:151) [__main__][INFO] loss = 0.0014803744852542877
 2021-09-21 13:09:12,976 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 13:10:07,047 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 13:10:07,048 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 13:10:07,048 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 13:10:07,048 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 13:10:07,048 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 13:10:07,048 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 13:10:10,841 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 13:10:10,841 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -43,15 +43,15 @@
 2021-09-21 14:08:14,267 (model.py:151) [__main__][INFO] loss = 0.0005465248832479119
 2021-09-21 14:08:14,348 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 14:11:01,615 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 14:11:01,615 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 14:11:01,615 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 14:11:01,615 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 14:11:01,615 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 14:11:01,615 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 14:11:05,224 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 14:11:05,224 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-21 14:11:06,097 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-21 14:13:14,313 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 14:13:14,313 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 14:13:14,314 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 14:13:14,313 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 14:13:14,314 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 14:13:14,314 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 14:13:18,126 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 14:13:18,127 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -60,8 +60,8 @@
 2021-09-21 15:18:22,199 (model.py:151) [__main__][INFO] loss = 0.0008196352864615619
 2021-09-21 15:18:22,315 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 15:24:22,845 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 15:24:22,845 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 15:24:22,845 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 15:24:22,845 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 15:24:22,845 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 15:24:22,845 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 15:24:26,749 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 15:24:26,749 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -70,8 +70,8 @@
 2021-09-21 16:22:52,273 (model.py:151) [__main__][INFO] loss = 0.000817157095298171
 2021-09-21 16:22:52,369 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 18:11:15,608 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-21 18:11:15,608 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 18:11:15,609 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 18:11:15,608 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 18:11:15,609 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 18:11:15,609 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 18:11:19,903 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 18:11:19,904 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -80,8 +80,8 @@
 2021-09-21 19:24:01,747 (model.py:151) [__main__][INFO] loss = 0.002074185060337186
 2021-09-21 19:24:01,858 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-21 19:29:18,959 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-21 19:29:18,959 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-21 19:29:18,959 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 19:29:18,959 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-21 19:29:18,959 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 19:29:18,959 (train_model.py:40) [__main__][INFO] Load data from the .h5 file.
 2021-09-21 19:29:23,669 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-21 19:29:23,670 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -92,7 +92,7 @@
 2021-09-21 21:36:10,709 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-21 21:36:10,797 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-21 21:36:10,799 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-21 21:36:10,800 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-21 21:36:10,800 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-21 21:36:10,800 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-21 21:36:29,452 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
 2021-09-21 21:36:29,452 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.

@@ -131,7 +131,7 @@ dmypy.json
 # Pyre ftype checker
 .pyre/
 /results/CeO2_111_history.svg
-/results/history.json
+/results/analysis/history.json
 /test_set/
 /train_set/
 /results/

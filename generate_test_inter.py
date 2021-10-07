@@ -7,6 +7,7 @@ from common.logger import root_dir
 from common.io_file import POSCAR
 from common.base import Coordinates, Element, Atom
 from common.structure import Molecule, Structure
+from common.operate import Operator as op
 
 # factor = [1, 2, 4]
 factor = [1, 1, 1]
@@ -73,23 +74,27 @@ def align(template, m):
 def inter_coord(dname):
     cut_radius = 5.0
     template = POSCAR(fname=f"{root_dir}/examples/CeO2_111/POSCAR_template").to_structure(style="Slab+Mol", mol_index=[36,37])
-    template.find_nearest_neighbour_table(cut_radius=cut_radius)
-    m_template = create_mol(template)
+    # template.find_nearest_neighbour_table(cut_radius=cut_radius)
+    # m_template = create_mol(template)
+    m_template = template.create_mol(cut_radius=cut_radius)
 
     mcoords = []
     orders = []
     for file in os.listdir(dname):
         print(f"Handle the {file}")
         s1 = POSCAR(fname=f"{dname}/{file}").to_structure(style="Slab+Mol", mol_index=[36,37], anchor=36)
-        s1.find_nearest_neighbour_table(cut_radius=cut_radius)
+        # self.find_nearest_neighbour_table(cut_radius=cut_radius)
         mol_CO = s1.molecule
         mol_CO_coord = pickle.loads(pickle.dumps(mol_CO.frac_coords))
         mol_CO_coord[1] = np.where(np.array(mol_CO.inter_coords[0][2])<0, np.array(mol_CO.inter_coords[0][2])+360, np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] / factor - [1.142, 0, 0]
         # mol_CO_coord[1] = (mol_CO.vector[0][2]/1.142 + 1) / 2
-        mol_slab= create_mol(s1)
+        # mol_slab= create_mol(self)
+        mol_slab = s1.create_mol(orders=None, cut_radius=cut_radius)
         mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
-        mol_slab_coord[1:8] = (align(m_template, mol_slab) / 2.356 + 1) / 2
-        # mol_slab_coord[:] = np.where(align(m_template, mol_slab)<0, align(m_template, mol_slab)+360, align(m_template, mol_slab)) / [20, 180, 360] #- [2.356, 0, 0]
+        mol_slab = op.align_molecule(m_template, mol_slab)
+        mol_slab_coord[1:8] = (np.array([item[2] for item in mol_slab.vector]) / 2.356 + 1) / 2
+        # mol_slab_coord[1:8] = (align(m_template, mol_slab) / 2.356 + 1) / 2
+        # mol_slab_coord[:] = np.where(align_structure(m_template, mol_slab)<0, align_structure(m_template, mol_slab)+360, align_structure(m_template, mol_slab)) / [20, 180, 360] #- [2.356, 0, 0]
         mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
         mcoords.append(mol_coord)
         orders.append((mol_slab.orders+s1.mol_index))
@@ -147,7 +152,7 @@ if __name__ == "__main__":
     test_input = test_input.reshape((50, 30))
 
     from keras.models import load_model
-    model = load_model("intercoord_3layer.h5")
+    model = load_model("results/intercoord_3layer.h5")
     test_output = model.predict([test_input[:, :24], test_input[:, 24:]])
     #print(test_input[2].reshape((10, 3)))
     #print()

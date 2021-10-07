@@ -73,7 +73,7 @@ def plot_steps(ori_dfs, ML_dfs):
     plt.yticks(fontsize=18)
     plt.ylabel("Steps", fontsize=22)
     # plt.show()
-    plt.savefig("istep.svg")
+    plt.savefig(f"{root_dir}/results/analysis/istep.svg")
 
 
 @plot_wrap
@@ -89,7 +89,7 @@ def plot_maxforce(*results, save=True):
     plt.ylabel("Max Force", fontsize=22)
 
     if save:
-        plt.savefig(f"{root_dir}/results/mforce.svg")
+        plt.savefig(f"{root_dir}/results/analysis/mforce.svg")
     else:
         plt.show()
 
@@ -111,7 +111,7 @@ def plot_maxiter(*results, save=True):
     plt.ylabel("Mean Iter nums", fontsize=22)
 
     if save:
-        plt.savefig(f"{root_dir}/results/mean_iter.svg")
+        plt.savefig(f"{root_dir}/results/analysis/mean_iter.svg")
     else:
         plt.show()
 
@@ -129,7 +129,7 @@ def plot_energy(*results, save=True):
     plt.ylabel("Energy", fontsize=22)
 
     if save:
-        plt.savefig(f"{root_dir}/results/energy.svg")
+        plt.savefig(f"{root_dir}/results/analysis/energy.svg")
     else:
         plt.show()
 
@@ -162,7 +162,7 @@ def plot_time():
     plt.yticks(fontsize=18)
     plt.ylabel("Time Spent / h", fontsize=22)
     # plt.show()
-    plt.savefig("time_spent.svg")
+    plt.savefig(f"{root_dir}/results/analysis/time_spent.svg")
 
 
 @plot_wrap
@@ -186,7 +186,7 @@ def plot_violin(*dirs, save=True):
     plt.xlabel("")
     plt.ylabel("Time Spent / h", fontsize=22)
     if save:
-        plt.savefig(f"{root_dir}/results/time_spent_violin.svg")
+        plt.savefig(f"{root_dir}/results/analysis/time_spent_violin.svg")
     else:
         plt.show()
 
@@ -204,7 +204,7 @@ def plot_index(index, *results, save=True):
         plt.yticks(fontsize=18)
         plt.ylabel(item, fontsize=22)
         if save:
-            plt.savefig(f"{root_dir}/results/{index}_{item}.svg")
+            plt.savefig(f"{root_dir}/results/analysis/{index}_{item}.svg")
         else:
             plt.show()
 

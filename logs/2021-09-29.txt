@@ -1,10 +1,10 @@
 2021-09-29 18:35:36,959 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 18:35:36,959 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 18:35:36,959 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 18:35:36,959 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 18:35:36,959 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 18:35:36,959 (train_model.py:42) [__main__][INFO] Load data from the .h5 file.
 2021-09-29 18:35:48,875 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 18:35:48,876 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 18:35:48,876 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 18:35:48,876 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 18:35:48,876 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 18:35:48,884 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 18:35:48,884 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 18:35:51,963 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
@@ -15,8 +15,8 @@
 2021-09-29 18:36:35,893 (model.py:151) [__main__][INFO] loss = 0.008114385418593884
 2021-09-29 18:36:36,047 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-29 18:38:39,682 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 18:38:39,682 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 18:38:39,682 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 18:38:39,682 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 18:38:39,682 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 18:38:39,682 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 18:38:39,682 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 18:38:42,582 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
@@ -27,8 +27,8 @@
 2021-09-29 18:39:23,909 (model.py:151) [__main__][INFO] loss = 0.007918019779026508
 2021-09-29 18:39:23,956 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-29 18:40:28,588 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 18:40:28,589 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 18:40:28,589 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 18:40:28,589 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 18:40:28,589 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 18:40:28,589 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 18:40:28,589 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 18:40:31,430 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
@@ -39,8 +39,8 @@
 2021-09-29 18:41:13,396 (model.py:151) [__main__][INFO] loss = 0.008321426808834076
 2021-09-29 18:41:13,443 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-29 19:38:38,636 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 19:38:38,636 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 19:38:38,636 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 19:38:38,636 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 19:38:38,636 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 19:38:38,636 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 19:38:38,636 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 19:38:41,552 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
@@ -51,8 +51,8 @@
 2021-09-29 19:39:25,004 (model.py:151) [__main__][INFO] loss = 0.00786706991493702
 2021-09-29 19:39:25,077 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-29 19:40:03,694 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 19:40:03,694 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 19:40:03,695 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 19:40:03,694 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 19:40:03,695 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 19:40:03,695 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 19:40:03,695 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 19:40:06,538 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
@@ -63,8 +63,8 @@
 2021-09-29 19:40:47,482 (model.py:151) [__main__][INFO] loss = 0.008319942280650139
 2021-09-29 19:40:47,527 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-29 19:41:01,701 (train_model.py:29) [__main__][INFO] Load the structure information.
-2021-09-29 19:41:01,701 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-29 19:41:01,702 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-29 19:41:01,701 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-29 19:41:01,702 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-29 19:41:01,702 (train_model.py:34) [__main__][INFO] Calculate the mcoords.
 2021-09-29 19:41:01,702 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-29 19:41:04,590 (manager.py:117) [__main__][INFO] Align the structure to the template structure.

@@ -2532,64 +2532,64 @@
 2021-09-19 11:34:01,712 (io_file.py:96) [__main__][INFO] XDATCAR_1-1 ---> POSCAR finished!
 2021-09-19 11:34:03,673 (io_file.py:109) [__main__][INFO] XDATCAR_1-1 ---> CONTCAR finished!
 2021-09-19 11:37:48,409 (train_model.py:24) [__main__][INFO] Load the structure information.
-2021-09-19 11:37:48,409 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 11:37:48,409 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 11:37:48,409 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 11:37:48,409 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 11:37:48,409 (train_model.py:28) [__main__][INFO] Calculate the mcoords
 2021-09-19 12:17:21,433 (train_model.py:24) [__main__][INFO] Load the structure information.
-2021-09-19 12:17:21,433 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 12:17:21,433 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 12:17:21,433 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 12:17:21,433 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 12:17:21,434 (train_model.py:28) [__main__][INFO] Calculate the mcoords
 2021-09-19 12:21:20,311 (train_model.py:24) [__main__][INFO] Load the structure information.
-2021-09-19 12:21:20,311 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 12:21:20,311 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 12:21:20,311 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 12:21:20,311 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 12:21:20,311 (train_model.py:28) [__main__][INFO] Calculate the mcoords
 2021-09-19 12:54:29,212 (train_model.py:24) [__main__][INFO] Load the structure information.
-2021-09-19 12:54:29,213 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 12:54:29,213 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 12:54:29,213 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 12:54:29,213 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 12:54:29,213 (train_model.py:28) [__main__][INFO] Calculate the mcoords
 2021-09-19 14:11:31,779 (model.py:107) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-19 14:11:31,779 (model.py:108) [__main__][INFO] Shuffle the data.
 2021-09-19 14:11:32,610 (model.py:130) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-19 14:39:12,087 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 14:39:12,090 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 14:39:12,091 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 14:39:12,090 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 14:39:12,091 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 14:39:12,093 (train_model.py:30) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:13:59,017 (model.py:149) [__main__][INFO] mae = 0.003904270939528942
 2021-09-19 18:13:59,018 (model.py:150) [__main__][INFO] loss = 0.0003079063317272812
 2021-09-19 18:13:59,564 (model.py:229) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-19 18:45:23,312 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 18:45:23,312 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 18:45:23,312 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 18:45:23,312 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 18:45:23,312 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 18:45:23,312 (manager.py:122) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:45:23,312 (manager.py:116) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 18:50:47,696 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 18:50:47,697 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 18:50:47,697 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 18:50:47,697 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 18:50:47,697 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 18:50:47,697 (manager.py:130) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:50:47,697 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 18:51:14,136 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 18:51:14,136 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 18:51:14,136 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 18:51:14,136 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 18:51:14,136 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 18:51:14,136 (manager.py:131) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:51:14,136 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 18:53:14,986 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 18:53:14,986 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 18:53:14,986 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 18:53:14,986 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 18:53:14,986 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 18:53:14,986 (manager.py:132) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:53:14,986 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 18:53:36,629 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 18:53:36,630 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 18:53:36,630 (manager.py:92) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 18:53:36,630 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 18:53:36,630 (manager.py:92) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 18:53:36,630 (manager.py:133) [__main__][INFO] Calculate the mcoords
 2021-09-19 18:53:36,630 (manager.py:117) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 19:28:23,994 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 19:28:23,995 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 19:28:23,995 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 19:28:23,995 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 19:28:23,995 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 19:28:23,995 (manager.py:142) [__main__][INFO] Calculate the mcoords
 2021-09-19 19:28:23,995 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 19:29:15,430 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 19:29:15,430 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 19:29:15,430 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 19:29:15,430 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 19:29:15,430 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 19:29:15,431 (manager.py:143) [__main__][INFO] Calculate the mcoords
 2021-09-19 19:29:15,431 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 19:37:30,352 (manager.py:143) [__main__][INFO] Calculate the mcoords
@@ -2598,21 +2598,21 @@
 2021-09-19 19:46:39,317 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-19 19:46:40,617 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-19 19:57:04,298 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 19:57:04,298 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 19:57:04,298 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 19:57:04,298 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 19:57:04,298 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 19:57:08,787 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-19 19:57:08,787 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-19 19:57:09,857 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-19 20:00:21,900 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 20:00:21,900 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 20:00:21,901 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:00:21,900 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 20:00:21,901 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:00:21,901 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-19 20:00:28,492 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-19 20:00:28,492 (model.py:109) [__main__][INFO] Shuffle the data.
 2021-09-19 20:00:30,051 (model.py:131) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
 2021-09-19 20:01:28,736 (train_model.py:26) [__main__][INFO] Load the structure information.
-2021-09-19 20:01:28,737 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
-2021-09-19 20:01:28,737 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:01:28,737 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-09-19 20:01:28,737 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:01:28,737 (train_model.py:37) [__main__][INFO] Load data from the .h5 file.
 2021-09-19 20:01:34,970 (model.py:108) [__main__][INFO] Data Shape: (398595, 38, 3)
 2021-09-19 20:01:34,970 (model.py:109) [__main__][INFO] Shuffle the data.
@@ -2623,27 +2623,27 @@
 2021-09-19 20:25:10,192 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:10,292 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:10,294 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:10,294 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:10,294 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:10,294 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:26,128 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:26,283 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:26,302 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:26,360 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:26,363 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:26,364 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:26,364 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:26,364 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:26,507 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:26,511 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:26,513 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:26,514 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:26,514 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:26,514 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:26,532 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:26,534 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:26,535 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:26,535 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:26,535 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:26,751 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:26,753 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:26,755 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:26,755 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:26,755 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:26,817 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:26,859 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
@@ -2653,29 +2653,29 @@
 2021-09-19 20:25:27,012 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:27,046 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,048 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,049 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,049 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,049 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,094 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,097 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,097 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,097 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,097 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,118 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,120 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,121 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,121 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,121 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,141 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,143 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,144 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,144 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,144 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,152 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,154 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,155 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,155 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,155 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,162 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:27,209 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:27,238 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,241 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,241 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,241 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,242 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,310 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:27,343 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
@@ -2683,27 +2683,27 @@
 2021-09-19 20:25:27,415 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:27,449 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,453 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,453 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,453 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,454 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,492 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,495 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,495 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,495 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,495 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,592 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,594 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,595 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,595 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,595 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,613 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,615 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,616 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,616 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,616 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,637 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,641 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,641 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,641 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,642 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:27,645 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:27,648 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:27,649 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:27,649 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:27,649 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,050 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:45,139 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
@@ -2722,73 +2722,73 @@
 2021-09-19 20:25:45,295 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:45,312 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,315 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,315 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,315 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,316 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,319 (generate_test.py:34) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:25:45,380 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,382 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,383 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,383 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,383 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,385 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,388 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,388 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,388 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,388 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,410 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,413 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,414 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,414 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,414 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,446 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,449 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
 2021-09-19 20:25:45,449 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
-2021-09-19 20:25:45,449 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,449 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,451 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,452 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,452 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,452 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,452 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,461 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,463 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,464 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,464 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,464 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,465 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,468 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,468 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,468 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,469 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,483 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,485 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,486 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,486 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,486 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,504 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,507 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,507 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,507 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,508 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,514 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,514 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
 2021-09-19 20:25:45,514 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
-2021-09-19 20:25:45,515 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,515 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,515 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,516 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,517 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,517 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,517 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,522 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,525 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,527 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,527 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,528 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,530 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,532 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,533 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,533 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,533 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,571 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,578 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,579 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,579 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,579 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:25:45,615 (generate_test.py:46) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:25:45,619 (generate_test.py:54) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:25:45,620 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:25:45,620 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:25:45,620 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:27:35,121 (generate_test.py:36) [__main__][INFO] Generate 50 random POSCAR.
 2021-09-19 20:27:35,200 (generate_test.py:48) [__main__][INFO] Generate the ML trained POSCAR.
 2021-09-19 20:27:35,201 (generate_test.py:56) [__main__][INFO] Step 0. Get the input data from the directory.
-2021-09-19 20:27:35,201 (manager.py:93) [__main__][INFO] Molecule was align to [36, 37] location.
+2021-09-19 20:27:35,201 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
 2021-09-19 20:27:35,201 (manager.py:118) [__main__][INFO] Align the structure to the template structure.
 2021-09-19 20:27:50,904 (generate_test.py:60) [__main__][INFO] Step 1. Normalization the data.
 2021-09-19 20:27:50,905 (generate_test.py:63) [__main__][INFO] Step 2. Translate the molecule and record the vectors.

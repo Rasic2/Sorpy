@@ -247,10 +247,10 @@
 2021-08-23 13:46:35,642 (main.py:391) [__main__][INFO] Train and test the model applying the K-fold validation method.
 2021-08-23 13:56:48,158 (main.py:394) [__main__][INFO] K fold average mae: 0.04974143803119659
 2021-08-23 13:56:48,159 (main.py:395) [__main__][INFO] K fold average loss: 0.003977148374542594
-2021-08-23 15:33:57,796 (main.py:46) [__main__][WARNING] Can't align the Molecule.
+2021-08-23 15:33:57,796 (main.py:46) [__main__][WARNING] Can't align_structure the Molecule.
 2021-08-23 16:28:59,640 (main.py:406) [__main__][INFO] Load the structure information.
-2021-08-23 16:28:59,640 (main.py:131) [__main__][INFO] Molecule was align to 37-38 location.
-2021-08-23 16:29:00,260 (main.py:131) [__main__][INFO] Molecule was align to 37-38 location.
+2021-08-23 16:28:59,640 (main.py:131) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-08-23 16:29:00,260 (main.py:131) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-08-23 16:29:00,886 (main.py:410) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-08-23 16:29:00,921 (main.py:262) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
 2021-08-23 16:29:00,921 (main.py:262) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (1, 0, 0)

@@ -1,7 +1,7 @@
-2021-09-05 15:59:43,771 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 15:59:43,771 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:02:39,691 (main.py:437) [__main__][INFO] Load the structure information.
-2021-09-05 16:02:39,691 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 16:02:39,691 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:02:39,691 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 16:02:39,691 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:02:43,888 (main.py:445) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 16:02:43,896 (main.py:447) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 16:02:43,956 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -250,10 +250,10 @@
 2021-09-05 16:13:15,208 (main.py:477) [__main__][INFO] mae = 0.011656522750854492
 2021-09-05 16:13:15,208 (main.py:478) [__main__][INFO] loss = 0.00028058551833964884
 2021-09-05 16:13:15,208 (main.py:425) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 16:15:54,504 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:15:54,504 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:17:06,082 (main.py:437) [__main__][INFO] Load the structure information.
-2021-09-05 16:17:06,082 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 16:17:06,082 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:17:06,082 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 16:17:06,082 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:17:10,128 (main.py:445) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 16:17:10,129 (main.py:447) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 16:17:10,190 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -502,10 +502,10 @@
 2021-09-05 16:22:38,627 (main.py:477) [__main__][INFO] mae = 0.01019914448261261
 2021-09-05 16:22:38,627 (main.py:478) [__main__][INFO] loss = 0.00021706912957597524
 2021-09-05 16:22:38,627 (main.py:425) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 16:23:52,990 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:23:52,990 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:27:29,274 (main.py:437) [__main__][INFO] Load the structure information.
-2021-09-05 16:27:29,274 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 16:27:29,275 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:27:29,274 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 16:27:29,275 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:27:33,060 (main.py:445) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 16:27:33,060 (main.py:447) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 16:27:33,122 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -754,10 +754,10 @@
 2021-09-05 16:34:20,199 (main.py:477) [__main__][INFO] mae = 0.006216607056558132
 2021-09-05 16:34:20,199 (main.py:478) [__main__][INFO] loss = 0.00012361847620923072
 2021-09-05 16:34:20,199 (main.py:425) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 16:34:43,334 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:34:43,334 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:35:48,141 (main.py:437) [__main__][INFO] Load the structure information.
-2021-09-05 16:35:48,141 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 16:35:48,141 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:35:48,141 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 16:35:48,141 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:35:51,968 (main.py:445) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 16:35:51,969 (main.py:447) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 16:35:52,036 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -1006,10 +1006,10 @@
 2021-09-05 16:39:53,686 (main.py:477) [__main__][INFO] mae = 0.011375018395483494
 2021-09-05 16:39:53,686 (main.py:478) [__main__][INFO] loss = 0.0002857853833120316
 2021-09-05 16:39:53,686 (main.py:425) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 16:40:20,554 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:40:20,554 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:42:56,805 (main.py:438) [__main__][INFO] Load the structure information.
-2021-09-05 16:42:56,805 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 16:42:56,805 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:42:56,805 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 16:42:56,805 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 16:43:00,765 (main.py:446) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 16:43:00,765 (main.py:448) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 16:43:00,837 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -1258,10 +1258,10 @@
 2021-09-05 16:58:38,695 (main.py:478) [__main__][INFO] mae = 0.007797018624842167
 2021-09-05 16:58:38,696 (main.py:479) [__main__][INFO] loss = 0.00022122527298051864
 2021-09-05 16:58:38,696 (main.py:426) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 16:58:58,653 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 16:58:58,653 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:14:32,126 (main.py:438) [__main__][INFO] Load the structure information.
-2021-09-05 18:14:32,126 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:14:32,127 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:14:32,126 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:14:32,127 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:14:36,068 (main.py:446) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:14:36,068 (main.py:448) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:14:36,127 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -1507,8 +1507,8 @@
 2021-09-05 18:14:36,377 (main.py:455) [__main__][INFO] Data Shape: (12000, 38, 3)
 2021-09-05 18:14:36,377 (main.py:457) [__main__][INFO] Shuffle the data.
 2021-09-05 18:15:38,504 (main.py:438) [__main__][INFO] Load the structure information.
-2021-09-05 18:15:38,504 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:15:38,505 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:15:38,504 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:15:38,505 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:15:42,368 (main.py:446) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:15:42,368 (main.py:448) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:15:42,427 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -1754,8 +1754,8 @@
 2021-09-05 18:15:42,672 (main.py:455) [__main__][INFO] Data Shape: (12000, 38, 3)
 2021-09-05 18:15:42,672 (main.py:457) [__main__][INFO] Shuffle the data.
 2021-09-05 18:17:00,707 (main.py:439) [__main__][INFO] Load the structure information.
-2021-09-05 18:17:00,708 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:17:00,708 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:17:00,708 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:17:00,708 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:17:04,615 (main.py:447) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:17:04,616 (main.py:449) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:17:04,675 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -2002,8 +2002,8 @@
 2021-09-05 18:17:04,924 (main.py:458) [__main__][INFO] Shuffle the data.
 2021-09-05 18:17:07,393 (main.py:480) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
 2021-09-05 18:19:15,814 (main.py:440) [__main__][INFO] Load the structure information.
-2021-09-05 18:19:15,814 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:19:15,814 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:19:15,814 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:19:15,814 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:19:19,539 (main.py:448) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:19:19,539 (main.py:450) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:19:19,600 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -2250,8 +2250,8 @@
 2021-09-05 18:19:19,850 (main.py:459) [__main__][INFO] Shuffle the data.
 2021-09-05 18:19:22,182 (main.py:481) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
 2021-09-05 18:20:36,438 (main.py:440) [__main__][INFO] Load the structure information.
-2021-09-05 18:20:36,438 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:20:36,438 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:20:36,438 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:20:36,438 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:20:40,133 (main.py:448) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:20:40,133 (main.py:450) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:20:40,197 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -2501,8 +2501,8 @@
 2021-09-05 18:23:15,283 (main.py:486) [__main__][INFO] loss = 0.0008902495028451085
 2021-09-05 18:23:15,283 (main.py:428) [__main__][INFO] Plotting the acc and loss curve.
 2021-09-05 18:31:44,842 (main.py:440) [__main__][INFO] Load the structure information.
-2021-09-05 18:31:44,842 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:31:44,842 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:31:44,842 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:31:44,842 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:31:48,653 (main.py:448) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:31:48,653 (main.py:450) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:31:48,718 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -2748,13 +2748,13 @@
 2021-09-05 18:31:49,015 (main.py:457) [__main__][INFO] Data Shape: (12000, 38, 3)
 2021-09-05 18:31:49,015 (main.py:459) [__main__][INFO] Shuffle the data.
 2021-09-05 18:31:51,378 (main.py:481) [__main__][INFO] Train and test the model applying the hold-out method.             <train:test = 80:20>
-2021-09-05 18:32:07,975 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:32:52,260 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:35:30,469 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:36:14,532 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:32:07,975 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:32:52,260 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:35:30,469 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:36:14,532 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:41:31,781 (main.py:439) [__main__][INFO] Load the structure information.
-2021-09-05 18:41:31,781 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
-2021-09-05 18:41:31,781 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:41:31,781 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
+2021-09-05 18:41:31,781 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.
 2021-09-05 18:41:35,886 (main.py:447) [__main__][INFO] The atom_list is defaultdict(<class 'list'>, {Element Ce: [0, 1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11], Element O: [12, 13, 14, 15, 16, 17, 18, 19, 20, 21, 22, 23, 24, 25, 26, 27, 28, 29, 30, 31, 32, 33, 34, 35], 'mol': [36, 37]})
 2021-09-05 18:41:35,887 (main.py:449) [__main__][INFO] Apply the PBC and tailor the x-y, z coordinates.
 2021-09-05 18:41:35,962 (main.py:257) [__main__][WARNING] i_new = 0.055556 j_new = -0.026982 index = (0, 1, 0)
@@ -3003,4 +3003,4 @@
 2021-09-05 18:49:29,649 (main.py:479) [__main__][INFO] mae = 0.012174366042017937
 2021-09-05 18:49:29,649 (main.py:480) [__main__][INFO] loss = 0.0003116842999588698
 2021-09-05 18:49:29,649 (main.py:427) [__main__][INFO] Plotting the acc and loss curve.
-2021-09-05 18:49:56,585 (main.py:121) [__main__][INFO] Molecule was align to 37-38 location.
+2021-09-05 18:49:56,585 (main.py:121) [__main__][INFO] Molecule was align_structure to 37-38 location.

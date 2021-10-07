@@ -9,16 +9,20 @@ from common.utils import Format_defaultdict
 from common.logger import logger
 
 
+
 class Molecule(AtomSetBase):
 
     def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, rotate=None, **kargs):
 
         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
-        self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+
+        if isinstance(anchor, int) and anchor in self.orders:
+            self.anchor = self.orders.index(anchor)
+        elif isinstance(anchor, Atom):
+            self.anchor = anchor
+        else:
+            self.anchor = None
         self.rotate = rotate if rotate is not None else np.identity(3)
-        for index, atom in enumerate(self.atoms):
-            if isinstance(self.anchor, int) and self.anchor == atom.order:
-                self.anchor = index
 
     def __repr__(self):
         return f"------------------------------------------------------------\n" \
@@ -148,6 +152,39 @@ class Structure(AtomSetBase):
         return self.coords - other.coords
 
     @property
+    def inter_coord(self):
+        """inter_coords<molecule>"""
+        return np.array([item[2] for item in self.molecule.inter_coords])
+
+    @property
+    def mcoord(self):
+        """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
+        if len(self.mol_index) > 0 and getattr(self, "anchor", None) is not None:
+            mindex = list(set(self.mol_index).difference({self.anchor}))
+            _mcoords = np.copy(self.frac_coords)
+            _mcoords[mindex] = self.inter_coord # TODO: atoms over than 2, order !!!
+            return _mcoords
+        else:
+            return None
+
+    def vcoord(self, m_template, cut_radius, orders):
+        from common.operate import Operator as op
+
+        mol_CO = self.molecule
+        mol_CO_coord = pickle.loads(pickle.dumps(mol_CO.frac_coords))
+        mol_CO_coord[1:] = np.where(np.array(mol_CO.inter_coords[0][2]) < 0, np.array(mol_CO.inter_coords[0][2]) + 360,
+                                    np.array(mol_CO.inter_coords[0][2])) / [1, 180, 360] - [1.142, 0, 0]
+        # TODO nomalize the coord in the Model class
+
+        mol_slab = self.create_mol(orders=orders, cut_radius=cut_radius)
+        mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
+        mol_slab = op.align_molecule(m_template, mol_slab)
+        mol_slab_coord[1:] = (np.array([item[2] for item in mol_slab.vector]) / 2.356 + 1) / 2
+
+        mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
+        return mol_coord, mol_slab.orders
+
+    @property
     def mass_center(self):
         self.ignore_index = getattr(self, "ignore_index", None)
         self.ignore_mol = getattr(self, "ignore_mol", None)
@@ -185,6 +222,38 @@ class Structure(AtomSetBase):
                             anchor=self.anchor, **kargs)
         else:
             return None
+
+    def create_mol(self, orders=None, formula="Ce", cut_radius=5.0):
+        if getattr(self, "NNT", None) is None:
+            self.find_nearest_neighbour_table(cut_radius=cut_radius)
+
+        max_length = cut_radius
+        if orders is None:
+            center = None
+            for index in self.mol_index:
+                for atom in self.NNT.index(index):
+                    if atom[0].element.formula == formula and atom[1] <= max_length:
+                        max_length = atom[1] # Iter the max_length to locate the nearest Ce atom for the molecule.
+                        center = atom
+
+            if center is None:
+                raise ValueError(f"Can't find the {formula} element within the cut_radius.")
+
+            elements = [atom[0].element for atom in self.bonds.index(center[0].order) if atom[0].order not in self.mol_index]
+            orders = [atom[0].order for atom in self.bonds.index(center[0].order) if atom[0].order not in self.mol_index]
+            coords = [atom[0].coord.frac_coords for atom in self.bonds.index(center[0].order) if atom[0].order not in self.mol_index]
+
+            elements.insert(0, center[0].element)
+            orders.insert(0, center[0].order)
+            coords.insert(0, center[0].coord.frac_coords)
+            coords = Coordinates(frac_coords=np.array(coords), lattice=center[0].coord.lattice)
+            return Molecule(elements=elements, orders=orders, coords=coords, anchor=center[0].order)
+        else:
+            # print(type(orders[0]))
+            # print(orders)
+            elements = np.array(self.elements)[orders]
+            coords = Coordinates(frac_coords=np.array(self.coords.frac_coords)[orders], lattice=self.lattice)
+            return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0])
 
     def find_nearest_neighbour_table(self, cut_radius=3.0):
         NNT = Format_defaultdict(list)
@@ -256,18 +325,18 @@ class Structure(AtomSetBase):
 
         logger.debug(f"{fname} write finished!")
 
-# m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
+# m_align = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
 #             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
-# print(m.pair)
-# print(m.vector)
-# print(m.dist)
-# print(m.theta)
-# print(m.phi)
-# print(m.frac_coords)
-# print(m.cart_coords)
-# print(m.inter_coords)
-# print(m.atoms_count)
-# print(m.TF)
+# print(m_align.pair)
+# print(m_align.vector)
+# print(m_align.dist)
+# print(m_align.theta)
+# print(m_align.phi)
+# print(m_align.frac_coords)
+# print(m_align.cart_coords)
+# print(m_align.inter_coords)
+# print(m_align.atoms_count)
+# print(m_align.TF)
 # s = Structure("Slab+Mol", elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
 #             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]), mol_index=[0])
 # exit()
@@ -382,7 +451,7 @@ class Structure(AtomSetBase):
 #                item = f"{ii[0]:.6f} {ii[1]:.6f} {ii[2]:.6f} {jj[0]} {jj[1]} {jj[2]} \n"
 #                f.write(item)
 #
-#    def align(self, template):
+#    def align_structure(self, template):
 #        indicator = 0  # 第二次对齐的原子
 #        repeat = 2  # supercell
 #        slab_coor = self.frac_coors[:36]

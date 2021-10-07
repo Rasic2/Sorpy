@@ -1,0 +1,20 @@
+2021-10-07 12:57:02,222 (train_model_inter.py:134) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:02:00,490 (train_model_inter.py:134) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:02:00,540 (structure.py:23) [__main__][ERROR] <para anchor> should be the instance of the <int> or <class Atom>.
+2021-10-07 13:03:00,464 (train_model_inter.py:134) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:03:11,989 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:03:33,471 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:04:36,798 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:05:39,447 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:05:53,543 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:06:14,649 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:07:26,401 (train_model_inter.py:135) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:07:45,399 (train_model_inter.py:136) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:09:49,548 (train_model_inter.py:136) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:23:37,573 (train_model_inter.py:136) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:23:59,954 (train_model_inter.py:168) [__main__][INFO] Train the model.
+2021-10-07 13:24:30,573 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-07 13:28:18,070 (train_model_inter.py:136) [__main__][INFO] Calculate the mcoords.
+2021-10-07 13:28:39,633 (train_model_inter.py:165) [__main__][INFO] Counter({29: 235, 28: 123, 25: 10, 24: 5, 0: 1, 1: 1})
+2021-10-07 13:28:39,633 (train_model_inter.py:168) [__main__][INFO] Train the model.
+2021-10-07 13:29:06,157 (model.py:230) [__main__][INFO] Plotting the acc and loss curve.

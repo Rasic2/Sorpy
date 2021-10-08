@@ -8,6 +8,7 @@ from matplotlib import pyplot as plt
 from common.logger import logger, root_dir
 from common.base import Lattice
 from common.utils import plot_clsss_wrap as plot_wrap
+from common.operate import Operator as op
 
 
 class Model:
@@ -24,7 +25,8 @@ class Model:
         self.train_output = train_output
 
         # Model data normalization
-        NormalizeFunc = {"mcoord": self.normalize_mcoord}
+        NormalizeFunc = {"mcoord": self.normalize_mcoord,
+                         "vcoord": self.normalize_vcoord}
         self.normalization = normalization
         if self.normalization in NormalizeFunc.keys():
             NormalizeFunc[self.normalization]()
@@ -76,8 +78,16 @@ class Model:
         setattr(self, "train_input", normalize_inner(data_input))
         setattr(self, "train_output", normalize_inner(data_output))
 
+    def normalize_vcoord(self):
+        """data normalization <vcoord format>"""
+
+        data_input, data_output = np.copy(self.train_input), np.copy(self.train_output)
+
+        setattr(self, "train_input", op.normalize_vcoord(data_input))
+        setattr(self, "train_output", op.normalize_vcoord(data_output))
+
     @staticmethod
-    def decode_mcoord(coords, lattice: Lattice=None):
+    def decode_mcoord(coords, lattice: Lattice = None):
         ori_coords = copy.deepcopy(coords)
         anchor_cart = np.dot(ori_coords[:, 36, :], lattice.matrix)
         inter_coords = ori_coords[:, [37], :] * [1, 180, 360] + [1.142, 0, 0]
@@ -86,12 +96,8 @@ class Model:
         x = r * np.sin(theta) * np.cos(phi)
         y = r * np.sin(theta) * np.sin(phi)
         z = r * np.cos(theta)
-        #print(x[0], y[0], z[0])
 
         xyz_cart = np.concatenate((x, y, z), axis=1)
-        #print(lattice.inverse)
-        #print(anchor_cart[0])
-        #print(xyz_cart[0])
         inter_cart = anchor_cart + xyz_cart
         inter_frac = np.dot(inter_cart, lattice.inverse)
 
@@ -120,6 +126,16 @@ class Model:
             raise KeyError(
                 f"'{method}' method can not to train the ML model. <optional arguments: ('hold out', 'Kfold')>")
 
+    @staticmethod
+    def split_data(model_data, data):
+        shape = [item.shape[1] for item in model_data]  # Dense layer
+        start = 0
+        data_new = []
+        for item in shape:
+            data_new.append(data[:, start:start + item])
+            start = item
+        return data_new
+
     def train_hold_out(self, mname=None, percent=0.8, epochs=50):
         """
         Hold-out method for the model train.
@@ -144,8 +160,13 @@ class Model:
         test_input_arr = test_input_arr.reshape((test_count, shape[1] * shape[2]))
         test_output_arr = test_output_arr.reshape((test_count, shape[1] * shape[2]))
 
-        history = self.model.fit(train_input_arr, train_output_arr, epochs=epochs, batch_size=2, validation_split=0.1)
-        scores = self.model.evaluate(test_input_arr, test_output_arr)
+        train_inputs = Model.split_data(self.model.inputs, train_input_arr)
+        train_outputs = Model.split_data(self.model.outputs, train_output_arr)
+        test_inputs = Model.split_data(self.model.inputs, test_input_arr)
+        test_outputs = Model.split_data(self.model.outputs, test_output_arr)
+
+        history = self.model.fit(train_inputs, train_outputs, epochs=epochs, batch_size=2, validation_split=0.1)
+        scores = self.model.evaluate(test_inputs, test_outputs)
 
         logger.info(f"mae = {scores[1]}")
         logger.info(f"loss = {scores[0]}")
@@ -206,7 +227,7 @@ class Ploter:
             self.val_loss = self.history.history['val_loss']
             self.epochs = list(range(1, len(self.acc) + 1))
         else:
-            self.load(Path(root_dir)/"results/history.json")
+            self.load(Path(root_dir) / "results/history.json")
 
         self.write()
 
@@ -222,7 +243,7 @@ class Ploter:
     def write(self):
         results = {'acc': self.acc, 'loss': self.loss, 'val_acc': self.val_acc, 'val_loss': self.val_loss,
                    'epochs': self.epochs}
-        with open(Path(root_dir)/"results/history.json", "w") as f:
+        with open(Path(root_dir) / "results/history.json", "w") as f:
             json.dump(results, f)
 
     @plot_wrap

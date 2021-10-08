@@ -192,10 +192,9 @@ def plot_violin(*dirs, save=True):
 
 
 def plot_index(index, *results, save=True):
-
     for item in ['iter', 'energy', 'force']:
         plt.figure()
-        ax=plt.subplot(111)
+        ax = plt.subplot(111)
         for result in results:
             df = result[f'file_{index}']
             ax.plot(df.index, df[item], '-o')

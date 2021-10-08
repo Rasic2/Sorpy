@@ -12,7 +12,7 @@ LOG_DIR = os.path.join(current_dir, "../logs")
 if not os.path.exists(LOG_DIR):
     os.mkdir(LOG_DIR)
 
-date = time.strftime("%Y-%m_align-%d", time.localtime())
+date = time.strftime("%Y-%m-%d", time.localtime())
 BLACK, RED, GREEN, YELLOW, BLUE, MAGENTA, CYAN, WHITE = range(8)
 
 RESET_SEQ = "\033[0m"

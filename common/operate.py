@@ -206,6 +206,30 @@ class Operator:
         return Molecule(elements=elements, orders=orders, coords=coords, anchor=orders[0])
 
     @staticmethod
+    def normalize_mcoord(data):
+        """
+        <mcoord normalization func>
+
+        :param data:    shape = [:, 38, 3]
+        :return: normalized data
+        """
+        data[:, 37, 2] = np.where(data[:, 37, 2] >= 0, data[:, 37, 2], 360 + data[:, 37, 2])
+        data[:, 37, :] = data[:, 37, :] / [1, 180, 360] - [1.142, 0, 0]
+        return data
+
+    @staticmethod
+    def normalize_vcoord(data):
+        """
+        <vcoord normalization func>
+
+        :param data:    shape = [:, 10, 3] <Ce1O7 + CO>
+        :return: normalized data
+        """
+        data[:, 1:8, :] = (data[:, 1:8, :] / 2.356 + 1) / 2
+        data[:, 9, :] = np.where(data[:, 9, :] < 0, data[:, 9, :] + 360, data[:, 9, :]) / [1, 180, 360] - [1.142, 0, 0]
+        return data
+
+    @staticmethod
     def find_trans_vector(coord: np.ndarray):
         repeat = 2  # Make repeat to be a parameter in future
         ori_coord = copy.deepcopy(coord)

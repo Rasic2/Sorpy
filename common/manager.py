@@ -117,7 +117,8 @@ class DirManager:
         logger.info("Align the structure to the template structure.")
         pool = ProcessPool(processes=os.cpu_count())
 
-        results = [pool.apply_async(op.align_structure, args=(self.template, file.structure)) for file in self.all_files]
+        results = [pool.apply_async(op.align_structure, args=(self.template, file.structure))
+                   for file in self.all_files]
         temp_structures = [result.get() for result in results]
 
         pool.close()
@@ -151,16 +152,12 @@ class DirManager:
         """frac_coords<Ce1> + vector<O7> + frac_coord<anchor> + inter_coords<molecule>"""
         m_template = self.template.create_mol(cut_radius=cut_radius)
         pool = ProcessPool(processes=os.cpu_count())
-        if orders is not None:
-            results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, order))
-                       for file, order in zip(self.all_files, orders)]
-        else:
-            results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, orders))
-                       for file in self.all_files]
+        orders = [None] * len(self) if orders is None else orders
+        results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, order))
+                   for file, order in zip(self.all_files, orders)]
 
         temp_results = [result.get() for result in results]
-        mcoords = [item for item, _ in temp_results]
-        orders = [item for _, item in temp_results]
+        mcoords, orders = map(list, zip(*temp_results))
 
         pool.close()
         pool.join()
@@ -215,7 +212,8 @@ class ParameterManager:
 
     def check_trans(self):
         for key, value in ParameterManager._parameters.items():
-            if hasattr(self, key) and getattr(self, key, None) is not None and not isinstance(self.__dict__[key], value):
+            if hasattr(self, key) and getattr(self, key, None) is not None \
+                    and not isinstance(self.__dict__[key], value):
                 if value == tuple:
                     self.__dict__[key] = tuple(eval(self.__dict__[key]))
                 else:

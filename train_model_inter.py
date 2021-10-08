@@ -6,7 +6,7 @@ from collections import Counter
 
 from common.io_file import POSCAR
 from common.logger import logger, root_dir
-from common.model import Ploter
+from common.model import Ploter, Model
 from common.manager import DirManager
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
@@ -20,7 +20,7 @@ if __name__ == "__main__":
     data_load_file = Path(root_dir) / "results/data_train-test.h5"
     model_save_file = Path(root_dir) / "results/intercoord_3layer.h5"
     plot_save_file = Path(root_dir) / "results/intercoord_3layer.svg"
-    data_load = "c"
+    data_load = "f"
 
     if data_load == "c":
 
@@ -37,9 +37,6 @@ if __name__ == "__main__":
         data_output, orders_o = output_dm.vcoords()
         logger.info("The vcoords of CONTCARs finished.")
         data_input, orders_i = input_dm.vcoords(orders=orders_o)
-        shape = data_input.shape
-        data_input, data_output = data_input.reshape((shape[0], shape[1] * shape[2])), \
-                                  data_output.reshape((shape[0], shape[1] * shape[2]))
 
         logger.info("Write the data into the .h5 file.")
         with h5py.File(data_load_file, "w") as hf:
@@ -77,11 +74,9 @@ if __name__ == "__main__":
 
     model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
     # model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
-    history = model.fit([data_input[:, :24], data_input[:, 24:]], data_output, epochs=60, batch_size=2,
-                        validation_split=0.1)
-    # predict = model.predict(data_input)
 
-    model.save(model_save_file)
+    train_model = Model(model, data_input, data_output, normalization="vcoord", expand=None)
+    history = train_model("hold out", mname=model_save_file, epochs=60)
 
     p = Ploter(history)
     p.plot(fname=plot_save_file)

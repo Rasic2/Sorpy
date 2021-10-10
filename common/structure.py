@@ -178,7 +178,7 @@ class Structure(AtomSetBase):
         mol_slab_coord[1:] = np.array([item[2] for item in mol_slab.vector])
 
         mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
-        return mol_coord, mol_slab.orders
+        return mol_coord, (mol_slab.orders + self.mol_index)
 
     @property
     def mass_center(self):

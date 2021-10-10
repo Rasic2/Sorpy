@@ -230,20 +230,20 @@ class Operator:
         return data
 
     @staticmethod
-    def find_trans_vector(coord: np.ndarray):
+    def find_trans_vector(coord: np.ndarray, anchor=36):
         repeat = 2  # Make repeat to be a parameter in future
         ori_coord = copy.deepcopy(coord)
 
-        anchor = ori_coord[:, 36, :2]
+        C_anchor = ori_coord[:, anchor, :2]
         model_region = np.array([1 / repeat, 1 / repeat])
         search_vector = np.arange(-1, 1 + 1 / repeat, 1 / repeat)
         trans_vectors = []
-        for index, item in enumerate(anchor):
+        for index, item in enumerate(C_anchor):
             search_matrix = itertools.product(search_vector, search_vector)
             for ii in search_matrix:
                 if 0 <= (item + ii)[0] <= model_region[0] and 0 <= (item + ii)[1] <= model_region[1]:
                     vector_m = [ii[0], ii[1], 0]
-                    ori_coord[index, 36, :] += vector_m
+                    ori_coord[index, anchor, :] += vector_m
                     trans_vectors.append(vector_m)
                     break
 

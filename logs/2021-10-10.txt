@@ -1,0 +1,22 @@
+2021-10-10 10:36:38,570 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-10 10:36:38,583 (train_model_inter.py:53) [__main__][INFO] Counter({9: 461, 8: 15, 0: 2})
+2021-10-10 10:36:38,583 (train_model_inter.py:55) [__main__][INFO] Train the model.
+2021-10-10 10:36:50,719 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 10:39:31,602 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 10:41:58,887 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 10:42:12,841 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 13:26:53,089 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 13:44:43,967 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 14:15:01,542 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 14:15:44,121 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 15:02:52,823 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 15:03:26,984 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 15:06:05,403 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 15:43:50,366 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 15:45:45,702 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:25:38,685 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:25:55,800 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:27:54,026 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:28:07,612 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:31:32,697 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-10 22:31:45,880 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.

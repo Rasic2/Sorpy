@@ -1,3 +1,4 @@
+import os
 import copy
 import json
 import random
@@ -9,6 +10,8 @@ from common.logger import logger, root_dir
 from common.base import Lattice
 from common.utils import plot_clsss_wrap as plot_wrap
 from common.operate import Operator as op
+from common.io_file import POSCAR
+from common.manager import DirManager
 
 
 class Model:
@@ -105,6 +108,35 @@ class Model:
         trans_coords[:, 37, :] = inter_frac
 
         return trans_coords
+
+    @staticmethod
+    def decode_vcoord(dname, test_output, orders, lattice):
+
+        test_output[:, 9, :] = test_output[:, 9, :] * [1, 180, 360] + [1.142, 0, 0]
+
+        # handle Ce-O
+        Ce_anchor_cart = np.dot(test_output[:, 0, :], lattice.matrix)
+        Ce_xyz_cart = (test_output[:, 1:8, :] * 2 - 1) * 2.356
+        test_output[:, 1:8, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
+
+        # handle C-O
+        C_anchor_cart = np.dot(test_output[:, 8, :], lattice.matrix)
+        r, theta, phi = test_output[:, 9, 0], np.deg2rad(test_output[:, 9, 1]), np.deg2rad(test_output[:, 9, 2])
+        x = r * np.sin(theta) * np.cos(phi)
+        y = r * np.sin(theta) * np.sin(phi)
+        z = r * np.cos(theta)
+        C_xyz_cart = np.concatenate((x.reshape(50, 1, 1), y.reshape(50, 1, 1), z.reshape(50, 1, 1)), axis=2)
+        test_output[:, 9, :] = np.dot((C_anchor_cart.reshape((50, 3)) + C_xyz_cart.reshape((50, 3))),
+                                      lattice.inverse)
+
+        outputs = []
+        dm = DirManager(dname=dname, style="Slab+Mol", mol_index=[36, 37], anchor=36)
+        for file, order, coord in zip(dm.all_files, orders, test_output):
+            s1 = file.structure
+            output_frac = np.copy(s1.frac_coords)
+            output_frac[order] = coord
+            outputs.append(output_frac)
+        return np.array(outputs)
 
     def __call__(self, method, mname=None, **kargs):
 

@@ -157,12 +157,12 @@ class DirManager:
                    for file, order in zip(self.all_files, orders)]
 
         temp_results = [result.get() for result in results]
-        mcoords, orders = map(list, zip(*temp_results))
+        vcoords, orders = map(list, zip(*temp_results))
 
         pool.close()
         pool.join()
 
-        return np.array(mcoords), orders
+        return np.array(vcoords), orders #, np.array(tcoords)
 
 
 class ParameterManager:

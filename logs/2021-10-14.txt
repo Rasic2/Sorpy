@@ -1,0 +1,20 @@
+2021-10-14 20:02:51,026 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:02:51,034 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:04:15,326 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:04:15,328 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:04:33,876 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:04:33,878 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:08:56,437 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:08:56,442 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:10:42,459 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:10:42,461 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:10:56,487 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-14 20:10:56,489 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-14 20:10:58,883 (train_model_inter.py:88) [__main__][INFO] Counter({9: 358, 8: 15})
+2021-10-14 20:10:58,883 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-14 20:10:58,883 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-14 20:10:58,884 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-14 20:11:23,694 (model.py:203) [__main__][INFO] mae = 0.016503874212503433
+2021-10-14 20:11:23,694 (model.py:204) [__main__][INFO] loss = 0.016503874212503433
+2021-10-14 20:11:24,135 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-14 20:11:41,431 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.

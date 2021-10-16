@@ -173,12 +173,16 @@ class Structure(AtomSetBase):
         mol_CO_coord[1:] = np.array(mol_CO.inter_coords[0][2])
 
         mol_slab = self.create_mol(orders=orders, cut_radius=cut_radius)
-        mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
         mol_slab = op.align_molecule(m_template, mol_slab)
+        # mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords - m_template.coords.frac_coords))
+        mol_slab_coord = pickle.loads(pickle.dumps(mol_slab.frac_coords))
+        # print(mol_slab_coord[0])
+        # print(m_template.coords.frac_coords[0])
+        # exit()
         mol_slab_coord[1:] = np.array([item[2] for item in mol_slab.vector])
 
         mol_coord = np.concatenate((mol_slab_coord, mol_CO_coord), axis=0)
-        return mol_coord, (mol_slab.orders + self.mol_index)
+        return mol_coord, mol_slab.orders #, m_template.coords.frac_coords[0]
 
     @property
     def mass_center(self):

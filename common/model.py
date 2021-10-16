@@ -132,6 +132,7 @@ class Model:
         outputs = []
         dm = DirManager(dname=dname, style="Slab+Mol", mol_index=[36, 37], anchor=36)
         for file, order, coord in zip(dm.all_files, orders, test_output):
+            order += dm.mol_index  # orders: mol_slab, need to plus the mol_CO order
             s1 = file.structure
             output_frac = np.copy(s1.frac_coords)
             output_frac[order] = coord

@@ -1,0 +1,6 @@
+2021-10-16 19:57:30,241 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-16 19:57:49,631 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-16 20:07:02,760 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-16 20:07:20,022 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-16 20:09:39,653 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-16 20:09:58,449 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.

@@ -1,3 +1,4 @@
+import numpy as np
 from pathlib import Path
 
 from common.logger import root_dir
@@ -22,6 +23,9 @@ if __name__ == "__main__":
     ori_input_dm = DirManager(dname=ori_dir, template=template, **kargs)
     test_input, orders = ori_input_dm.vcoords()
     test_input = op.normalize_vcoord(test_input)
+    tcoord = np.copy(test_input[:, 0])
+    test_input[:, 0] = 0.0
+
     test_input, trans_vectors = op.find_trans_vector(test_input, anchor=8)
     test_input = test_input.reshape((test_input.shape[0], 30))
 
@@ -30,6 +34,7 @@ if __name__ == "__main__":
     model = load_model("results/intercoord_3layer.h5")
     test_output = model.predict([test_input[:, :24], test_input[:, 24:]])
     test_output = test_output.reshape(50, 10, 3)
+    test_output[:, 0] = test_output[:, 0] + tcoord
 
     test_output = Model.decode_vcoord(ori_dir, test_output, orders, template.lattice)
     for index in range(test_output.shape[0]):

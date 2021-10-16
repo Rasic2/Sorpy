@@ -1,0 +1,209 @@
+2021-10-15 15:14:12,680 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:14:12,689 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:14:12,689 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:14:12,690 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:15:38,267 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:15:38,269 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:15:38,277 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:15:38,277 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:17:23,028 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:17:23,029 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:17:23,029 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:17:23,030 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:17:33,793 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:26:35,930 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:26:35,931 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:26:35,931 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:26:35,931 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:26:46,398 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:28:10,185 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:28:10,186 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:28:10,186 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:28:10,186 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:28:20,468 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:28:28,477 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 15:28:28,504 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:28:32,554 (train_model_inter.py:88) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 15:28:32,555 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 15:28:32,555 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 15:28:32,555 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 15:29:00,721 (model.py:203) [__main__][INFO] mae = 0.016564106568694115
+2021-10-15 15:29:00,721 (model.py:204) [__main__][INFO] loss = 0.016564106568694115
+2021-10-15 15:29:00,909 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 15:29:11,529 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:29:11,530 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:29:11,530 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:29:11,530 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:29:21,941 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:29:29,692 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 15:29:29,695 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:29:32,458 (train_model_inter.py:88) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 15:29:32,458 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 15:29:32,458 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 15:29:32,459 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 15:30:00,602 (model.py:203) [__main__][INFO] mae = 0.013457103632390499
+2021-10-15 15:30:00,603 (model.py:204) [__main__][INFO] loss = 0.013457103632390499
+2021-10-15 15:30:00,662 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 15:31:49,008 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:33:53,632 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:34:06,135 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:34:06,136 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:34:06,136 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:34:06,136 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:34:17,018 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:34:25,481 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 15:34:25,486 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:35:06,888 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 15:35:06,898 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:35:47,197 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 15:35:47,199 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:50:39,963 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:50:39,964 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:50:39,964 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:50:39,964 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:50:50,766 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:50:59,005 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 15:50:59,009 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 15:51:09,906 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 15:51:09,907 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:51:09,907 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 15:51:09,907 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 15:51:20,137 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 15:51:27,797 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 15:51:27,801 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:00:43,977 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 16:00:43,978 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:00:43,978 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:00:43,978 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 16:00:54,325 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 16:01:02,100 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 16:01:02,103 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:01:04,697 (train_model_inter.py:91) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 16:02:56,707 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 16:02:56,708 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:02:56,708 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:02:56,708 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 16:03:06,840 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 16:03:14,473 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 16:03:14,476 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:03:16,898 (train_model_inter.py:92) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 16:04:15,996 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 16:04:15,997 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:04:15,997 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:04:15,997 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 16:04:26,115 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 16:04:33,812 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 16:04:33,815 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:04:36,569 (train_model_inter.py:93) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 16:05:26,731 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:05:26,732 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:05:29,284 (train_model_inter.py:92) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-15 16:05:54,910 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:05:54,912 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:05:57,370 (train_model_inter.py:92) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 16:06:39,962 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:06:39,964 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:06:42,563 (train_model_inter.py:92) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:06:59,906 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:06:59,908 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:07:02,654 (train_model_inter.py:92) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:08:32,498 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:08:32,500 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:08:35,229 (train_model_inter.py:92) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:08:35,229 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 16:08:35,230 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 16:08:35,230 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 16:09:02,982 (model.py:203) [__main__][INFO] mae = 0.014344451017677784
+2021-10-15 16:09:02,982 (model.py:204) [__main__][INFO] loss = 0.014344451017677784
+2021-10-15 16:09:03,074 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 16:17:53,571 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:17:53,573 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:17:56,255 (train_model_inter.py:96) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:17:56,255 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 16:17:56,255 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 16:17:56,255 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 16:18:22,263 (model.py:203) [__main__][INFO] mae = 0.01193779706954956
+2021-10-15 16:18:22,264 (model.py:204) [__main__][INFO] loss = 0.01193779706954956
+2021-10-15 16:18:22,324 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 16:18:36,086 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:18:36,088 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:18:38,726 (train_model_inter.py:96) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:18:38,726 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 16:18:38,726 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 16:18:38,727 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 16:19:05,172 (model.py:203) [__main__][INFO] mae = 0.012402466498315334
+2021-10-15 16:19:05,173 (model.py:204) [__main__][INFO] loss = 0.012402466498315334
+2021-10-15 16:19:05,233 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 16:19:31,746 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:22:33,824 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:22:33,826 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:22:36,442 (train_model_inter.py:97) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:22:36,443 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 16:22:36,443 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 16:22:36,443 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 16:23:02,460 (model.py:203) [__main__][INFO] mae = 0.013310053385794163
+2021-10-15 16:23:02,461 (model.py:204) [__main__][INFO] loss = 0.013310053385794163
+2021-10-15 16:23:02,530 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 16:23:42,113 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:24:39,393 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:26:32,322 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-15 16:26:32,324 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 16:26:35,123 (train_model_inter.py:97) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 16:26:35,123 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-15 16:26:35,123 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-15 16:26:35,124 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-15 16:27:01,113 (model.py:203) [__main__][INFO] mae = 0.013319816440343857
+2021-10-15 16:27:01,113 (model.py:204) [__main__][INFO] loss = 0.013319816440343857
+2021-10-15 16:27:01,171 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-15 16:27:20,076 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:59:58,208 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 16:59:58,209 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:59:58,209 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 16:59:58,209 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:00:09,010 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:00:16,590 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:00:16,593 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:00:19,010 (train_model_inter.py:97) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 17:02:11,181 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 17:02:11,182 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:02:11,182 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:02:11,183 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:02:21,767 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:02:29,713 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:02:29,717 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:02:32,388 (train_model_inter.py:98) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 17:19:58,811 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 17:19:58,814 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:19:58,814 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:19:58,814 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:20:09,328 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:20:17,316 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:20:17,326 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:20:22,171 (train_model_inter.py:98) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 17:20:37,274 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 17:20:37,275 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:20:37,275 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:20:37,275 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:20:48,115 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:20:56,859 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:20:56,862 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:20:59,944 (train_model_inter.py:98) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 17:22:05,128 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 17:22:05,129 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:22:05,130 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:22:05,130 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:22:16,876 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:22:27,109 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:22:27,112 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:22:30,040 (train_model_inter.py:97) [__main__][INFO] Counter({9: 628, 0: 108, 8: 27})
+2021-10-15 17:23:12,866 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-15 17:23:12,867 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:23:12,867 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:23:12,867 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-15 17:23:22,762 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-15 17:23:30,760 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-15 17:23:30,766 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-15 17:23:33,552 (train_model_inter.py:97) [__main__][INFO] Counter({9: 628, 8: 27})
+2021-10-15 17:25:03,158 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:25:20,030 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-15 17:26:42,645 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.

@@ -1,0 +1,57 @@
+2021-10-13 13:14:49,724 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 13:14:49,740 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 13:15:19,196 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 13:15:19,196 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 13:15:22,260 (train_model_inter.py:77) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-13 13:15:22,260 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-13 13:15:22,260 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-13 13:15:22,268 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-13 13:15:50,774 (model.py:203) [__main__][INFO] mae = 0.014535212889313698
+2021-10-13 13:15:50,774 (model.py:204) [__main__][INFO] loss = 0.014535212889313698
+2021-10-13 13:15:50,939 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-13 13:28:27,898 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 13:28:44,563 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 13:30:26,337 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 13:39:03,655 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 13:39:13,572 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 16:28:04,944 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 16:28:47,059 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-13 16:45:02,263 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:45:02,268 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:45:04,601 (train_model_inter.py:78) [__main__][INFO] Counter({9: 358, 8: 15, 0: 2})
+2021-10-13 16:45:04,602 (model.py:146) [__main__][INFO] Data Shape: (600, 10, 3)
+2021-10-13 16:45:04,602 (model.py:147) [__main__][INFO] Shuffle the data.
+2021-10-13 16:45:04,603 (model.py:179) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-13 16:45:28,915 (model.py:203) [__main__][INFO] mae = 0.013496468774974346
+2021-10-13 16:45:28,915 (model.py:204) [__main__][INFO] loss = 0.013496468774974346
+2021-10-13 16:45:29,110 (model.py:283) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-13 16:45:45,046 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:45:45,048 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:46:36,914 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:46:36,916 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:46:59,861 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:46:59,863 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:47:19,449 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:47:19,451 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:47:57,494 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:47:57,496 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:48:23,710 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:48:23,712 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 16:48:41,140 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 16:48:41,142 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:03:50,327 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:03:50,330 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:04:40,291 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:04:40,293 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:04:58,570 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:04:58,572 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:15:26,458 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:15:26,459 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:16:03,117 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:16:03,119 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:16:20,336 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:16:20,338 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 17:16:43,911 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 17:16:43,913 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-13 20:19:08,233 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-13 20:19:08,237 (train_model_inter.py:53) [__main__][INFO] Train the model.

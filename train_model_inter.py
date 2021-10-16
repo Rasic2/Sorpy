@@ -20,7 +20,7 @@ if __name__ == "__main__":
     data_load_file = Path(root_dir) / "results/data_train-test.h5"
     model_save_file = Path(root_dir) / "results/intercoord_3layer.h5"
     plot_save_file = Path(root_dir) / "results/intercoord_3layer.svg"
-    data_load = "f"
+    data_load = "c"
 
     if data_load == "c":
 
@@ -50,8 +50,6 @@ if __name__ == "__main__":
     else:
         raise TypeError("Please indicate the load method of model train data, <'c' or 'f'>")
 
-    logger.info(Counter(np.where(data_output-data_input>0.1)[1]))
-
     logger.info("Train the model.")
     from keras import models, layers, Input
 
@@ -68,14 +66,36 @@ if __name__ == "__main__":
     mol_model = models.Model(inputs=mol_input, outputs=mol_model)
     concatenated = layers.concatenate([slab_model.output, mol_model.output])
 
-    structure = layers.Dense(64, activation='relu')(concatenated)
-    structure = layers.Dense(30)(structure)
+    # structure = layers.Dense(64, activation='relu')(concatenated)
+    # structure = layers.Dense(30)(structure)
+    structure = layers.Dense(30)(concatenated)
     model = models.Model(inputs=[slab_model.input, mol_model.input], outputs=structure)
 
     model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
     # model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
 
     train_model = Model(model, data_input, data_output, normalization="vcoord", expand=None)
+    train_model.train_output[:, 0] = np.where(train_model.train_output[:, 0] - train_model.train_input[:, 0] > 0.5,
+                                              train_model.train_output[:, 0] - 1, train_model.train_output[:, 0])
+    train_model.train_output[:, 0] = np.where(train_model.train_output[:, 0] - train_model.train_input[:, 0] < -0.5,
+                                              train_model.train_output[:, 0] + 1, train_model.train_output[:, 0])
+
+    train_model.train_output[:, 0] = train_model.train_output[:, 0] - train_model.train_input[:, 0]
+    train_model.train_input[:, 0] = 0.0
+
+    # print(train_model.train_output[0])
+    # print(np.where(train_model.train_output[:, 0] - train_model.train_input[:, 0]>0.5))
+    # print(train_model.train_output[561, 0] - train_model.train_input[561, 0])
+    # print(train_model.train_output[56, 8])
+    # print()
+    # print(train_model.train_input[56, 8])
+    # exit()
+    # print(np.where(train_model.train_input[:, 0]>0.1))
+    print(train_model.train_input[5, 0])
+    print(train_model.train_output[5, 0])
+    # print(np.where(np.abs(train_model.train_output - train_model.train_input) > 0.1))
+    logger.info(Counter(np.where(np.abs(train_model.train_output - train_model.train_input) > 0.1)[1]))
+    exit()
     history = train_model("hold out", mname=model_save_file, epochs=60)
 
     p = Ploter(history)

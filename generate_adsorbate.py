@@ -21,10 +21,8 @@ surface_110_DIR = os.path.join(CAL_DIR, "110")
 
 warnings.filterwarnings("ignore")  # Ignore the warning output
 
-PM = ParameterManager(Path(root_dir)/"config/setting_110.yaml")
 
-
-def surface_cleave(miller: tuple):
+def surface_cleave(PM: ParameterManager):
     """
     Cleave the specified surface according to the Miller-index
 
@@ -35,10 +33,10 @@ def surface_cleave(miller: tuple):
     slabs = generate_all_slabs(CeO2, max_index=1, min_slab_size=PM.SlabThickness, min_vacuum_size=PM.VacuumHeight,
                                center_slab=True, max_normal_search=1)
 
-    if miller == (1, 1, 1):
-        CeO2_surf = [slab for slab in slabs if slab.miller_index == miller][1]
+    if PM.MillerIndex == (1, 1, 1):
+        CeO2_surf = [slab for slab in slabs if slab.miller_index == PM.MillerIndex][1]
     else:
-        CeO2_surf = [slab for slab in slabs if slab.miller_index == miller][0]
+        CeO2_surf = [slab for slab in slabs if slab.miller_index == PM.MillerIndex][0]
 
     CeO2_surf.make_supercell(PM.supercell)
     asf_CeO2_surf = AdsorbateSiteFinder(CeO2_surf)
@@ -133,13 +131,15 @@ def random_molecule_getter():
 
 if __name__ == "__main__":
 
+    PM = ParameterManager(Path(root_dir) / "config/setting_110.yaml")
+
     if not os.path.exists(CAL_DIR):
         os.mkdir(CAL_DIR)
 
     side_ref = PM.LatticeParameter / math.sqrt(2) * 2  # 111 surface <latt_abc>
 
     # asf_CeO2_surf = surface_cleave((1, 1, 1))
-    asf_CeO2_surf = surface_cleave(PM.MillerIndex)
+    asf_CeO2_surf = surface_cleave(PM)
     latt = asf_CeO2_surf.slab.lattice.matrix[:2, :2]
     side_a = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.a / side_ref))
     side_b = np.linspace(0, 0.5, num=math.ceil(10 * asf_CeO2_surf.slab.lattice.b / side_ref))

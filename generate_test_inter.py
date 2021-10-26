@@ -29,6 +29,8 @@ if __name__ == "__main__":
         i[:, 2] = j + i[:, 2]
 
     test_input, orders = ori_input_dm.vcoords()
+    print(test_input[0])
+    exit()
     test_input[:, 8] = test_input_frac[:, 0]
     test_input = op.normalize_vcoord(test_input)
     tcoord = np.copy(test_input[:, 0])  # record the Ce fractional coordinate

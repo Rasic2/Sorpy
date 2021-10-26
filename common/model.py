@@ -110,27 +110,27 @@ class Model:
         return trans_coords
 
     @staticmethod
-    def decode_vcoord(dname, test_output, orders, lattice):
+    def decode_vcoord(dm, test_output, orders, lattice):
 
-        test_output[:, 9, :] = test_output[:, 9, :] * [1, 180, 360] + [1.142, 0, 0]
+        test_output[:, -1, :] = test_output[:, -1, :] * [1, 180, 360] + [1.142, 0, 0]
 
         # handle Ce-O
         Ce_anchor_cart = np.dot(test_output[:, 0, :], lattice.matrix)
-        Ce_xyz_cart = (test_output[:, 1:8, :] * 2 - 1) * 2.356
-        test_output[:, 1:8, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
+        Ce_xyz_cart = (test_output[:, 1:-2, :] * 2 - 1) * 2.356
+        test_output[:, 1:-2, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
 
         # handle C-O
-        C_anchor_cart = np.dot(test_output[:, 8, :], lattice.matrix)
-        r, theta, phi = test_output[:, 9, 0], np.deg2rad(test_output[:, 9, 1]), np.deg2rad(test_output[:, 9, 2])
+        C_anchor_cart = np.dot(test_output[:, -2, :], lattice.matrix)
+        r, theta, phi = test_output[:, -1, 0], np.deg2rad(test_output[:, -1, 1]), np.deg2rad(test_output[:, -1, 2])
         x = r * np.sin(theta) * np.cos(phi)
         y = r * np.sin(theta) * np.sin(phi)
         z = r * np.cos(theta)
         C_xyz_cart = np.concatenate((x.reshape(50, 1, 1), y.reshape(50, 1, 1), z.reshape(50, 1, 1)), axis=2)
-        test_output[:, 9, :] = np.dot((C_anchor_cart.reshape((50, 3)) + C_xyz_cart.reshape((50, 3))),
+        test_output[:, -1, :] = np.dot((C_anchor_cart.reshape((50, 3)) + C_xyz_cart.reshape((50, 3))),
                                       lattice.inverse)
 
         outputs = []
-        dm = DirManager(dname=dname, style="Slab+Mol", mol_index=[36, 37], anchor=36)
+
         for file, order, coord in zip(dm.all_files, orders, test_output):
             order += dm.mol_index  # orders: mol_slab, need to plus the mol_CO order
             s1 = file.structure

@@ -151,6 +151,7 @@ class DirManager:
     def vcoords(self, orders=None, cut_radius=5.0):
         """frac_coords<Ce1> + vector<O7> + frac_coord<anchor> + inter_coords<molecule>"""
         m_template = self.template.create_mol(cut_radius=cut_radius)
+        # print(m_template)
         pool = ProcessPool(processes=os.cpu_count())
         orders = [None] * len(self) if orders is None else orders
         results = [pool.apply_async(file.structure.vcoord, args=(m_template, cut_radius, order))

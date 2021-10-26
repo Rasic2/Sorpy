@@ -1,0 +1,102 @@
+2021-10-26 11:23:42,913 (train_model_inter.py:31) [__main__][INFO] Load the structure information.
+2021-10-26 11:23:42,914 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 11:23:42,914 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 11:23:42,914 (train_model_inter.py:36) [__main__][INFO] Calculate the vcoords.
+2021-10-26 11:41:42,680 (train_model_inter.py:38) [__main__][INFO] The vcoords of CONTCARs finished.
+2021-10-26 11:54:21,110 (train_model_inter.py:41) [__main__][INFO] Write the data into the .h5 file.
+2021-10-26 11:54:21,140 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-26 11:54:24,187 (train_model_inter.py:95) [__main__][INFO] Counter({9: 25437, 8: 2075})
+2021-10-26 11:54:24,187 (model.py:147) [__main__][INFO] Data Shape: (79719, 10, 3)
+2021-10-26 11:54:24,187 (model.py:148) [__main__][INFO] Shuffle the data.
+2021-10-26 11:54:24,293 (model.py:180) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-26 12:23:06,164 (model.py:204) [__main__][INFO] mae = 0.004580914042890072
+2021-10-26 12:23:06,164 (model.py:205) [__main__][INFO] loss = 0.004580914042890072
+2021-10-26 12:23:06,339 (model.py:284) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-26 12:59:26,027 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-26 12:59:26,045 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-26 12:59:43,214 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-26 12:59:43,232 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-26 12:59:47,360 (train_model_inter.py:95) [__main__][INFO] Counter({9: 25437, 8: 2075})
+2021-10-26 12:59:47,360 (model.py:147) [__main__][INFO] Data Shape: (79719, 10, 3)
+2021-10-26 12:59:47,360 (model.py:148) [__main__][INFO] Shuffle the data.
+2021-10-26 12:59:47,436 (model.py:180) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-26 13:27:52,636 (model.py:204) [__main__][INFO] mae = 0.002423962578177452
+2021-10-26 13:27:52,636 (model.py:205) [__main__][INFO] loss = 0.002423962578177452
+2021-10-26 13:27:52,703 (model.py:284) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-26 13:30:07,136 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-26 13:30:07,153 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-26 13:30:10,197 (train_model_inter.py:95) [__main__][INFO] Counter({9: 25437, 8: 2075})
+2021-10-26 13:30:10,197 (model.py:147) [__main__][INFO] Data Shape: (79719, 10, 3)
+2021-10-26 13:30:10,197 (model.py:148) [__main__][INFO] Shuffle the data.
+2021-10-26 13:30:10,275 (model.py:180) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-26 13:57:47,339 (model.py:204) [__main__][INFO] mae = 0.004799786489456892
+2021-10-26 13:57:47,339 (model.py:205) [__main__][INFO] loss = 0.004799786489456892
+2021-10-26 13:57:47,398 (model.py:284) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-26 14:00:10,426 (train_model_inter.py:46) [__main__][INFO] Load data from the .h5 file.
+2021-10-26 14:00:10,444 (train_model_inter.py:53) [__main__][INFO] Train the model.
+2021-10-26 14:00:13,472 (train_model_inter.py:95) [__main__][INFO] Counter({9: 25437, 8: 2075})
+2021-10-26 14:00:13,473 (model.py:147) [__main__][INFO] Data Shape: (79719, 10, 3)
+2021-10-26 14:00:13,473 (model.py:148) [__main__][INFO] Shuffle the data.
+2021-10-26 14:00:13,555 (model.py:180) [__main__][INFO] Train and test_set the model applying the hold-out method. <train:test_set = 80:20>
+2021-10-26 14:29:41,385 (model.py:204) [__main__][INFO] mae = 0.0024932315573096275
+2021-10-26 14:29:41,385 (model.py:205) [__main__][INFO] loss = 0.0024932315573096275
+2021-10-26 14:29:41,449 (model.py:284) [__main__][INFO] Plotting the acc and loss curve.
+2021-10-26 14:39:03,480 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 14:39:17,379 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 14:40:33,962 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 14:40:47,852 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:07:36,501 (generate_test_ori.py:26) [__main__][INFO] Generate 50 random POSCAR.
+2021-10-26 15:08:59,444 (generate_test_ori.py:26) [__main__][INFO] Generate 50 random POSCAR.
+2021-10-26 15:09:20,463 (generate_test_ori.py:26) [__main__][INFO] Generate 50 random POSCAR.
+2021-10-26 15:11:28,174 (generate_test_ori.py:26) [__main__][INFO] Generate 50 random POSCAR.
+2021-10-26 15:22:52,055 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:24:54,290 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:26:32,378 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:31:04,236 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:32:14,964 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:37:02,484 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 15:43:40,007 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 15:58:41,630 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:26:33,255 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:28:20,692 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:29:50,676 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 16:31:18,437 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:31:47,482 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:34:33,173 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 16:35:10,556 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 16:55:55,022 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 17:05:39,159 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:08:41,081 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:17:14,581 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:17:58,842 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:19:08,450 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:20:44,282 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 17:21:05,637 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:04:42,482 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:05:00,085 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 20:08:33,578 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 20:09:29,853 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 20:10:34,564 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 20:33:18,045 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:37:11,732 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:38:02,264 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:44:17,070 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:45:10,161 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:47:41,917 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:48:25,453 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:50:01,326 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:50:46,201 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:54:10,949 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:54:27,206 (manager.py:93) [__main__][INFO] Molecule was align_structure to [36, 37] location.
+2021-10-26 20:59:30,177 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 20:59:55,636 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:01:05,701 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:02:57,247 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:05:14,085 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:05:46,971 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:06:08,397 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:08:42,545 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:09:30,813 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:10:54,386 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:17:37,202 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.
+2021-10-26 21:22:07,654 (manager.py:93) [__main__][INFO] Molecule was align_structure to [48, 49] location.

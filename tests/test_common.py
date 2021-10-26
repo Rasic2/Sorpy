@@ -26,7 +26,7 @@ def test_dist():
 
     for i in range(50):
         # print(i+1)
-        poscar = POSCAR(fname=f"{root_dir}/tests/result/POSCAR_{i+1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
+        poscar = POSCAR(fname=f"{root_dir}/tests/result/CONTCAR_{i+1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
         # ori = CONTCAR(fname=f"{root_dir}/test_set/guess/ori/POSCAR_ori_{i+1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
         ori = CONTCAR(fname=f"{root_dir}/test_set/guess/ML-2_2/POSCAR_ML_{i + 1}").to_structure(style="Slab+Mol",
                                                                                               mol_index=[36, 37],
@@ -45,7 +45,7 @@ def test_dist():
         # frac_diff = poscar
         # cart_diff = np.dot(frac_diff.frac_coords, poscar.lattice.matrix)
         # if i in findlist:
-        if i+1 == 16:
+        if i+1 == 2:
             input_dm = DirManager(dname=Path(root_dir)/"train_set/input", style="Slab+Mol", mol_index=[36, 37], anchor=36)
             output_dm = DirManager(dname=Path(root_dir) / "train_set/output", style="Slab+Mol", mol_index=[36, 37],
                                   anchor=36)
@@ -62,6 +62,20 @@ def test_dist():
         # print()
     # for i in sorted(diff, key=lambda x : x[1])[::-1]:
     #     print(i)
+    pass
+
+def test_diff2():
+    for i in range(50):
+        # si = POSCAR(fname=f"{root_dir}/tests/result/POSCAR_{i+1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
+        si = POSCAR(fname=f"{root_dir}/test_set/guess/ML-test/POSCAR_ML_{i+1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
+        so = CONTCAR(fname=f"{root_dir}/tests/result/CONTCAR_{i + 1}").to_structure(style="Slab+Mol", mol_index=[36, 37], anchor=36)
+        frac_diff = so-si
+        frac_diff = op.pbc(frac_diff)
+        # print(i+1,"\t", np.max(np.abs(np.dot(frac_diff, si.lattice.matrix))))
+        if i+1==2:
+            # print(frac_diff)
+            print(np.abs(np.dot(frac_diff, si.lattice.matrix))[-2:])
+            # print(np.where(np.abs(np.dot(frac_diff, si.lattice.matrix)) > 0.1))
     pass
 
 def test_topdist():
@@ -163,7 +177,8 @@ def test_mass_center():
 
 if __name__ == "__main__":
     # test_dist()
-    test_topdist()
+    # test_topdist()
+    test_diff2()
     #test_filemanager()
     # test_dirmanager()
     # test_operator()

@@ -14,13 +14,13 @@ os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
 
 if __name__ == "__main__":
 
-    input_dir = Path(root_dir) / "train_set/input"
-    output_dir = Path(root_dir) / "train_set/output"
+    input_dir = Path(root_dir) / "train_set/xinput-m"
+    output_dir = Path(root_dir) / "train_set/xoutput-m"
     template_file = Path(root_dir) / "examples/CeO2_111/POSCAR_template"
-    data_load_file = Path(root_dir) / "results/data_train-test.h5"
-    model_save_file = Path(root_dir) / "results/intercoord_3layer.h5"
-    plot_save_file = Path(root_dir) / "results/intercoord_3layer.svg"
-    data_load = "c"
+    data_load_file = Path(root_dir) / "results/data_train-test-xdat.h5"
+    model_save_file = Path(root_dir) / "results/intercoord_xdat_3layer.h5"
+    plot_save_file = Path(root_dir) / "results/intercoord__xdat_3layer.svg"
+    data_load = "f"
 
     if data_load == "c":
 
@@ -51,7 +51,7 @@ if __name__ == "__main__":
         raise TypeError("Please indicate the load method of model train data, <'c' or 'f'>")
 
     logger.info("Train the model.")
-    from keras import models, layers, Input
+    from keras import models, layers, Input, optimizers
 
     slab_input = Input(shape=(8 * 3,))
     mol_input = Input(shape=(2 * 3,))
@@ -71,8 +71,8 @@ if __name__ == "__main__":
     structure = layers.Dense(30)(concatenated)
     model = models.Model(inputs=[slab_model.input, mol_model.input], outputs=structure)
 
-    model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
-    # model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
+    # model.compile(loss='mae', optimizer='rmsprop', metrics=['mae'])
+    model.compile(loss='mae', optimizer=optimizers.RMSprop(learning_rate=1e-04), metrics=['mae'])
 
     train_model = Model(model, data_input, data_output, normalization="vcoord", expand=None)
     train_model.train_output[:, 0] = np.where(train_model.train_output[:, 0] - train_model.train_input[:, 0] > 0.5,

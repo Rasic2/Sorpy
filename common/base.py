@@ -79,7 +79,7 @@ class Coordinates:
             raise StopIteration
 
     def __repr__(self):
-        return f"<Coordinates {self.frac_coords.shape}>"
+        return f"<frac {self.frac_coords}> : <cart {self.cart_coords}>"
 
     def __sub__(self, other):
         assert len(self) == len(other)

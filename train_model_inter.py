@@ -91,11 +91,8 @@ if __name__ == "__main__":
     # print(train_model.train_input[56, 8])
     # exit()
     # print(np.where(train_model.train_input[:, 0]>0.1))
-    print(train_model.train_input[5, 0])
-    print(train_model.train_output[5, 0])
     # print(np.where(np.abs(train_model.train_output - train_model.train_input) > 0.1))
     logger.info(Counter(np.where(np.abs(train_model.train_output - train_model.train_input) > 0.1)[1]))
-    exit()
     history = train_model("hold out", mname=model_save_file, epochs=60)
 
     p = Ploter(history)

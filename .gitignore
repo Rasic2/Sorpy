@@ -135,3 +135,4 @@ dmypy.json
 /test_set/
 /train_set/
 /results/
+/tests/result/

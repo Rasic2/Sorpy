@@ -111,7 +111,7 @@ class Structure(AtomSetBase):
     styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
     extra_attrs = ("TF",)
 
-    def __init__(self, style=None, elements=None, coords: Coordinates = None, lattice: Lattice = None, mol_index=None,
+    def __init__(self, name=None, style=None, elements=None, coords: Coordinates = None, lattice: Lattice = None, mol_index=None,
                  **kargs):
         """
         :param style:           <Required> Indicate the system style: <"Crystal", "Slab", "Mol", "Slab+Mol">
@@ -121,6 +121,7 @@ class Structure(AtomSetBase):
         :param mol_index:       <Optional> The molecule index
         :param kargs:           <Optional> <TF, anchor, ignore_mol, ignore_index>
         """
+        self.name=name
         self.style = style
         if self.style not in Structure.styles:
             raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
@@ -289,7 +290,7 @@ class Structure(AtomSetBase):
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
         coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
 
-        return Structure(style, mol_index=mol_index,
+        return Structure(name=fname, style=style, mol_index=mol_index,
                          elements=elements, coords=coords, lattice=lattice, TF=TF, **kargs)
 
     def write_to_POSCAR(self, fname, system=None, factor=1):

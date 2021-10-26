@@ -221,6 +221,10 @@ class AtomSetBase:
     def frac_coords(self):
         return self.coords.frac_coords
 
+    @frac_coords.setter
+    def frac_coords(self, frac_coords):
+        self.coords.frac_coords = frac_coords
+
     @property
     def cart_coords(self):
         return self.coords.cart_coords

@@ -9,8 +9,8 @@ from common.model import Model, Ploter
 from common.logger import logger, root_dir
 
 os.environ["TF_CPP_MIN_LOG_LEVEL"] = "2"
-input_dir = Path(root_dir) / "train_set" / "input"
-output_dir = Path(root_dir) / "train_set" / "output"
+input_dir = Path(root_dir) / "train_set" / "xinput-m"
+output_dir = Path(root_dir) / "train_set" / "xoutput-m"
 data_load_file = "data_train.h5"
 model_save_file = "model-3layer-lr-1e-05.h5"
 plot_save_file = "model-3layer-lr-1e-05.svg"

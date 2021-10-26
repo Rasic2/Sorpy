@@ -14,6 +14,18 @@ class Operator:
         pass
 
     @staticmethod
+    def pbc(array):
+        """
+        Handle the PBC problem
+
+        :param array: <np.array type>
+        :return:
+        """
+        array = np.where(array > 0.5, array - 1, array)
+        array = np.where(array < -0.5, array + 1, array)
+        return array
+
+    @staticmethod
     def dist(si, sj) -> defaultdict:
         assert isinstance(si, AtomSetBase) and isinstance(sj, AtomSetBase), \
             "The object A and B are not instance of the <class 'AtomSetBase'>"

@@ -110,13 +110,15 @@ class Model:
         return trans_coords
 
     @staticmethod
-    def decode_vcoord(dm, test_output, orders, lattice):
+    def decode_vcoord(dm, test_output, orders, lattice, rotate=None):
 
         test_output[:, -1, :] = test_output[:, -1, :] * [1, 180, 360] + [1.142, 0, 0]
 
         # handle Ce-O
         Ce_anchor_cart = np.dot(test_output[:, 0, :], lattice.matrix)
         Ce_xyz_cart = (test_output[:, 1:-2, :] * 2 - 1) * 2.356
+        if rotate is not None:
+            Ce_xyz_cart = np.dot(Ce_xyz_cart, np.linalg.inv(rotate))
         test_output[:, 1:-2, :] = np.dot((Ce_anchor_cart.reshape((50, 1, 3)) + Ce_xyz_cart), lattice.inverse)
 
         # handle C-O

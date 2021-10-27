@@ -237,9 +237,10 @@ class Operator:
         :param data:    shape = [:, 10, 3] <Ce1O7 + CO>
         :return: normalized data
         """
-        data[:, 1:8, :] = (data[:, 1:8, :] / 2.356 + 1) / 2
-        data[:, 9, :] = np.where(data[:, 9, :] < 0, data[:, 9, :] + 360, data[:, 9, :]) / [1, 180, 360] - [1.142, 0, 0]
-        return data
+        temp_data = np.copy(data)
+        temp_data[:, 1:-2, :] = (temp_data[:, 1:-2, :] / 2.356 + 1) / 2
+        temp_data[:, -1, :] = np.where(temp_data[:, -1, :] < 0, temp_data[:, -1, :] + 360, temp_data[:, -1, :]) / [1, 180, 360] - [1.142, 0, 0]
+        return temp_data
 
     @staticmethod
     def find_trans_vector(coord: np.ndarray, anchor=36):
@@ -260,3 +261,55 @@ class Operator:
                     break
 
         return ori_coord, trans_vectors
+
+    @staticmethod
+    def getRotate(mode):
+        """
+        # 111-vector
+            [ 1.92686215e+00,   1.11247889e+00,  -7.86646043e-01]           20
+            [-1.92686985e+00,   1.11247889e+00,  -7.86646043e-01]           22
+            [-3.85373200e-06,  -2.22495111e+00,  -7.86646043e-01]           23
+            [ 0.00000000e+00,   0.00000000e+00,  -2.35990981e+00]           24
+            [ 3.85373200e-06,   2.22495111e+00,   7.86646043e-01]           32  remove
+            [ 1.92686985e+00,  -1.11247889e+00,   7.86646043e-01]           35
+            [-1.92686215e+00,  -1.11247889e+00,   7.86646043e-01]           33
+
+        # 110-vector                                              <111> - <110>
+            [ 0.      ,  -1.3625,  -1.92685829]                       23-21
+            [ 1.926866,  -1.3625,   0.        ]                       33-25
+            [-1.926866,  -1.3625,   0.        ]                       35-27
+            [ 1.926866,   1.3625,   0.        ]                       20-32
+            [-1.926866,   1.3625,   0.        ]                       22-34
+            [ 0.      ,   1.3625,  -1.92685829]]                      24-44
+        """
+        import math
+
+        r = 2.35993
+        theta = math.radians(109.4714)
+        phi = math.radians(30)
+
+        Base_111 = [[ 0.                             ,                               0., -r                ],
+                    [ r*math.sin(theta)*math.cos(phi), -r*math.sin(theta)*math.sin(phi), -r*math.cos(theta)],
+                    [-r*math.sin(theta)*math.cos(phi), -r*math.sin(theta)*math.sin(phi), -r*math.cos(theta)]]
+
+       #[[ 0.00000000e+00,   0.00000000e+00,  -2.35990981e+00],
+       # [ 1.92686985e+00,  -1.11247889e+00,   7.86646043e-01],
+       # [-1.92686215e+00,  -1.11247889e+00,   7.86646043e-01]]  # three points in 111-surface
+
+        theta = math.radians(144.7355)
+        phi = math.radians(90)
+
+        Base_110 = [[ 0.               ,  r*math.sin(theta)*math.sin(phi), r*math.cos(theta)],
+                    [ r*math.cos(theta), -r*math.sin(theta)*math.sin(phi), 0.               ],
+                    [-r*math.cos(theta), -r*math.sin(theta)*math.sin(phi), 0.               ]]
+
+        #[[ 0.,         1.3625,  -1.92685829],
+        # [-1.926866,  -1.3625,   0.        ],
+        # [ 1.926866,  -1.3625,   0.        ]]  # three points in 110-surface
+
+        if mode == '110':
+            rotate = np.dot(np.linalg.inv(np.array(Base_110)), np.array(Base_111))
+        else:
+            rotate = None
+
+        return rotate

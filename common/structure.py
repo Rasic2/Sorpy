@@ -3,7 +3,7 @@ import math
 import numpy as np
 import itertools
 
-from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates
+from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates, NearstNeighbourTable
 from common.utils import Format_defaultdict
 from common.logger import logger
 
@@ -143,8 +143,10 @@ class Structure(AtomSetBase):
         self.index = list(range(len(self.atoms)))
         self.mol_index = mol_index if isinstance(mol_index, (list, np.ndarray)) else [mol_index]
         self.slab_index = list(set(self.index).difference(set(self.mol_index))) if mol_index is not None else self.index
+        self.NNT = None
 
         self.kargs = {attr: getattr(self, attr, None) for attr in Structure.extra_attrs}
+
 
     def __repr__(self):
         return f"------------------------------------------------------------\n" \
@@ -198,16 +200,23 @@ class Structure(AtomSetBase):
         else:
             return None
 
-    def find_nearest_neighbour_table(self, cut_radius=3.0):
-        NNT = Format_defaultdict(list)
+    def find_nearest_neighbour_table(self, amplitude=0.2):
+        NNT = NearstNeighbourTable(list)
+        images = [(i, j, k) for i in (-1, 0, 1) for j in (-1, 0, 1) for k in (-1, 0, 1)]
         for atom_i in self.atoms:
             for atom_j in self.atoms:
-                if atom_j != atom_i:
-                    distance = np.linalg.norm(atom_j.cart_coord - atom_i.cart_coord)
-                    if distance <= cut_radius:
+                if atom_j.element in atom_i.element.bonds.keys():
+                    atom_j_map = [Atom(element=atom_j.element,
+                                       order=atom_j.order,
+                                       coord=Coordinates(frac_coords=atom_j.frac_coord+image,
+                                                         lattice=atom_j.coord.lattice))
+                                  for image in images]
+                    distance = np.min([np.linalg.norm(atom.cart_coord - atom_i.cart_coord) for atom in atom_j_map])
+                    cut_radius = atom_i.element.bonds[atom_j.element]
+                    if distance <= cut_radius*(1+amplitude) and distance>=cut_radius*(1-amplitude):
                         NNT[atom_i].append((atom_j, distance))
 
-        sorted_NNT = Format_defaultdict(list)
+        sorted_NNT = NearstNeighbourTable(list)
         for key, value in NNT.items():
             sorted_NNT[key] = sorted(value, key=lambda x: x[1])
 

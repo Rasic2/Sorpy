@@ -1,6 +1,8 @@
 Element C:
     formula: C
     number: 6
+    period: 2
+    group: 14
     bonds:
         - formula: O
           bond length: 1.142
@@ -8,6 +10,8 @@ Element C:
 Element O:
     formula: O
     number: 8
+    period: 2
+    group: 16
     bonds:
         - formula: C
           bond length: 1.142
@@ -18,6 +22,8 @@ Element O:
 Element Ce:
     formula: Ce
     number: 58
+    period: 6
+    group: 3
     bonds:
         - formula: O
           bond length: 2.356

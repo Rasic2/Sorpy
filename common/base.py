@@ -118,7 +118,7 @@ class Coordinates:
 class Element:
     with open(Path(f"{root_dir}/config/element.yaml")) as f:
         cfg = f.read()
-    elements = yaml.load(cfg)
+    elements = yaml.safe_load(cfg)
 
     def __init__(self, formula):
         self.formula = formula
@@ -141,6 +141,14 @@ class Element:
     @property
     def number(self) -> int:
         return Element.elements[f'Element {self.formula}']['number']
+
+    @property
+    def period(self) -> int:
+        return Element.elements[f'Element {self.formula}']['period']
+
+    @property
+    def group(self) -> int:
+        return Element.elements[f'Element {self.formula}']['group']
 
     @property
     def bonds(self):
@@ -255,3 +263,9 @@ class AtomSetBase:
             sorted_bonds[key] = sorted(value, key=lambda x: x[1])
 
         return bonds
+
+
+class NearstNeighbourTable(Format_defaultdict):
+    @property
+    def data(self):
+        return [[value[1] for value in values] for _, values in self.items()]

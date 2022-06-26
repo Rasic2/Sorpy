@@ -3,7 +3,8 @@ import time
 import inspect
 import logging
 
-from __init__ import root_dir
+root_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.realpath(inspect.getfile(inspect.currentframe())))))
+
 
 current_dir = os.path.dirname(os.path.abspath(os.path.realpath(inspect.getfile(inspect.currentframe()))))
 parent_dir = os.path.dirname(current_dir)

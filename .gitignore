@@ -130,6 +130,8 @@ dmypy.json
 
 # Pyre ftype checker
 .pyre/
+
+.idea/
 test_set/
 train_set/
 results/

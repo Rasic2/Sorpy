@@ -13,7 +13,7 @@ yaml.warnings({'YAMLLoadWarning': False})
 
 class Lattice:
 
-    def __init__(self, matrix):
+    def __init__(self, matrix: np.ndarray):
         self.matrix = matrix
 
     def __repr__(self):
@@ -21,6 +21,10 @@ class Lattice:
 
     def __eq__(self, other):
         return np.all(self.matrix == other.matrix)
+
+    @property
+    def length(self):
+        return np.power(np.sum(np.power(self.matrix,2),axis=1), 0.5)
 
     @property
     def inverse(self):
@@ -118,7 +122,7 @@ class Coordinates:
 class Element:
     with open(Path(f"{root_dir}/config/element.yaml")) as f:
         cfg = f.read()
-    elements = yaml.safe_load(cfg)
+    __elements = yaml.safe_load(cfg)
 
     def __init__(self, formula):
         self.formula = formula
@@ -140,20 +144,20 @@ class Element:
 
     @property
     def number(self) -> int:
-        return Element.elements[f'Element {self.formula}']['number']
+        return Element.__elements[f'Element {self.formula}']['number']
 
     @property
     def period(self) -> int:
-        return Element.elements[f'Element {self.formula}']['period']
+        return Element.__elements[f'Element {self.formula}']['period']
 
     @property
     def group(self) -> int:
-        return Element.elements[f'Element {self.formula}']['group']
+        return Element.__elements[f'Element {self.formula}']['group']
 
     @property
     def bonds(self):
         return {Element(bond['formula']): bond['bond length'] for bond in
-                Element.elements[f'Element {self.formula}']['bonds']}
+                Element.__elements[f'Element {self.formula}']['bonds']}
 
 class Elements:
 
@@ -266,6 +270,15 @@ class AtomSetBase:
 
 
 class NearstNeighbourTable(Format_defaultdict):
+
     @property
-    def data(self):
-        return [[value[1] for value in values] for _, values in self.items()]
+    def index(self):
+        return [[key.order, value[0].order] for key, values in self.items() for value in values]
+
+    @property
+    def dist(self):
+        return np.array([[value[1] for value in values] for _, values in self.items()])
+
+    @property
+    def dist3d(self):
+        return np.array([[value[2] for value in values] for _, values in self.items()])

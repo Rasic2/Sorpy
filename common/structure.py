@@ -200,21 +200,22 @@ class Structure(AtomSetBase):
         else:
             return None
 
-    def find_nearest_neighbour_table(self, amplitude=0.2):
+    def find_nearest_neighbour_table(self, neighbour_num: int = 12):
         NNT = NearstNeighbourTable(list)
         images = [(i, j, k) for i in (-1, 0, 1) for j in (-1, 0, 1) for k in (-1, 0, 1)]
         for atom_i in self.atoms:
+            NNT_i = []
             for atom_j in self.atoms:
-                if atom_j.element in atom_i.element.bonds.keys():
+                if atom_i != atom_j:
                     atom_j_map = [Atom(element=atom_j.element,
                                        order=atom_j.order,
                                        coord=Coordinates(frac_coords=atom_j.frac_coord+image,
                                                          lattice=atom_j.coord.lattice))
                                   for image in images]
                     distance = np.min([np.linalg.norm(atom.cart_coord - atom_i.cart_coord) for atom in atom_j_map])
-                    cut_radius = atom_i.element.bonds[atom_j.element]
-                    if distance <= cut_radius*(1+amplitude) and distance>=cut_radius*(1-amplitude):
-                        NNT[atom_i].append((atom_j, distance))
+                    NNT_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*atom_i.coord.lattice.length))
+            NNT_i = sorted(NNT_i, key=lambda x:x[1])
+            NNT[atom_i] = NNT_i[:neighbour_num]
 
         sorted_NNT = NearstNeighbourTable(list)
         for key, value in NNT.items():

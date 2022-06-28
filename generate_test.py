@@ -91,7 +91,7 @@ if __name__ == "__main__":
     test_ML_coor = Model.decode_mcoord(test_ML_coor, template.lattice)
 
     logger.info("Step 5. Write the predict coordinates to the POSCAR.")
-    style, elements, lattice, TF = template.style, template.elements, template.lattice, template.TF
+    style, elements, lattice, TF = template.style, template.__elements, template.lattice, template.TF
     for index, item in enumerate(test_ML_coor):
         s = Structure(style=style, elements=elements, coords=Coordinates(frac_coords=item, lattice=lattice),
                       lattice=lattice, TF=TF)

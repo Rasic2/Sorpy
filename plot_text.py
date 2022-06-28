@@ -47,10 +47,10 @@ def plot_wrap(func):
 def plot_steps(ori_dfs, ML_dfs):
     ori_isteps, ml_isteps = [], []
     for key, df in ori_dfs.items():
-        ori_isteps.append(len(df.index))
+        ori_isteps.append(len(df.__index))
 
     for key, df in ML_dfs.items():
-        ml_isteps.append(len(df.index))
+        ml_isteps.append(len(df.__index))
     ori_isteps, ml_isteps = np.array(ori_isteps), np.array(ml_isteps)
 
     b_min, b_diff = [], []
@@ -196,7 +196,7 @@ def plot_index(index, *results, save=True):
         ax=plt.subplot(111)
         for result in results:
             df = result[f'file_{index}']
-            ax.plot(df.index, df[item], '-o')
+            ax.plot(df.__index, df[item], '-o')
 
         plt.xticks(fontsize=18)
         plt.yticks(fontsize=18)

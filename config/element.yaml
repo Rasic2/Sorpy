@@ -5,8 +5,9 @@ Element C:
     group: 14
     color: '#828282'
     bonds:
-        - formula: O
-          bond length: 1.142
+        Element C: 1.540
+        Element O: 1.142
+        Element Ce: 2.480
 
 Element O:
     formula: O
@@ -15,11 +16,9 @@ Element O:
     group: 16
     color: '#FF0000'
     bonds:
-        - formula: C
-          bond length: 1.142
-
-        - formula: Ce
-          bond length: 2.356
+        Element C: 1.142
+        Element O: 1.490
+        Element Ce: 2.356
 
 Element Ce:
     formula: Ce
@@ -28,5 +27,6 @@ Element Ce:
     group: 3
     color: '#FFFFC8'
     bonds:
-        - formula: O
-          bond length: 2.356
+        Element C: 2.480
+        Element O: 2.356
+        Element Ce: 3.420

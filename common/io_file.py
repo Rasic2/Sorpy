@@ -5,7 +5,7 @@ from pathlib import Path
 from multiprocessing import Pool as ProcessPool
 from multiprocessing.dummy import Pool as ThreadPool
 
-from common.base import Lattice, Elements, Coordinates
+from common.base import Lattice, Coordinates
 from common.structure import Structure
 from common.logger import logger
 

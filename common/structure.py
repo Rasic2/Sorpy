@@ -1,128 +1,129 @@
 import copy
 import math
+import time
+
 import numpy as np
 import itertools
 
-from common.base import Element, Atom, AtomSetBase, Lattice, Coordinates, NearstNeighbourTable
+from common.base import Atom, Lattice, Coordinates, NeighbourTable, Atoms
 from common.utils import Format_defaultdict
 from common.logger import logger
 
 
-class Molecule(AtomSetBase):
+# class Molecule(AtomSetBase):
+#
+#     def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, **kargs):
+#
+#         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
+#         self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
+#         for index, atom in enumerate(self.atoms):
+#             if self.anchor == atom.order:
+#                 self.anchor = index
+#
+#     def __repr__(self):
+#         return f"------------------------------------------------------------\n" \
+#                f"<Molecule>                                                  \n" \
+#                f"-Atoms-                                                     \n" \
+#                f"{self.atoms}                                                \n" \
+#                f"------------------------------------------------------------"
+#
+#     def __getitem__(self, index):
+#         return self.atoms[index]
+#
+#     @property
+#     def pair(self):
+#         pair_list = []
+#         for ii in itertools.product(self.atoms, self.atoms):
+#             if ii[0] != ii[1]:
+#                 pair_list.append(ii)
+#         pair_list = (tuple(sorted(item)) for item in pair_list)
+#
+#         return set(pair_list)
+#
+#     @property
+#     def vector(self):  # TODO PBC apply not considered important error
+#         """ vector in Cartesian format """
+#         lattice = self.coords.lattice
+#         pair = set()
+#         for atom_i, atom_j in self.pair:  # handle the PBC principle, Reset the molecule.atoms !!!
+#             element = copy.deepcopy(atom_j.element)
+#             order = copy.deepcopy(atom_j.order)
+#             frac_coord = copy.deepcopy(atom_j.frac_coord)
+#             frac_coord = np.where(frac_coord - atom_i.frac_coord > 0.5, frac_coord - 1, frac_coord)
+#             frac_coord = np.where(frac_coord - atom_i.frac_coord < -0.5, frac_coord + 1, frac_coord)
+#             coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
+#             atom_j = Atom(element=element, order=order, coord=coord)
+#             pair.add((atom_i, atom_j))
+#         return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in pair]
+#
+#     @property
+#     def dist(self):
+#         if self.anchor:  # anchor Atom and Reset vector
+#             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+#             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+#             return [(atom_j, atom_i, np.linalg.norm(vector))
+#                     for atom_i, vector in zip(self.atoms, vectors) if atom_i != atom_j]
+#         else:
+#             return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
+#
+#     @property
+#     def theta(self):
+#         if self.anchor:  # anchor Atom and Reset vector
+#             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+#             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+#             return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
+#                     for (vector), (_, atom_i, dist) in zip(vectors, self.dist) if atom_i != atom_j]
+#         else:
+#             return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
+#                     for (atom_i, atom_j, vector), (_, _, dist) in zip(self.vector, self.dist)]
+#
+#     @property
+#     def phi(self):
+#         if self.anchor:  # anchor Atom and Reset vector
+#             atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
+#             vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
+#             return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0])))
+#                     for (_, atom_i, _), (vector) in zip(self.theta, vectors)]
+#         else:
+#             return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0])))
+#                     for (atom_i, atom_j, vector) in self.vector]
+#
+#     @property
+#     def inter_coords(self):
+#         return [(atom_i, atom_j, [dist, theta, phi])
+#                 for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
+#
+#
+# class Slab(AtomSetBase):
+#
+#     def __init__(self, elements=None, orders=None, coords: Coordinates = None, lattice: Lattice = None, **kargs):
+#         super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
+#         self.lattice = lattice
+#
+#         assert len(self.elements) == len(self.frac_coords) == len(self.cart_coords), \
+#             "The shape of <formulas>, <frac_coords>, <cart_coords> are not equal."
+#
+#     def __repr__(self):
+#         return f"------------------------------------------------------------\n" \
+#                f"<Slab>                                                      \n" \
+#                f"-Lattice-                                                   \n" \
+#                f"{self.lattice.matrix}                                       \n" \
+#                f"-Atoms-                                                     \n" \
+#                f"{self.atoms}                                                \n" \
+#                f"------------------------------------------------------------" \
+#             if self.lattice is not None else f"<Slab object>"
+#
+#     @property
+#     def mass_center(self):
+#         return np.sum(self.coords.frac_coords, axis=0) / len(self)
 
-    def __init__(self, elements=None, orders=None, coords: Coordinates = None, anchor=None, **kargs):
 
-        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
-        self.anchor = anchor if isinstance(anchor, (int, Atom)) else None
-        for index, atom in enumerate(self.atoms):
-            if self.anchor == atom.order:
-                self.anchor = index
-
-    def __repr__(self):
-        return f"------------------------------------------------------------\n" \
-               f"<Molecule>                                                  \n" \
-               f"-Atoms-                                                     \n" \
-               f"{self.atoms}                                                \n" \
-               f"------------------------------------------------------------"
-
-    def __getitem__(self, index):
-        return self.atoms[index]
-
-    @property
-    def pair(self):
-        pair_list = []
-        for ii in itertools.product(self.atoms, self.atoms):
-            if ii[0] != ii[1]:
-                pair_list.append(ii)
-        pair_list = (tuple(sorted(item)) for item in pair_list)
-
-        return set(pair_list)
-
-    @property
-    def vector(self):  # TODO PBC apply not considered important error
-        """ vector in Cartesian format """
-        lattice = self.coords.lattice
-        pair = set()
-        for atom_i, atom_j in self.pair:  # handle the PBC principle, Reset the molecule.atoms !!!
-            element = copy.deepcopy(atom_j.element)
-            order = copy.deepcopy(atom_j.order)
-            frac_coord = copy.deepcopy(atom_j.frac_coord)
-            frac_coord = np.where(frac_coord - atom_i.frac_coord > 0.5, frac_coord - 1, frac_coord)
-            frac_coord = np.where(frac_coord - atom_i.frac_coord < -0.5, frac_coord + 1, frac_coord)
-            coord = Coordinates(frac_coords=frac_coord, lattice=lattice)
-            atom_j = Atom(element=element, order=order, coord=coord)
-            pair.add((atom_i, atom_j))
-        return [(atom_i, atom_j, atom_j.cart_coord - atom_i.cart_coord) for atom_i, atom_j in pair]
-
-    @property
-    def dist(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, np.linalg.norm(vector))
-                    for atom_i, vector in zip(self.atoms, vectors) if atom_i != atom_j]
-        else:
-            return [(atom_i, atom_j, np.linalg.norm(vector)) for atom_i, atom_j, vector in self.vector]
-
-    @property
-    def theta(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
-                    for (vector), (_, atom_i, dist) in zip(vectors, self.dist) if atom_i != atom_j]
-        else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(math.sqrt(dist ** 2 - vector[2] ** 2), vector[2])))
-                    for (atom_i, atom_j, vector), (_, _, dist) in zip(self.vector, self.dist)]
-
-    @property
-    def phi(self):
-        if self.anchor:  # anchor Atom and Reset vector
-            atom_j = self.atoms[self.anchor] if isinstance(self.anchor, int) else self.anchor
-            vectors = [atom_i.cart_coord - atom_j.cart_coord for atom_i in self.atoms if atom_i != atom_j]
-            return [(atom_j, atom_i, math.degrees(math.atan2(vector[1], vector[0])))
-                    for (_, atom_i, _), (vector) in zip(self.theta, vectors)]
-        else:
-            return [(atom_i, atom_j, math.degrees(math.atan2(vector[1], vector[0])))
-                    for (atom_i, atom_j, vector) in self.vector]
-
-    @property
-    def inter_coords(self):
-        return [(atom_i, atom_j, [dist, theta, phi])
-                for (atom_i, atom_j, dist), (_, _, theta), (_, _, phi) in zip(self.dist, self.theta, self.phi)]
-
-
-class Slab(AtomSetBase):
-
-    def __init__(self, elements=None, orders=None, coords: Coordinates = None, lattice: Lattice = None, **kargs):
-        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
-        self.lattice = lattice
-
-        assert len(self.elements) == len(self.frac_coords) == len(self.cart_coords), \
-            "The shape of <formulas>, <frac_coords>, <cart_coords> are not equal."
-
-    def __repr__(self):
-        return f"------------------------------------------------------------\n" \
-               f"<Slab>                                                      \n" \
-               f"-Lattice-                                                   \n" \
-               f"{self.lattice.matrix}                                       \n" \
-               f"-Atoms-                                                     \n" \
-               f"{self.atoms}                                                \n" \
-               f"------------------------------------------------------------" \
-            if self.lattice is not None else f"<Slab object>"
-
-    @property
-    def mass_center(self):
-        return np.sum(self.coords.frac_coords, axis=0) / len(self)
-
-
-class Structure(AtomSetBase):
+class Structure():
     """TODO <class Coordinates including the frac, cart transfer>"""
     styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
     extra_attrs = ("TF",)
 
-    def __init__(self, style=None, elements=None, coords: Coordinates = None, lattice: Lattice = None, mol_index=None,
-                 **kargs):
+    def __init__(self, style=None, atoms: Atoms = None, lattice: Lattice = None, mol_index=None, **kargs):
         """
         :param style:           <Required> Indicate the system style: <"Crystal", "Slab", "Mol", "Slab+Mol">
         :param elements:        <Required> The system Elements list: [Element, Element, etc]
@@ -132,18 +133,24 @@ class Structure(AtomSetBase):
         :param kargs:           <Optional> <TF, anchor, ignore_mol, ignore_index>
         """
         self.style = style
+        self.atoms = atoms
+        self.lattice = lattice
+        self.neighbour_table = None
+
         if self.style not in Structure.styles:
             raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
 
-        orders = list(range(len(elements)))
-        super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
-        self.lattice = lattice
+        # orders = list(range(len(elements)))
+        # super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
 
         mol_index = mol_index if mol_index is not None else []
-        self.index = list(range(len(self.atoms)))
+        # self.index = list(range(len(self.atoms)))
         self.mol_index = mol_index if isinstance(mol_index, (list, np.ndarray)) else [mol_index]
-        self.slab_index = list(set(self.index).difference(set(self.mol_index))) if mol_index is not None else self.index
-        self.NNT = None
+        self.slab_index = list(set(self.atoms.order).difference(set(self.mol_index))) if mol_index is not None else self.atoms.order
+
+        for key, value in kargs.items():
+            if key in Structure.extra_attrs:
+                setattr(self, key, value)
 
         self.kargs = {attr: getattr(self, attr, None) for attr in Structure.extra_attrs}
 
@@ -157,9 +164,6 @@ class Structure(AtomSetBase):
                f"{self.atoms}                                                \n" \
                f"------------------------------------------------------------" \
             if self.lattice is not None else f"<Structure object>"
-
-    def __sub__(self, other):
-        return self.coords - other.coords
 
     @property
     def mass_center(self):
@@ -200,28 +204,41 @@ class Structure(AtomSetBase):
         else:
             return None
 
-    def find_nearest_neighbour_table(self, neighbour_num: int = 12):
-        NNT = NearstNeighbourTable(list)
-        images = [(i, j, k) for i in (-1, 0, 1) for j in (-1, 0, 1) for k in (-1, 0, 1)]
+    def find_neighbour_table(self, neighbour_num: int = 12, amplitude=0.2, cut_radius = 5.0):
+        neighbour_table = NeighbourTable(list)
         for atom_i in self.atoms:
-            NNT_i = []
+            neighbour_table_i = []
             for atom_j in self.atoms:
                 if atom_i != atom_j:
-                    atom_j_map = [Atom(element=atom_j.element,
-                                       order=atom_j.order,
-                                       coord=Coordinates(frac_coords=atom_j.frac_coord+image,
-                                                         lattice=atom_j.coord.lattice))
-                                  for image in images]
-                    distance = np.min([np.linalg.norm(atom.cart_coord - atom_i.cart_coord) for atom in atom_j_map])
-                    NNT_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*atom_i.coord.lattice.length))
-            NNT_i = sorted(NNT_i, key=lambda x:x[1])
-            NNT[atom_i] = NNT_i[:neighbour_num]
+                    try:
+                        default_bond = atom_i.bonds[f'Element {atom_j.formula}']
+                        distance = np.linalg.norm(atom_j.cart_coord - atom_i.cart_coord)
+                        if distance <= default_bond*(1+amplitude):
+                            neighbour_table_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*self.lattice.length))
+                            continue
+                    except KeyError:
+                        logger.debug(f"{atom_i.formula} and {atom_j.formula} don't have default bond property, search all images!")
+                    logger.debug(f"Start search the {atom_i.formula}{atom_i.order}-{atom_j.formula}{atom_j.order} neighbour in all images!")
+                    image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
+                    image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
+                    image = image_pos + image_neg
+                    COD_frac = np.all(atom_j.frac_coord+image-atom_i.frac_coord<=0.5) and np.all(atom_j.frac_coord+image-atom_i.frac_coord>=-0.5)
+                    if not COD_frac:
+                        logger.error(f"Transform Error, exit!")
+                        SystemExit()
+                    logger.debug(f"Search the image {image} successfully, start calculate the distance!")
+                    atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord+image).set_coord(lattice=self.lattice)
+                    distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
+                    logger.debug(f"distance={distance}")
+                    neighbour_table_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*self.lattice.length))
+            neighbour_table_i = sorted(neighbour_table_i, key=lambda x:x[1])
+            neighbour_table[atom_i] = neighbour_table_i[:neighbour_num]
 
-        sorted_NNT = NearstNeighbourTable(list)
-        for key, value in NNT.items():
-            sorted_NNT[key] = sorted(value, key=lambda x: x[1])
+        sorted_neighbour_table = NeighbourTable(list)
+        for key, value in neighbour_table.items():
+            sorted_neighbour_table[key] = sorted(value, key=lambda x: x[1])
 
-        setattr(self, "NNT", sorted_NNT)
+        setattr(self, "neighbour_table", sorted_neighbour_table)
 
     @staticmethod
     def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):
@@ -230,23 +247,24 @@ class Structure(AtomSetBase):
             cfg = f.readlines()
         lattice = Lattice.read_from_string(cfg[2:5])
 
-        elements = [(name, int(count)) for name, count in zip(cfg[5].split(), cfg[6].split())]
-        elements = sum([[formula] * count for (formula, count) in elements], [])
-        elements = np.array([Element(formula) for formula in elements])
+        formula = [(name, int(count)) for name, count in zip(cfg[5].split(), cfg[6].split())]
+        formula = sum([[formula] * count for (formula, count) in formula], [])
 
         selective = cfg[7].lower()[0] == "s"
         if selective:
             coor_type = cfg[8].rstrip()
-            coords = np.array(list([float(item) for item in coor.split()[:3]] for coor in cfg[9:9 + len(elements)]))
+            coords = np.array(list([float(item) for item in coor.split()[:3]] for coor in cfg[9:9 + len(formula)]))
 
-            frac_coords = coords if coor_type.lower()[0] == "d" else None
-            cart_coords = coords if coor_type.lower()[0] == "c" else None
-
-            TF = np.array(list([item.split()[3:6] for item in cfg[9:9 + len(elements)]]))
+            frac_coord = coords if coor_type.lower()[0] == "d" else None
+            cart_coord = coords if coor_type.lower()[0] == "c" else None
+            TF = np.array(list([item.split()[3:6] for item in cfg[9:9 + len(formula)]]))
         else:
             raise NotImplementedError \
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
-        coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
+        # coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
+        atoms=Atoms(formula=formula, frac_coord=frac_coord, cart_coord=cart_coord) # yaml read time-cost
+        atoms.set_coord(lattice)
+
 
         # if "expand" in kargs.keys():
         #    expand_func = list(kargs['expand'].keys())[0]
@@ -258,8 +276,7 @@ class Structure(AtomSetBase):
         #    else:
         #        logger.warning("Expand step may not happen.")
 
-        return Structure(style, mol_index=mol_index,
-                         elements=elements, coords=coords, lattice=lattice, TF=TF, **kargs)
+        return Structure(style, mol_index=mol_index, atoms=atoms, lattice=lattice, TF=TF, **kargs)
 
     def write_to_POSCAR(self, fname, system=None, factor=1):
         system = system if system is not None else " ".join([item[0] + str(item[1]) for item in self.atoms_count])

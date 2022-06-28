@@ -1,3 +1,4 @@
+import copy
 import itertools
 from pathlib import Path
 from collections import Counter
@@ -11,7 +12,7 @@ from common.utils import Format_defaultdict
 yaml.warnings({'YAMLLoadWarning': False})
 
 
-class Lattice:
+class Lattice(object):
 
     def __init__(self, matrix: np.ndarray):
         self.matrix = matrix
@@ -24,7 +25,7 @@ class Lattice:
 
     @property
     def length(self):
-        return np.power(np.sum(np.power(self.matrix,2),axis=1), 0.5)
+        return np.power(np.sum(np.power(self.matrix, 2), axis=1), 0.5)
 
     @property
     def inverse(self):
@@ -50,7 +51,7 @@ class Lattice:
         return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.matrix])
 
 
-class Coordinates:
+class Coordinates(object):
     def __init__(self, frac_coords=None, cart_coords=None, lattice: Lattice = None):
         self.frac_coords = frac_coords if frac_coords is not None else np.array([])
         self.cart_coords = cart_coords if cart_coords is not None else np.array([])
@@ -68,7 +69,7 @@ class Coordinates:
         return self
 
     def __len__(self):
-        assert len(self.frac_coords) == len(self.frac_coords)
+        assert len(self.frac_coords) == len(self.cart_coords)
         return len(self.frac_coords)
 
     def __next__(self):  # TODO "may produce bug"
@@ -109,7 +110,7 @@ class Coordinates:
             raise NotImplementedError
 
     @staticmethod
-    def read_from_strings(strings=None, ctype="frac", lattice: Lattice=None):
+    def read_from_strings(strings=None, ctype="frac", lattice: Lattice = None):
         coords = np.array([[float(ii) for ii in item.split()[:3]] for item in strings])
         if ctype == "frac":
             return Coordinates(frac_coords=coords, lattice=lattice)
@@ -119,161 +120,269 @@ class Coordinates:
             raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
 
 
-class Element:
-    with open(Path(f"{root_dir}/config/element.yaml")) as f:
+# class Element:
+#     with open(Path(f"{root_dir}/config/element.yaml")) as f:
+#         cfg = f.read()
+#     __elements = yaml.safe_load(cfg)
+#
+#     def __init__(self, formula):
+#         self.formula = formula
+#
+#     def __eq__(self, other):
+#         return self.number == other.number
+#
+#     def __lt__(self, other):
+#         return self.number < other.number
+#
+#     def __ge__(self, other):
+#         return self.number >= other.number
+#
+#     def __hash__(self):
+#         return hash(self.number)
+#
+#     def __repr__(self):
+#         return f"<Element {self.formula}>"
+#
+#     @property
+#     def number(self) -> int:
+#         return Element.__elements[f'Element {self.formula}']['number']
+#
+#     @property
+#     def period(self) -> int:
+#         return Element.__elements[f'Element {self.formula}']['period']
+#
+#     @property
+#     def group(self) -> int:
+#         return Element.__elements[f'Element {self.formula}']['group']
+#
+#     @property
+#     def bonds(self):
+#         return {Element(bond['formula']): bond['bond length'] for bond in
+#                 Element.__elements[f'Element {self.formula}']['bonds']}
+
+# class Elements:
+#
+#     def __new__(cls, *args, **kwargs):
+#         raise TypeError("Can't create the <class Elements> instance.")
+#
+#     @staticmethod
+#     def read_from_strings(formulas, counts):
+#         elements = [(formula, int(count)) for formula, count in zip(formulas.split(), counts.split())]
+#         elements = sum([[formula] * count for (formula, count) in elements], [])
+#         return [Element(formula) for formula in elements]
+
+
+class Atom(object):
+    """
+        `Atom class represent one atom in periodic solid system`
+
+        @property
+            formula:        chemical formula
+            number:         atomic number
+            period:         atomic period in element period table
+            group:          atomic group in element period table
+            color:          atomic color using RGB
+            order:          atomic order in <Structure class>, default: 0
+            frac_coord:     fractional coordinates  
+            cart_coord:     cartesian coordinates
+            bonds:          atomic default bond property {atom: bond-length}
+        
+        @func
+            __initialize_attrs:     initialize the attributes from the element.yaml
+    """
+    _config_file = Path(f"{root_dir}/config/element.yaml")
+    _attributes_mono = ['number', 'period', 'group', 'color']
+    _attributes_list = ['frac_coord', 'cart_coord']
+    _attributes_dict = ['bonds']
+
+    with open(_config_file) as f:
         cfg = f.read()
-    __elements = yaml.safe_load(cfg)
+    _attrs = yaml.safe_load(cfg)
 
-    def __init__(self, formula):
+    def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
         self.formula = formula
-
-    def __eq__(self, other):
-        return self.number == other.number
-
-    def __lt__(self, other):
-        return self.number < other.number
-
-    def __ge__(self, other):
-        return self.number >= other.number
-
-    def __hash__(self):
-        return hash(self.number)
-
-    def __repr__(self):
-        return f"<Element {self.formula}>"
-
-    @property
-    def number(self) -> int:
-        return Element.__elements[f'Element {self.formula}']['number']
-
-    @property
-    def period(self) -> int:
-        return Element.__elements[f'Element {self.formula}']['period']
-
-    @property
-    def group(self) -> int:
-        return Element.__elements[f'Element {self.formula}']['group']
-
-    @property
-    def bonds(self):
-        return {Element(bond['formula']): bond['bond length'] for bond in
-                Element.__elements[f'Element {self.formula}']['bonds']}
-
-class Elements:
-
-    def __new__(cls, *args, **kwargs):
-        raise TypeError("Can't create the <class Elements> instance.")
-
-    @staticmethod
-    def read_from_strings(formulas, counts):
-        elements = [(formula, int(count)) for formula, count in zip(formulas.split(), counts.split())]
-        elements = sum([[formula] * count for (formula, count) in elements], [])
-        return [Element(formula) for formula in elements]
-
-
-class Atom:
-    """Periodic System in Solid"""
-
-    def __init__(self, element: Element = None, order: int = None, coord: Coordinates = None):
-        self.element = element
         self.order = order
-        self.coord = coord
+        self.number, self.period, self.group, self.color, self.bonds = (None, None, None, None, [])
+        self.frac_coord = np.array(frac_coord) if frac_coord is not None else None
+        self.cart_coord = np.array(cart_coord) if cart_coord is not None else None
+
+        self.initialize = False
+        if not self.initialize:
+            self.__initialize_attrs()
 
     def __eq__(self, other):
-        return self.element == other.element and self.order == other.order
+        return self.number == other.number and self.order == other.order
 
     def __lt__(self, other):
-        return self.element < other.element or self.order < other.order
+        return self.number < other.number or self.order < other.order
 
     def __ge__(self, other):
-        return self.element >= other.element or self.order >= other.order
+        return self.number >= other.number or self.order >= other.order
 
     def __hash__(self):
-        return hash(self.element) + hash(str(self.order))
+        return hash(self.number) + hash(str(self.order))
 
     def __repr__(self):
-        return f"(Atom {self.order} : {self.element} : {self.coord})"
+        return f"(Atom {self.order} : {self.formula} : {self.cart_coord})"
 
-    @property
-    def frac_coord(self):
-        return self.coord.frac_coords
-
-    @property
-    def cart_coord(self):
-        return self.coord.cart_coords
-
-
-class AtomSetBase:
-
-    def __init__(self, elements=None, orders=None, coords: Coordinates = None, **kargs):
-
-        self.elements = elements if elements is not None else np.array([])
-        self.orders = orders
-        self.coords = coords
-
-        for key, value in kargs.items():
-            if getattr(self, key, None) is None:
+    def __initialize_attrs(self):
+        if isinstance(self.formula, str):  # <class Atom>
+            for key, value in Atom._attrs[f'Element {self.formula}'].items():
                 setattr(self, key, value)
+        elif isinstance(self.formula, list):  # <class Atoms>
+            for attr in Atom._attributes_mono + Atom._attributes_dict:
+                setattr(self, attr, [Atom._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
-    def __len__(self):
-        assert len(self.elements) == len(self.coords)
-        return len(self.elements)
+        self.initialize = True
 
-    def __contains__(self, item):
-        if item is self.atoms:
+    def set_coord(self, lattice:Lattice):
+        assert lattice is not None
+        if (self.cart_coord is not None and None not in self.cart_coord) and (self.frac_coord is None or None in self.frac_coord):
+            self.frac_coord = np.dot(self.cart_coord, lattice.inverse)
+        elif (self.frac_coord is not None and None not in self.frac_coord) and (self.cart_coord is None or None in self.cart_coord):
+            self.cart_coord = np.dot(self.frac_coord, lattice.matrix)
+
+        return self
+
+
+class Atoms(Atom):
+    """
+        `Atoms class represent atom set in periodic solid system`
+
+        @property
+            formula:        chemical formula, <list>
+            number:         atomic number, <list>
+            period:         atomic period in element period table, <list>
+            group:          atomic group in element period table, <list>
+            color:          atomic color using RGB, <list>
+            order:          atomic order in <Structure class>, default: <list(range(len(formula)))>
+            frac_coord:     fractional coordinates, <list>
+            cart_coord:     cartesian coordinates, <list>
+            bonds:          atomic default bond property {atom: bond-length}
+
+            count:          total atom number in atom set
+            size:           list atom number according to their formula
+
+        @func
+            __initialize_attrs:     initialize the attributes from the element.yaml
+    """
+    def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
+        super(Atoms, self).__init__(formula, order, frac_coord, cart_coord)
+        self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
+        self.frac_coord = [None] * len(self.formula) if self.frac_coord is None else self.frac_coord
+        self.cart_coord = [None] * len(self.formula) if self.cart_coord is None else self.cart_coord
+        self.__index = 0
+
+    def __len__(self) -> int:
+        return len(self.formula)
+
+    def __repr__(self):
+        string = ""
+        for order, formula, cart_coord in zip(self.order, self.formula, self.cart_coord):
+            string += f"(Atom {order} : {formula} : {cart_coord}) \n"
+        return string
+
+    def __iter__(self):
+        return copy.deepcopy(self) # return deepcopy(instance), otherwise the __index will create count bug
+
+    def __next__(self):
+        if self.__index < len(self):
+            self.__index += 1
+            return self[self.__index - 1]
+        else:
+            self.__index = 0
+            raise StopIteration
+
+    def __contains__(self, atom):
+        if atom in list(self):
             return True
         else:
             return False
 
-    @property
-    def frac_coords(self):
-        return self.coords.frac_coords
+    def __getitem__(self, index):
+        return Atom(formula=self.formula[index], order=self.order[index],
+                    frac_coord=self.frac_coord[index], cart_coord=self.cart_coord[index])
 
     @property
-    def cart_coords(self):
-        return self.coords.cart_coords
-
-    @property
-    def atoms(self):
-        return np.array([Atom(element, order, coord) for element, order, coord in
-                         itertools.zip_longest(self.elements, self.orders, self.coords)])
-
-    @property
-    def atoms_total(self) -> int:
+    def count(self) -> int:
         return len(self)
 
     @property
-    def atoms_formulas(self):
-        return [element.formula for element in self.elements]
-
-    @property
-    def atoms_count(self):
-        return sorted(Counter(self.atoms_formulas).items(), key=lambda x: Element(x[0]).number)
-
-    @property
-    def bonds(self):
-        min_factor, max_factor = 0.8, 1.2
-        bonds = Format_defaultdict(list)
-        for atom_i in self.atoms:
-            for atom_j in self.atoms:
-                if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
-                    bond_length = np.linalg.norm(
-                        self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
-                    if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
-                        bonds[atom_i].append((atom_j, bond_length))
-
-        sorted_bonds = Format_defaultdict(list)
-        for key, value in bonds.items():
-            sorted_bonds[key] = sorted(value, key=lambda x: x[1])
-
-        return bonds
+    def size(self):
+        return Counter(self.formula)
 
 
-class NearstNeighbourTable(Format_defaultdict):
+# class AtomSetBase:
+#
+#     def __init__(self, elements=None, orders=None, coords: Coordinates = None, **kargs):
+#
+#         self.elements = elements if elements is not None else np.array([])
+#         self.orders = orders
+#         self.coords = coords
+#
+#         for key, value in kargs.items():
+#             if getattr(self, key, None) is None:
+#                 setattr(self, key, value)
+#
+#     def __len__(self):
+#         assert len(self.elements) == len(self.coords)
+#         return len(self.elements)
+#
+#     def __contains__(self, item):
+#         if item is self.atoms:
+#             return True
+#         else:
+#             return False
+#
+#     @property
+#     def frac_coords(self):
+#         return self.coords.frac_coords
+#
+#     @property
+#     def cart_coords(self):
+#         return self.coords.cart_coords
+#
+#     @property
+#     def atoms(self):
+#         return np.array([Atom(element, order, coord) for element, order, coord in
+#                          itertools.zip_longest(self.elements, self.orders, self.coords)])
+#
+#     @property
+#     def atoms_total(self) -> int:
+#         return len(self)
+#
+#     @property
+#     def atoms_formulas(self):
+#         return [element.formula for element in self.elements]
+#
+#     @property
+#     def atoms_count(self):
+#         return sorted(Counter(self.atoms_formulas).items(), key=lambda x: Element(x[0]).number)
+#
+#     @property
+#     def bonds(self):
+#         min_factor, max_factor = 0.8, 1.2
+#         bonds = Format_defaultdict(list)
+#         for atom_i in self.atoms:
+#             for atom_j in self.atoms:
+#                 if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
+#                     bond_length = np.linalg.norm(
+#                         self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
+#                     if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
+#                         bonds[atom_i].append((atom_j, bond_length))
+#
+#         sorted_bonds = Format_defaultdict(list)
+#         for key, value in bonds.items():
+#             sorted_bonds[key] = sorted(value, key=lambda x: x[1])
+#
+#         return bonds
+
+
+class NeighbourTable(Format_defaultdict):
 
     @property
     def index(self):
-        return [[key.order, value[0].order] for key, values in self.items() for value in values]
+        return np.array([[value[0].order for value in values] for key, values in self.items()])
 
     @property
     def dist(self):

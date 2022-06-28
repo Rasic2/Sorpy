@@ -9,9 +9,9 @@ from common.logger import root_dir
 
 fname = Path(f'{root_dir}/train_set/input/POSCAR_1-1')
 s1 = POSCAR(fname=fname).to_structure(style="Slab")
-s1.find_nearest_neighbour_table(neighbour_num=12)
+s1.find_neighbour_table(neighbour_num=12)
 atom_feature = np.array([[atom.element.group, atom.element.period] for atom in s1.atoms])
-adj_matrix = s1.NNT.index
+adj_matrix = s1.NNT.__index
 dist_feature = s1.NNT.dist
 dist3d_feature = s1.NNT.dist3d
 

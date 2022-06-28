@@ -196,8 +196,8 @@ class Atom(object):
     _attributes_dict = ['bonds']
 
     with open(_config_file) as f:
-        cfg = f.read()
-    _attrs = yaml.safe_load(cfg)
+        _cfg = f.read()
+    _attrs = yaml.safe_load(_cfg)
 
     def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
         self.formula = formula
@@ -206,8 +206,8 @@ class Atom(object):
         self.frac_coord = np.array(frac_coord) if frac_coord is not None else None
         self.cart_coord = np.array(cart_coord) if cart_coord is not None else None
 
-        self.initialize = False
-        if not self.initialize:
+        self._initialize = False
+        if not self._initialize:
             self.__initialize_attrs()
 
     def __eq__(self, other):
@@ -233,7 +233,7 @@ class Atom(object):
             for attr in Atom._attributes_mono + Atom._attributes_dict:
                 setattr(self, attr, [Atom._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
-        self.initialize = True
+        self._initialize = True
 
     def set_coord(self, lattice:Lattice):
         assert lattice is not None

@@ -120,8 +120,8 @@ from common.logger import logger
 
 class Structure():
     """TODO <class Coordinates including the frac, cart transfer>"""
-    styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
-    extra_attrs = ("TF",)
+    _styles = ("Crystal", "Slab", "Mol", "Slab+Mol")
+    _extra_attrs = ("TF",)
 
     def __init__(self, style=None, atoms: Atoms = None, lattice: Lattice = None, mol_index=None, **kargs):
         """
@@ -137,8 +137,8 @@ class Structure():
         self.lattice = lattice
         self.neighbour_table = None
 
-        if self.style not in Structure.styles:
-            raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure.styles}")
+        if self.style not in Structure._styles:
+            raise AttributeError(f"The '{self.style}' not support in this version, optional style: {Structure._styles}")
 
         # orders = list(range(len(elements)))
         # super().__init__(elements=elements, orders=orders, coords=coords, **kargs)
@@ -149,10 +149,10 @@ class Structure():
         self.slab_index = list(set(self.atoms.order).difference(set(self.mol_index))) if mol_index is not None else self.atoms.order
 
         for key, value in kargs.items():
-            if key in Structure.extra_attrs:
+            if key in Structure._extra_attrs:
                 setattr(self, key, value)
 
-        self.kargs = {attr: getattr(self, attr, None) for attr in Structure.extra_attrs}
+        self.kargs = {attr: getattr(self, attr, None) for attr in Structure._extra_attrs}
 
 
     def __repr__(self):

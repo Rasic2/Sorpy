@@ -1,9 +1,9 @@
 import math
 
 import torch
-from torch import nn
-from torch.nn import Parameter, BatchNorm1d, Flatten, Linear, ReLU, Tanh
 import torch.nn.functional as F
+from torch import nn
+from torch.nn import Parameter, Flatten, ReLU, Tanh
 
 
 class GraphConvLayer(nn.Module):
@@ -21,7 +21,7 @@ class GraphConvLayer(nn.Module):
         self.bias = bias
         self.weight_node = Parameter(torch.FloatTensor(atom_in_fea_num, atom_out_fea_num))
         self.weight_edge = Parameter(torch.FloatTensor(bond_in_fea_num, bond_out_fea_num))
-        self.weight_node_to_edge = Parameter(torch.FloatTensor(2*atom_out_fea_num, bond_in_fea_num))
+        self.weight_node_to_edge = Parameter(torch.FloatTensor(2 * atom_out_fea_num, bond_in_fea_num))
         if self.bias:
             self.bias_node = Parameter(torch.FloatTensor(atom_out_fea_num))
             self.bias_edge = Parameter(torch.FloatTensor(bond_out_fea_num))
@@ -55,10 +55,11 @@ class GraphConvLayer(nn.Module):
         """
 
         # update atom-feature
-        atom_root = torch.pow(torch.pow(atom,2), 0.25) # positive value
-        atom_neighbor = torch.FloatTensor(*adj_matrix.shape,self.atom_in_fea_num) # shape: (B, N, M, F_atom)
+        atom_root = torch.pow(torch.pow(atom, 2), 0.25)  # positive value
+        atom_neighbor = torch.FloatTensor(*adj_matrix.shape, self.atom_in_fea_num)  # shape: (B, N, M, F_atom)
         for batch, _ in enumerate(atom):
-            atom_neighbor[batch]=torch.pow(torch.pow(atom[batch][adj_matrix[batch]], 2), 0.25) # shape: (B, N, M, F_atom)
+            atom_neighbor[batch] = torch.pow(torch.pow(atom[batch][adj_matrix[batch]], 2),
+                                             0.25)  # shape: (B, N, M, F_atom)
         if torch.cuda.is_available():
             atom_neighbor = atom_neighbor.cuda()
 
@@ -71,32 +72,32 @@ class GraphConvLayer(nn.Module):
         atom_update = torch.matmul(atom_update, self.weight_node)  # shape: (B, N, F_atom)
         if self.bias:
             atom_update = atom_update + self.bias_node
-        atom_update = self.relu(atom_update) # positive value
+        atom_update = self.relu(atom_update)  # positive value
 
         # update bond-feature, accumulate the two node information
-        adj_matrix_tuple_flatten = self.flatten(adj_matrix_tuple) # shape: (B, NxMx2)
-        bond_diatom = torch.Tensor(*adj_matrix_tuple_flatten.shape, self.atom_out_fea_num) # shape: (B, NxMx2, F_atom)
+        adj_matrix_tuple_flatten = self.flatten(adj_matrix_tuple)  # shape: (B, NxMx2)
+        bond_diatom = torch.Tensor(*adj_matrix_tuple_flatten.shape, self.atom_out_fea_num)  # shape: (B, NxMx2, F_atom)
         for batch, _ in enumerate(atom_update):
             bond_diatom[batch] = atom_update[batch][adj_matrix_tuple_flatten[batch]]
         if torch.cuda.is_available():
             bond_diatom = bond_diatom.cuda()
 
-        bond_diatom = torch.reshape(bond_diatom, shape=(adj_matrix_tuple_flatten.shape[0], -1, 2*self.atom_out_fea_num)) # shape: (B, NxM, 2xF_atom)
+        bond_diatom = torch.reshape(bond_diatom, shape=(
+        adj_matrix_tuple_flatten.shape[0], -1, 2 * self.atom_out_fea_num))  # shape: (B, NxM, 2xF_atom)
         bond_diatom = F.normalize(bond_diatom, p=1, dim=-2)  # column normalization, shape: (B, NxM, 2xF_atom)
-        bond_diatom = torch.matmul(bond_diatom, self.weight_node_to_edge) # shape: (B, NxM, F_bond)
+        bond_diatom = torch.matmul(bond_diatom, self.weight_node_to_edge)  # shape: (B, NxM, F_bond)
         if self.bias:
             bond_diatom += self.bias_node_to_edge
-
         bond_diatom = self.tanh(bond_diatom)
 
         # update bond-feature, transfer the node-information in the edge <sum function>
-        bond_update = torch.reshape(bond, shape=bond_diatom.shape) # shape: (B, NxM, F_bond)
+        bond_update = torch.reshape(bond, shape=bond_diatom.shape)  # shape: (B, NxM, F_bond)
         bond_update = bond_update + bond_diatom
         bond_update = torch.matmul(bond_update, self.weight_edge)
-        bond_update = torch.reshape(bond_update, shape=(*adj_matrix.shape, self.bond_out_fea_num)) # shape: (B, N, M, F_bond)
+        bond_update = torch.reshape(bond_update,
+                                    shape=(*adj_matrix.shape, self.bond_out_fea_num))  # shape: (B, N, M, F_bond)
         if self.bias:
             bond_update = bond_update + self.bias_edge
-        # bond_update = self.tanh(bond_update)
 
         return atom_update, bond_update
 
@@ -107,7 +108,7 @@ class Model(nn.Module):
         self.conv1 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
         # self.conv2 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
 
-    def forward(self, atom, bond, adj_matrix, adj_matrix_tuple,):
+    def forward(self, atom, bond, adj_matrix, adj_matrix_tuple, ):
         atom, bond = self.conv1(atom, bond, adj_matrix, adj_matrix_tuple)
         # atom, bond = torch.tanh(atom), torch.tanh(bond)
         # atom, bond = self.conv2(atom, bond, adj_matrix, adj_matrix_tuple)

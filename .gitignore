@@ -136,3 +136,4 @@ test_set/
 train_set/
 results/
 logs/
+*.pth

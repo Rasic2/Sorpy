@@ -6,7 +6,7 @@ from pathlib import Path
 from multiprocessing import Pool as ProcessPool
 
 from common.io_file import POSCAR, CONTCAR
-from common.operate import Operator as op
+# from common.operate import Operator as op
 from common.logger import logger
 from common.utils import Format_list
 
@@ -53,7 +53,7 @@ class FileManager:
             self.mol_index = [mol_index]
         else:
             self.mol_index = None
-            logger.warning("The Molecule was not align.")
+            # logger.warning("The Molecule was not align.")
 
         self.style = style
         from collections import defaultdict
@@ -111,6 +111,10 @@ class DirManager:
             all_files = [file for file in all_files if file is not None]
             self._all_files = Format_list(sorted(all_files, key=lambda x: x))
         return self._all_files
+
+    @property
+    def all_files_path(self):
+        return [Path(file.fname) for file in self.all_files]
 
     @property
     def coords(self):

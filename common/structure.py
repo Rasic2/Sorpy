@@ -214,7 +214,7 @@ class Structure():
                         default_bond = atom_i.bonds[f'Element {atom_j.formula}']
                         distance = np.linalg.norm(atom_j.cart_coord - atom_i.cart_coord)
                         if distance <= default_bond*(1+amplitude):
-                            neighbour_table_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*self.lattice.length))
+                            neighbour_table_i.append((atom_j, distance, (atom_j.cart_coord-atom_i.cart_coord)))#*self.lattice.length))
                             continue
                     except KeyError:
                         logger.debug(f"{atom_i.formula} and {atom_j.formula} don't have default bond property, search all images!")
@@ -230,7 +230,7 @@ class Structure():
                     atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord+image).set_coord(lattice=self.lattice)
                     distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
                     logger.debug(f"distance={distance}")
-                    neighbour_table_i.append((atom_j, distance, (atom_j.frac_coord-atom_i.frac_coord)*self.lattice.length))
+                    neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord))) #*self.lattice.length))
             neighbour_table_i = sorted(neighbour_table_i, key=lambda x:x[1])
             neighbour_table[atom_i] = neighbour_table_i[:neighbour_num]
 
@@ -239,6 +239,17 @@ class Structure():
             sorted_neighbour_table[key] = sorted(value, key=lambda x: x[1])
 
         setattr(self, "neighbour_table", sorted_neighbour_table)
+
+    def find_neighbour_table_from_index(self, adj_matrix):
+        neighbour_table = NeighbourTable(list)
+        for atom_i_order, atom_ij in enumerate(adj_matrix):
+            atom_i = self.atoms[atom_i_order]
+            neighbour_table_i = []
+            for atom_j_order in atom_ij:
+                atom_j = self.atoms[atom_j_order]
+                neighbour_table_i.append((atom_j, None, atom_j.cart_coord-atom_i.cart_coord))
+            neighbour_table[atom_i] = neighbour_table_i
+        setattr(self, "neighbour_table", neighbour_table)
 
     @staticmethod
     def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):

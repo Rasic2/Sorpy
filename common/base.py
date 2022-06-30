@@ -194,10 +194,16 @@ class Atom(object):
     _attributes_mono = ['number', 'period', 'group', 'color']
     _attributes_list = ['frac_coord', 'cart_coord']
     _attributes_dict = ['bonds']
+    _initialize = False
+    _attrs = None
 
-    with open(_config_file) as f:
-        _cfg = f.read()
-    _attrs = yaml.safe_load(_cfg)
+    def __new__(cls, *args, **kwargs):
+        if not cls._initialize:
+            with open(cls._config_file) as f:
+                _cfg = f.read()
+            cls._attrs = yaml.safe_load(_cfg)
+            cls._initialize = True
+        return super(Atom, cls).__new__(cls)
 
     def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
         self.formula = formula
@@ -206,9 +212,7 @@ class Atom(object):
         self.frac_coord = np.array(frac_coord) if frac_coord is not None else None
         self.cart_coord = np.array(cart_coord) if cart_coord is not None else None
 
-        self._initialize = False
-        if not self._initialize:
-            self.__initialize_attrs()
+        self.__initialize_attrs()
 
     def __eq__(self, other):
         return self.number == other.number and self.order == other.order
@@ -227,13 +231,11 @@ class Atom(object):
 
     def __initialize_attrs(self):
         if isinstance(self.formula, str):  # <class Atom>
-            for key, value in Atom._attrs[f'Element {self.formula}'].items():
+            for key, value in self._attrs[f'Element {self.formula}'].items():
                 setattr(self, key, value)
         elif isinstance(self.formula, list):  # <class Atoms>
-            for attr in Atom._attributes_mono + Atom._attributes_dict:
-                setattr(self, attr, [Atom._attrs[f'Element {formula}'][attr] for formula in self.formula])
-
-        self._initialize = True
+            for attr in self._attributes_mono + self._attributes_dict:
+                setattr(self, attr, [self._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
     def set_coord(self, lattice:Lattice):
         assert lattice is not None
@@ -266,6 +268,10 @@ class Atoms(Atom):
         @func
             __initialize_attrs:     initialize the attributes from the element.yaml
     """
+
+    def __new__(cls, *args, **kwargs):
+        return super(Atoms, cls).__new__(cls)
+
     def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
         super(Atoms, self).__init__(formula, order, frac_coord, cart_coord)
         self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
@@ -383,6 +389,10 @@ class NeighbourTable(Format_defaultdict):
     @property
     def index(self):
         return np.array([[value[0].order for value in values] for key, values in self.items()])
+
+    @property
+    def index_tuple(self):
+        return np.array([[(key.order, value[0].order) for value in values] for key, values in self.items()])
 
     @property
     def dist(self):

@@ -20,13 +20,13 @@ def main():
     torch.set_printoptions(profile='full')
     logger.info("---------------Start----------------")
 
-    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
-    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
-    dataset_path = "dataset.pth"
+    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input-2'))
+    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output-2'))
+    dataset_path = "dataset-2.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
-        torch.save(dataset.data, dataset_path)
+        # torch.save(dataset.data, dataset_path)
         logger.info("-----All Files loaded successful-----")
     else:
         data = torch.load(dataset_path)
@@ -45,13 +45,13 @@ def main():
     model = Model(25, 25, 3, 3, bias=True)
     loss_fn = nn.L1Loss(reduction='mean')
     optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 0.99 ** (epoch / 50))
+    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 0.99 ** (epoch / 10))
     if torch.cuda.is_available():
         model = model.cuda()
         loss_fn = loss_fn.cuda()
 
     loss_result = []
-    for epoch in range(3):
+    for epoch in range(20):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
@@ -95,6 +95,7 @@ def main():
             loss_result.append((total_train_loss/train_size).cpu().detach().numpy())
         else:
             loss_result.append(total_train_loss/train_size)
+
     # model predict
     atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = test_dataset.data
     index = random.choice(list(range(len(atom_feature))))

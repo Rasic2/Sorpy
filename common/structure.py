@@ -1,9 +1,10 @@
 import copy
 import itertools
+from collections import defaultdict
 
 import numpy as np
 
-from common.base import Atom, Lattice, NeighbourTable, Atoms
+from common.base import Atom, Lattice, Atoms
 from common.logger import logger
 
 
@@ -122,12 +123,22 @@ class Structure():
 
     def __init__(self, style=None, atoms: Atoms = None, lattice: Lattice = None, mol_index=None, **kargs):
         """
-        :param style:           <Required> Indicate the system style: <"Crystal", "Slab", "Mol", "Slab+Mol">
-        :param elements:        <Required> The system Elements list: [Element, Element, etc]
-        :param coords:          <Required> The system Coordinates
-        :param lattice:         <Required> The Lattice vector
-        :param mol_index:       <Optional> The molecule index
-        :param kargs:           <Optional> <TF, anchor, ignore_mol, ignore_index>
+        @parameter:
+            style:              <Required> Indicate the system style: <"Crystal", "Slab", "Mol", "Slab+Mol">
+            atoms:              <Required> atoms of the structure, <class Atoms>
+            lattice:            <Required> Lattice vector
+            mol_index:          <Optional> molecule index, if style=Mol or Slab+Mol
+            kargs:              <Optional> <TF, anchor, ignore_mol, ignore_index>
+
+        @property:
+            neighbour_tabel:    neighbour table of structure, number of neighbour_atom default is 12
+
+        @func:
+            find_neighbour_tables(self, neighbour_num: int = 12, adj_matrix=None) --> self.neighbour_table
+            to_POSCAR(self, fname, system=None, factor=1): output the structure into `POSCAR/CONTCAR` file
+
+            from_POSCAR(fname, style=None, mol_index=None, **kargs) --> Structure
+            from_adj_matrix(structure, adj_matrix, adj_matrix_tuple, bond_dist3d, known_first_order) --> Structure
         """
         self.style = style
         self.atoms = atoms
@@ -143,14 +154,14 @@ class Structure():
         mol_index = mol_index if mol_index is not None else []
         # self.index = list(range(len(self.atoms)))
         self.mol_index = mol_index if isinstance(mol_index, (list, np.ndarray)) else [mol_index]
-        self.slab_index = list(set(self.atoms.order).difference(set(self.mol_index))) if mol_index is not None else self.atoms.order
+        self.slab_index = list(
+            set(self.atoms.order).difference(set(self.mol_index))) if mol_index is not None else self.atoms.order
 
         for key, value in kargs.items():
             if key in Structure._extra_attrs:
                 setattr(self, key, value)
 
         self.kargs = {attr: getattr(self, attr, None) for attr in Structure._extra_attrs}
-
 
     def __repr__(self):
         return f"------------------------------------------------------------\n" \
@@ -201,66 +212,31 @@ class Structure():
         else:
             return None
 
-    def find_neighbour_table(self, neighbour_num: int = 12, amplitude=0.2):
+    def find_neighbour_table(self, neighbour_num: int = 12, adj_matrix=None):
         neighbour_table = NeighbourTable(list)
         for atom_i in self.atoms:
             neighbour_table_i = []
-            for atom_j in self.atoms:
+            atom_j_list = self.atoms if adj_matrix is None else [self.atoms[atom_j_order] for atom_j_order in
+                                                                 adj_matrix[atom_i.order]]
+            for atom_j in atom_j_list:
                 if atom_i != atom_j:
-                    try:
-                        default_bond = atom_i.bonds[f'Element {atom_j.formula}']
-                        distance = np.linalg.norm(atom_j.cart_coord - atom_i.cart_coord)
-                        if distance <= default_bond*(1+amplitude):
-                            neighbour_table_i.append((atom_j, distance, (atom_j.cart_coord-atom_i.cart_coord)))#*self.lattice.length))
-                            continue
-                    except KeyError:
-                        logger.debug(f"{atom_i.formula} and {atom_j.formula} don't have default bond property, search all images!")
-                    logger.debug(f"Start search the {atom_i.formula}{atom_i.order}-{atom_j.formula}{atom_j.order} neighbour in all images!")
-                    image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
-                    image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
-                    image = image_pos + image_neg
-                    COD_frac = np.all(atom_j.frac_coord+image-atom_i.frac_coord<=0.5) and np.all(atom_j.frac_coord+image-atom_i.frac_coord>=-0.5)
-                    if not COD_frac:
-                        logger.error(f"Transform Error, exit!")
-                        SystemExit()
-                    logger.debug(f"Search the image {image} successfully, start calculate the distance!")
-                    atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord+image).set_coord(lattice=self.lattice)
+                    image = Atom.search_image(atom_i, atom_j)
+                    atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord + image).set_coord(
+                        lattice=self.lattice)
                     distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
                     logger.debug(f"distance={distance}")
-                    neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord))) #*self.lattice.length))
-            neighbour_table_i = sorted(neighbour_table_i, key=lambda x:x[1])
+                    neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord)))
+            neighbour_table_i = sorted(neighbour_table_i,
+                                       key=lambda x: x[1]) if adj_matrix is None else neighbour_table_i
             neighbour_table[atom_i] = neighbour_table_i[:neighbour_num]
 
-        sorted_neighbour_table = NeighbourTable(list)
-        for key, value in neighbour_table.items():
-            sorted_neighbour_table[key] = sorted(value, key=lambda x: x[1])
-
-        setattr(self, "neighbour_table", sorted_neighbour_table)
-
-    def find_neighbour_table_from_index(self, adj_matrix):
-        neighbour_table = NeighbourTable(list)
-        for atom_i_order, atom_ij in enumerate(adj_matrix):
-            atom_i = self.atoms[atom_i_order]
-            neighbour_table_i = []
-            for atom_j_order in atom_ij:
-                atom_j = self.atoms[atom_j_order]
-                image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
-                image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
-                image = image_pos + image_neg
-                COD_frac = np.all(atom_j.frac_coord + image - atom_i.frac_coord <= 0.5) and np.all(
-                    atom_j.frac_coord + image - atom_i.frac_coord >= -0.5)
-                if not COD_frac:
-                    logger.error(f"Transform Error, exit!")
-                    SystemExit()
-                logger.debug(f"Search the image {image} successfully, start calculate the distance!")
-                atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord + image).set_coord(
-                    lattice=self.lattice)
-                distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
-                logger.debug(f"distance={distance}")
-                neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord)))
-            neighbour_table[atom_i] = neighbour_table_i
-
-        setattr(self, "neighbour_table", neighbour_table)
+        if adj_matrix is None:
+            sorted_neighbour_table = NeighbourTable(list)
+            for key, value in neighbour_table.items():
+                sorted_neighbour_table[key] = sorted(value, key=lambda x: x[1])
+            setattr(self, "neighbour_table", sorted_neighbour_table)
+        else:
+            setattr(self, "neighbour_table", neighbour_table)
 
     @staticmethod
     def from_POSCAR(fname, style=None, mol_index=None, **kargs):
@@ -284,7 +260,7 @@ class Structure():
             raise NotImplementedError \
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
 
-        atoms=Atoms(formula=formula, frac_coord=frac_coord, cart_coord=cart_coord)
+        atoms = Atoms(formula=formula, frac_coord=frac_coord, cart_coord=cart_coord)
         atoms.set_coord(lattice)
 
         return Structure(style, mol_index=mol_index, atoms=atoms, lattice=lattice, TF=TF, **kargs)
@@ -306,13 +282,11 @@ class Structure():
         # construct the search-map
         known_order = []  # search-map, shape: (N-1, 2)
         known_index = [known_first_order]  # shape: (N,)
-        known_index_matrix = [] # search-map corresponding to the index of adj_matrix_tuple
+        known_index_matrix = []  # search-map corresponding to the index of adj_matrix_tuple
         for index, item in enumerate(adj_matrix_tuple_flatten):
             if item[0] not in known_index and item[1] in known_index:
                 known_index.append(item[0])
                 known_order.append((item[1], item[0]))
-                real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])
-                # print(item[1], item[0], adj_matrix[item[1]], real_index)
                 real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])[0][0]
                 known_index_matrix.append(real_index)
             if item[1] not in known_index and item[0] in known_index:
@@ -342,7 +316,8 @@ class Structure():
         return Structure(style="Slab", atoms=atoms, lattice=structure.lattice, TF=structure.TF)
 
     def to_POSCAR(self, fname, system=None, factor=1):
-        system = system if system is not None else " ".join([f"{key} {value}" for key, value in self.atoms.size.items()])
+        system = system if system is not None else " ".join(
+            [f"{key} {value}" for key, value in self.atoms.size.items()])
         lattice = self.lattice.to_strings
         elements = [(key, str(len(list(value)))) for key, value in itertools.groupby(self.atoms.formula)]
         element_name, element_count = list(map(list, zip(*elements)))
@@ -364,3 +339,25 @@ class Structure():
             f.write(coords)
 
         logger.debug(f"{fname} write finished!")
+
+
+class NeighbourTable(defaultdict):
+
+    def __repr__(self):
+        return " ".join([f"{key} <---> <{value[0]}> \n" for key, value in self.items()])
+
+    @property
+    def index(self):  # adj_matrix
+        return np.array([[value[0].order for value in values] for key, values in self.items()])
+
+    @property
+    def index_tuple(self):  # adj_matrix_tuple
+        return np.array([[(key.order, value[0].order) for value in values] for key, values in self.items()])
+
+    @property
+    def dist(self):
+        return np.array([[value[1] for value in values] for _, values in self.items()])
+
+    @property
+    def dist3d(self):
+        return np.array([[value[2] for value in values] for _, values in self.items()])

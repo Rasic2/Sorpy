@@ -1,13 +1,12 @@
 import copy
-import itertools
-from pathlib import Path
 from collections import Counter
+from pathlib import Path
+from typing import List, Any
 
 import numpy as np
 import yaml
 
-from common.logger import root_dir
-from common.utils import Format_defaultdict
+from common.logger import root_dir, logger
 
 yaml.warnings({'YAMLLoadWarning': False})
 
@@ -34,8 +33,11 @@ class Lattice(object):
     @staticmethod
     def read_from_string(string):
         """
-        :param string:      POSCAR文件中的3行Lattice矢量
-        :return:
+        @parameter
+            string:     three-line <string>,
+                        e.g.,    7.707464  0.000000  0.000000
+                                -3.853732  6.674860  0.000000
+                                 0.000000  0.000000 28.319031
         """
         matrix = np.array([[float(ii) for ii in item.split()] for item in string])
         return Lattice(matrix)
@@ -51,73 +53,73 @@ class Lattice(object):
         return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.matrix])
 
 
-class Coordinates(object):
-    def __init__(self, frac_coords=None, cart_coords=None, lattice: Lattice = None):
-        self.frac_coords = frac_coords if frac_coords is not None else np.array([])
-        self.cart_coords = cart_coords if cart_coords is not None else np.array([])
-        self.lattice = lattice
-        self.index = 0
-        self.__set_coords()
-
-    def __getitem__(self, index):
-        try:
-            return Coordinates(self.frac_coords[index], self.cart_coords[index], self.lattice)
-        except IndexError:
-            return Coordinates(lattice=self.lattice)
-
-    def __iter__(self):
-        return self
-
-    def __len__(self):
-        assert len(self.frac_coords) == len(self.cart_coords)
-        return len(self.frac_coords)
-
-    def __next__(self):  # TODO "may produce bug"
-        if self.index < len(self):
-            parameter = (self.frac_coords[self.index], self.cart_coords[self.index], self.lattice)
-            self.index += 1
-            return Coordinates(*parameter)
-        else:
-            self.index = 0
-            raise StopIteration
-
-    def __repr__(self):
-        return f"<Coordinates {self.frac_coords.shape}>"
-
-    def __sub__(self, other):
-        assert len(self) == len(other)
-        assert self.frac_coords.shape == other.frac_coords.shape
-        return self.frac_coords - other.frac_coords
-
-    def __set_coords(self):
-        self.__set_cart_coords()
-        self.__set_frac_coords()
-
-    def __set_frac_coords(self):
-        if self.cart_coords.size > 0 and self.lattice is not None and self.frac_coords.size == 0:
-            self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
-
-    def __set_cart_coords(self):
-        if self.frac_coords.size > 0 and self.lattice is not None and self.cart_coords.size == 0:
-            self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
-
-    def to_strings(self, ctype="frac"):
-        if ctype == "frac":
-            return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.frac_coords]).rstrip()
-        elif ctype == "cart":
-            return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.cart_coords]).rstrip()
-        else:
-            raise NotImplementedError
-
-    @staticmethod
-    def read_from_strings(strings=None, ctype="frac", lattice: Lattice = None):
-        coords = np.array([[float(ii) for ii in item.split()[:3]] for item in strings])
-        if ctype == "frac":
-            return Coordinates(frac_coords=coords, lattice=lattice)
-        elif ctype == "cart":
-            return Coordinates(cart_coords=coords, lattice=lattice)
-        else:
-            raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
+# class Coordinates(object):
+#     def __init__(self, frac_coords=None, cart_coords=None, lattice: Lattice = None):
+#         self.frac_coords = frac_coords if frac_coords is not None else np.array([])
+#         self.cart_coords = cart_coords if cart_coords is not None else np.array([])
+#         self.lattice = lattice
+#         self.index = 0
+#         self.__set_coords()
+#
+#     def __getitem__(self, index):
+#         try:
+#             return Coordinates(self.frac_coords[index], self.cart_coords[index], self.lattice)
+#         except IndexError:
+#             return Coordinates(lattice=self.lattice)
+#
+#     def __iter__(self):
+#         return self
+#
+#     def __len__(self):
+#         assert len(self.frac_coords) == len(self.cart_coords)
+#         return len(self.frac_coords)
+#
+#     def __next__(self):  # TODO "may produce bug"
+#         if self.index < len(self):
+#             parameter = (self.frac_coords[self.index], self.cart_coords[self.index], self.lattice)
+#             self.index += 1
+#             return Coordinates(*parameter)
+#         else:
+#             self.index = 0
+#             raise StopIteration
+#
+#     def __repr__(self):
+#         return f"<Coordinates {self.frac_coords.shape}>"
+#
+#     def __sub__(self, other):
+#         assert len(self) == len(other)
+#         assert self.frac_coords.shape == other.frac_coords.shape
+#         return self.frac_coords - other.frac_coords
+#
+#     def __set_coords(self):
+#         self.__set_cart_coords()
+#         self.__set_frac_coords()
+#
+#     def __set_frac_coords(self):
+#         if self.cart_coords.size > 0 and self.lattice is not None and self.frac_coords.size == 0:
+#             self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
+#
+#     def __set_cart_coords(self):
+#         if self.frac_coords.size > 0 and self.lattice is not None and self.cart_coords.size == 0:
+#             self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
+#
+#     def to_strings(self, ctype="frac"):
+#         if ctype == "frac":
+#             return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.frac_coords]).rstrip()
+#         elif ctype == "cart":
+#             return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.cart_coords]).rstrip()
+#         else:
+#             raise NotImplementedError
+#
+#     @staticmethod
+#     def read_from_strings(strings=None, ctype="frac", lattice: Lattice = None):
+#         coords = np.array([[float(ii) for ii in item.split()[:3]] for item in strings])
+#         if ctype == "frac":
+#             return Coordinates(frac_coords=coords, lattice=lattice)
+#         elif ctype == "cart":
+#             return Coordinates(cart_coords=coords, lattice=lattice)
+#         else:
+#             raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
 
 
 class Atom(object):
@@ -153,7 +155,7 @@ class Atom(object):
             cls._initialize = True
         return super(Atom, cls).__new__(cls)
 
-    def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
+    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None):
         self.formula = formula
         self.order = order
         self.number, self.period, self.group, self.color, self.bonds = (None, None, None, None, [])
@@ -185,14 +187,33 @@ class Atom(object):
             for attr in self._attributes_mono + self._attributes_dict:
                 setattr(self, attr, [self._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
-    def set_coord(self, lattice:Lattice):
+    def set_coord(self, lattice: Lattice):
         assert lattice is not None
-        if (self.cart_coord is not None and None not in self.cart_coord) and (self.frac_coord is None or None in self.frac_coord):
+        if (self.cart_coord is not None and None not in self.cart_coord) and (
+                self.frac_coord is None or None in self.frac_coord):
             self.frac_coord = np.dot(self.cart_coord, lattice.inverse)
-        elif (self.frac_coord is not None and None not in self.frac_coord) and (self.cart_coord is None or None in self.cart_coord):
+        elif (self.frac_coord is not None and None not in self.frac_coord) and (
+                self.cart_coord is None or None in self.cart_coord):
             self.cart_coord = np.dot(self.frac_coord, lattice.matrix)
 
         return self
+
+    @staticmethod
+    def search_image(atom_i, atom_j) -> np.ndarray:
+        if not isinstance(atom_i, Atom) or not isinstance(atom_j, Atom):
+            SystemError("The parameters should be <class Atom>!")
+        logger.debug(
+            f"Start search the {atom_i.formula}{atom_i.order}-{atom_j.formula}{atom_j.order} neighbour in all images!")
+        image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
+        image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
+        image = image_pos + image_neg
+        COD_frac = np.all(atom_j.frac_coord + image - atom_i.frac_coord <= 0.5) and np.all(
+            atom_j.frac_coord + image - atom_i.frac_coord >= -0.5)
+        if not COD_frac:
+            SystemExit(f"Transform Error, exit!")
+        logger.debug(f"Search the image {image} successfully!")
+
+        return image
 
 
 class Atoms(Atom):
@@ -215,12 +236,13 @@ class Atoms(Atom):
 
         @func
             __initialize_attrs:     initialize the attributes from the element.yaml
+            from_list:              construct the <class Atoms> from an Atom list, i.e., [Atom, Atom, Atom] --> Atoms
     """
 
     def __new__(cls, *args, **kwargs):
         return super(Atoms, cls).__new__(cls)
 
-    def __init__(self, formula, order=0, frac_coord=None, cart_coord=None):
+    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None):
         super(Atoms, self).__init__(formula, order, frac_coord, cart_coord)
         self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
         self.frac_coord = [None] * len(self.formula) if self.frac_coord is None else self.frac_coord
@@ -237,7 +259,7 @@ class Atoms(Atom):
         return string
 
     def __iter__(self):
-        return copy.deepcopy(self) # return deepcopy(instance), otherwise the __index will create count bug
+        return copy.deepcopy(self)  # return deepcopy(instance), otherwise the __index will create count bug
 
     def __next__(self):
         if self.__index < len(self):
@@ -267,12 +289,11 @@ class Atoms(Atom):
 
     @staticmethod
     def from_list(atoms: list):
-        formula=[atom.formula for atom in atoms]
-        order = [atom.order for atom in atoms]
+        formula = [atom.formula for atom in atoms]
+        order: List[Any] = [atom.order for atom in atoms]
         frac_coord = [atom.frac_coord for atom in atoms]
         cart_coord = [atom.cart_coord for atom in atoms]
         return Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord)
-
 
 # class AtomSetBase:
 #
@@ -338,22 +359,3 @@ class Atoms(Atom):
 #             sorted_bonds[key] = sorted(value, key=lambda x: x[1])
 #
 #         return bonds
-
-
-class NeighbourTable(Format_defaultdict):
-
-    @property
-    def index(self):
-        return np.array([[value[0].order for value in values] for key, values in self.items()])
-
-    @property
-    def index_tuple(self):
-        return np.array([[(key.order, value[0].order) for value in values] for key, values in self.items()])
-
-    @property
-    def dist(self):
-        return np.array([[value[1] for value in values] for _, values in self.items()])
-
-    @property
-    def dist3d(self):
-        return np.array([[value[2] for value in values] for _, values in self.items()])

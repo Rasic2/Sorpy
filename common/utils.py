@@ -1,9 +1,9 @@
 import profile
 import pstats
-
-import numpy as np
 from collections import defaultdict
 from functools import wraps
+
+import numpy as np
 from matplotlib import pyplot as plt
 
 """
@@ -48,18 +48,19 @@ def plot_clsss_wrap(func):
 
     return wrapper
 
+
 def performance(func: str = "main()", fname: str = "TimeCost"):
     profile.run(func, fname)
-    p=pstats.Stats(fname)
+    p = pstats.Stats(fname)
     p.strip_dirs().sort_stats("time").print_stats()
 
 
-class Format_defaultdict(defaultdict):
-    def __repr__(self):
-        strings = ""
-        for key, value in self.items():
-            strings += f"{key} <---> {value[0]} \n"
-        return strings
+# class Format_defaultdict(defaultdict):
+#     def __repr__(self):
+#         strings = ""
+#         for key, value in self.items():
+#             strings += f"{key} <---> {value[0]} \n"
+#         return strings
 
 
 class Format_list(list):
@@ -68,5 +69,3 @@ class Format_list(list):
         for item in self:
             strings += f"{item} \n"
         return strings.rstrip()
-
-

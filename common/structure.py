@@ -243,7 +243,7 @@ class Structure():
         logger.debug(f"Handle the {fname}")
         with open(fname) as f:
             cfg = f.readlines()
-        lattice = Lattice.read_from_string(cfg[2:5])
+        lattice = Lattice.from_string(cfg[2:5])
 
         formula = [(name, int(count)) for name, count in zip(cfg[5].split(), cfg[6].split())]
         formula = sum([[formula] * count for (formula, count) in formula], [])
@@ -285,9 +285,12 @@ class Structure():
         known_index_matrix = []  # search-map corresponding to the index of adj_matrix_tuple
         for index, item in enumerate(adj_matrix_tuple_flatten):
             if item[0] not in known_index and item[1] in known_index:
+                try:
+                    real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])[0][0]  # bug: [4]: [1, 2, 8]; [8]: [1, 2, 5]
+                except IndexError:
+                    continue
                 known_index.append(item[0])
                 known_order.append((item[1], item[0]))
-                real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])[0][0]
                 known_index_matrix.append(real_index)
             if item[1] not in known_index and item[0] in known_index:
                 known_index.append(item[1])
@@ -318,7 +321,7 @@ class Structure():
     def to_POSCAR(self, fname, system=None, factor=1):
         system = system if system is not None else " ".join(
             [f"{key} {value}" for key, value in self.atoms.size.items()])
-        lattice = self.lattice.to_strings
+        lattice = self.lattice.strings
         elements = [(key, str(len(list(value)))) for key, value in itertools.groupby(self.atoms.formula)]
         element_name, element_count = list(map(list, zip(*elements)))
         element_name, element_count = " ".join(element_name), " ".join(element_count)

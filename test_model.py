@@ -20,13 +20,13 @@ def main():
     torch.set_printoptions(profile='full')
     logger.info("---------------Start----------------")
 
-    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input-2'))
-    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output-2'))
-    dataset_path = "dataset-2.pth"
+    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
+    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
+    dataset_path = "dataset.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
-        # torch.save(dataset.data, dataset_path)
+        torch.save(dataset.data, dataset_path)
         logger.info("-----All Files loaded successful-----")
     else:
         data = torch.load(dataset_path)
@@ -37,7 +37,7 @@ def main():
     train_dataset = dataset[:TRAIN]
     test_dataset = dataset[TRAIN:]
     batch_size = 1
-    train_dataloader = DataLoader(train_dataset,  batch_size=batch_size, shuffle=True)
+    train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     train_size = len(train_dataloader)
     test_size = len(test_dataloader)
@@ -88,21 +88,25 @@ def main():
             total_test_loss += test_loss
 
         logger.info(
-                    f"Training {(epoch + 1)}: train_loss = {total_train_loss/train_size:15.12f}, "
-                    f"test_loss = {total_test_loss/test_size:15.12f}, "
-                    f"learning_rate = {optimizer.state_dict()['param_groups'][0]['lr']:15.12f}")
+            f"Training {(epoch + 1)}: train_loss = {total_train_loss / train_size:15.12f}, "
+            f"test_loss = {total_test_loss / test_size:15.12f}, "
+            f"learning_rate = {optimizer.state_dict()['param_groups'][0]['lr']:15.12f}")
         if torch.cuda.is_available():
-            loss_result.append((total_train_loss/train_size).cpu().detach().numpy())
+            loss_result.append((total_train_loss / train_size).cpu().detach().numpy())
         else:
-            loss_result.append(total_train_loss/train_size)
+            loss_result.append(total_train_loss / train_size)
+
+    # plot the loss-curve
+    plt.plot(loss_result, '-o')
+    plt.savefig("loss.svg")
 
     # model predict
     atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = test_dataset.data
     index = random.choice(list(range(len(atom_feature))))
     structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure(style="Slab")
     structure_target = Structure.from_adj_matrix(structure, adj_matrix[index].cpu().detach().numpy(),
-                                              adj_matrix_tuple[index].cpu().detach().numpy(),
-                                              bond_dist3d_output[index].cpu().detach().numpy(), 0)
+                                                 adj_matrix_tuple[index].cpu().detach().numpy(),
+                                                 bond_dist3d_output[index].cpu().detach().numpy(), 0)
     structure_target.to_POSCAR("CONTCAR_target")
 
     if torch.cuda.is_available():
@@ -113,13 +117,11 @@ def main():
 
     predict = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
     structure_predict = Structure.from_adj_matrix(structure, adj_matrix[index].cpu().detach().numpy(),
-                                              adj_matrix_tuple[index].cpu().detach().numpy(),
-                                              predict[1][index].cpu().detach().numpy(), 0)
-    structure_predict.to_POSCAR("CONTCAR_predict")
+                                                  adj_matrix_tuple[index].cpu().detach().numpy(),
+                                                  predict[1][index].cpu().detach().numpy(), 0)
+    structure_predict.to_POSCAR(f"CONTCAR_predict")
 
     logger.info("---------------End---------------")
-    plt.plot(loss_result,'-o')
-    plt.savefig("loss.svg")
 
 
 if __name__ == '__main__':

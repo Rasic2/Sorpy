@@ -31,7 +31,7 @@ class Lattice(object):
         return np.linalg.inv(self.matrix)
 
     @staticmethod
-    def read_from_string(string):
+    def from_string(string):
         """
         @parameter
             string:     three-line <string>,
@@ -46,10 +46,10 @@ class Lattice(object):
     def read_from_POSCAR(fname):
         with open(fname) as f:
             cfg = f.readlines()
-        return Lattice.read_from_string(cfg[2:5])
+        return Lattice.from_string(cfg[2:5])
 
     @property
-    def to_strings(self):
+    def strings(self):
         return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.matrix])
 
 

@@ -95,4 +95,4 @@ if __name__ == "__main__":
     for index, item in enumerate(test_ML_coor):
         s = Structure(style=style, elements=elements, coords=Coordinates(frac_coords=item, lattice=lattice),
                       lattice=lattice, TF=TF)
-        s.write_to_POSCAR(fname=f'{test_ML_dir}/POSCAR_ML_{index + 1}')
+        s.to_POSCAR(fname=f'{test_ML_dir}/POSCAR_ML_{index + 1}')

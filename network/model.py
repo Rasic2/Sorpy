@@ -106,7 +106,7 @@ class Model(nn.Module):
     def __init__(self, atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=True):
         super(Model, self).__init__()
         self.conv1 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
-        # self.conv2 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
+        self.conv2 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
 
     def forward(self, atom, bond, adj_matrix, adj_matrix_tuple, ):
         atom, bond = self.conv1(atom, bond, adj_matrix, adj_matrix_tuple)

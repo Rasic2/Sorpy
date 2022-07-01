@@ -44,10 +44,10 @@ class StructureDataset(Dataset):
             bond_dist3d_target = self._load_output(fname=fname_out, adj_matrix=adj_matrix)
 
             # align the input and output
-            diff = (bond_dist3d_target - bond_dist3d) / (0.5 * structure.lattice.length)
-            diff_around = np.around(diff)
-            diff_around = diff_around * 0.5 * structure.lattice.length
-            bond_dist3d_target -= diff_around
+            # diff = (bond_dist3d_target - bond_dist3d) / (0.5 * structure.lattice.length)
+            # diff_around = np.around(diff)
+            # diff_around = diff_around * 0.5 * structure.lattice.length
+            # bond_dist3d_target -= diff_around
 
             count += 1
             if count % 100 == 0:
@@ -55,19 +55,19 @@ class StructureDataset(Dataset):
 
             # put the structure into the dataset
             atom_feature_input.append(atom_feature)
-            bond_dist3d_input.append(bond_dist3d)
+            bond_dist3d_input.append(bond_dist3d) # POSCAR data
             adj_matrix_input.append(adj_matrix)
             adj_matrix_tuple_input.append(adj_matrix_tuple)
-            bond_dist3d_output.append(bond_dist3d_target)
+            bond_dist3d_output.append(bond_dist3d_target) # CONTCAR data
 
-        # shuffle the dataset
-        index = list(range(len(atom_feature_input)))
-        random.shuffle(index)
-        atom_feature_input = np.array(atom_feature_input)[index]
-        bond_dist3d_input = np.array(bond_dist3d_input)[index]
-        adj_matrix_input = np.array(adj_matrix_input)[index]
-        adj_matrix_tuple_input = np.array(adj_matrix_tuple_input)[index]
-        bond_dist3d_output = np.array(bond_dist3d_output)[index]
+        # # shuffle the dataset
+        # index = list(range(len(atom_feature_input)))
+        # random.shuffle(index)
+        # atom_feature_input = np.array(atom_feature_input)[index]
+        # bond_dist3d_input = np.array(bond_dist3d_input)[index]
+        # adj_matrix_input = np.array(adj_matrix_input)[index]
+        # adj_matrix_tuple_input = np.array(adj_matrix_tuple_input)[index]
+        # bond_dist3d_output = np.array(bond_dist3d_output)[index]
 
         return torch.Tensor(np.array(atom_feature_input)), torch.Tensor(np.array(bond_dist3d_input)), \
                torch.LongTensor(np.array(adj_matrix_input)), torch.LongTensor(np.array(adj_matrix_tuple_input)), \

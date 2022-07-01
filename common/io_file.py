@@ -46,7 +46,7 @@ class POSCAR(VASPFile):
             raise ArithmeticError(f"{self} and {other} not have the same lattice vector!")
 
     def to_structure(self, style=None, mol_index=None, **kargs):
-        return Structure.read_from_POSCAR(self.fname, style=style, mol_index=mol_index, **kargs)
+        return Structure.from_POSCAR(self.fname, style=style, mol_index=mol_index, **kargs)
 
 
 class CONTCAR(POSCAR):
@@ -84,7 +84,7 @@ class XDATCAR(VASPFile):
     def to_POSCAR_thread(self, index, prefix, dname):
         fname_index = index + 1 if prefix.startswith("POSCAR") else index
         fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{fname_index}"
-        self[index].write_to_POSCAR(fname=dname / fname)
+        self[index].to_POSCAR(fname=dname / fname)
 
     def to_POSCAR(self, prefix="POSCAR_", dname=None, indexes=None):
         pool = ProcessPool(processes=4)
@@ -97,7 +97,7 @@ class XDATCAR(VASPFile):
 
     def to_CONCAR_thread(self, i, prefix, dname):
         fname = prefix + os.path.basename(self.fname).split("_")[1] + "-" + f"{i + 1}"
-        self[-1].write_to_POSCAR(fname=dname / fname)
+        self[-1].to_POSCAR(fname=dname / fname)
 
     def to_CONTCAR(self, prefix="CONTCAR_", dname=None, indexes=None):
         if len(indexes) == 1 and -1 in indexes:

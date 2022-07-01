@@ -137,3 +137,6 @@ train_set/
 results/
 logs/
 *.pth
+*.svg
+CONTCAR_*
+POSCAR_*

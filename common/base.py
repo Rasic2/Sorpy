@@ -120,58 +120,6 @@ class Coordinates(object):
             raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
 
 
-# class Element:
-#     with open(Path(f"{root_dir}/config/element.yaml")) as f:
-#         cfg = f.read()
-#     __elements = yaml.safe_load(cfg)
-#
-#     def __init__(self, formula):
-#         self.formula = formula
-#
-#     def __eq__(self, other):
-#         return self.number == other.number
-#
-#     def __lt__(self, other):
-#         return self.number < other.number
-#
-#     def __ge__(self, other):
-#         return self.number >= other.number
-#
-#     def __hash__(self):
-#         return hash(self.number)
-#
-#     def __repr__(self):
-#         return f"<Element {self.formula}>"
-#
-#     @property
-#     def number(self) -> int:
-#         return Element.__elements[f'Element {self.formula}']['number']
-#
-#     @property
-#     def period(self) -> int:
-#         return Element.__elements[f'Element {self.formula}']['period']
-#
-#     @property
-#     def group(self) -> int:
-#         return Element.__elements[f'Element {self.formula}']['group']
-#
-#     @property
-#     def bonds(self):
-#         return {Element(bond['formula']): bond['bond length'] for bond in
-#                 Element.__elements[f'Element {self.formula}']['bonds']}
-
-# class Elements:
-#
-#     def __new__(cls, *args, **kwargs):
-#         raise TypeError("Can't create the <class Elements> instance.")
-#
-#     @staticmethod
-#     def read_from_strings(formulas, counts):
-#         elements = [(formula, int(count)) for formula, count in zip(formulas.split(), counts.split())]
-#         elements = sum([[formula] * count for (formula, count) in elements], [])
-#         return [Element(formula) for formula in elements]
-
-
 class Atom(object):
     """
         `Atom class represent one atom in periodic solid system`
@@ -316,6 +264,14 @@ class Atoms(Atom):
     @property
     def size(self):
         return Counter(self.formula)
+
+    @staticmethod
+    def from_list(atoms: list):
+        formula=[atom.formula for atom in atoms]
+        order = [atom.order for atom in atoms]
+        frac_coord = [atom.frac_coord for atom in atoms]
+        cart_coord = [atom.cart_coord for atom in atoms]
+        return Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord)
 
 
 # class AtomSetBase:

@@ -1,12 +1,9 @@
 import copy
-import math
-import time
-
-import numpy as np
 import itertools
 
-from common.base import Atom, Lattice, Coordinates, NeighbourTable, Atoms
-from common.utils import Format_defaultdict
+import numpy as np
+
+from common.base import Atom, Lattice, NeighbourTable, Atoms
 from common.logger import logger
 
 
@@ -204,7 +201,7 @@ class Structure():
         else:
             return None
 
-    def find_neighbour_table(self, neighbour_num: int = 12, amplitude=0.2, cut_radius = 5.0):
+    def find_neighbour_table(self, neighbour_num: int = 12, amplitude=0.2):
         neighbour_table = NeighbourTable(list)
         for atom_i in self.atoms:
             neighbour_table_i = []
@@ -247,12 +244,26 @@ class Structure():
             neighbour_table_i = []
             for atom_j_order in atom_ij:
                 atom_j = self.atoms[atom_j_order]
-                neighbour_table_i.append((atom_j, None, atom_j.cart_coord-atom_i.cart_coord))
+                image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
+                image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
+                image = image_pos + image_neg
+                COD_frac = np.all(atom_j.frac_coord + image - atom_i.frac_coord <= 0.5) and np.all(
+                    atom_j.frac_coord + image - atom_i.frac_coord >= -0.5)
+                if not COD_frac:
+                    logger.error(f"Transform Error, exit!")
+                    SystemExit()
+                logger.debug(f"Search the image {image} successfully, start calculate the distance!")
+                atom_j_image = Atom(formula=atom_j.formula, frac_coord=atom_j.frac_coord + image).set_coord(
+                    lattice=self.lattice)
+                distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
+                logger.debug(f"distance={distance}")
+                neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord)))
             neighbour_table[atom_i] = neighbour_table_i
+
         setattr(self, "neighbour_table", neighbour_table)
 
     @staticmethod
-    def read_from_POSCAR(fname, style=None, mol_index=None, **kargs):
+    def from_POSCAR(fname, style=None, mol_index=None, **kargs):
         logger.debug(f"Handle the {fname}")
         with open(fname) as f:
             cfg = f.readlines()
@@ -272,33 +283,74 @@ class Structure():
         else:
             raise NotImplementedError \
                 ("The POSCAR file which don't have the selective seaction cant't handle in this version.")
-        # coords = Coordinates(frac_coords=frac_coords, cart_coords=cart_coords, lattice=lattice)
-        atoms=Atoms(formula=formula, frac_coord=frac_coord, cart_coord=cart_coord) # yaml read time-cost
+
+        atoms=Atoms(formula=formula, frac_coord=frac_coord, cart_coord=cart_coord)
         atoms.set_coord(lattice)
-
-
-        # if "expand" in kargs.keys():
-        #    expand_func = list(kargs['expand'].keys())[0]
-        #    if expand_func in Structure.ExpandFunc.keys():
-        #        coords = Structure.ExpandFunc[expand_func](frac_coords, lattice=lattice)
-        #        for coord in coords:
-        #            yield Structure(style, mol_index=mol_index, elements=elements,
-        #                            coords=coord, lattice=lattice, TF=TF, **kargs)
-        #    else:
-        #        logger.warning("Expand step may not happen.")
 
         return Structure(style, mol_index=mol_index, atoms=atoms, lattice=lattice, TF=TF, **kargs)
 
-    def write_to_POSCAR(self, fname, system=None, factor=1):
-        system = system if system is not None else " ".join([item[0] + str(item[1]) for item in self.atoms_count])
+    @staticmethod
+    def from_adj_matrix(structure, adj_matrix, adj_matrix_tuple, bond_dist3d, known_first_order):
+        """
+        Construct a new structure from old structure's adj_matrix
+
+        @parameter
+            adj_matrix:         shape: (N, M)
+            adj_matrix_tuple:   shape: (N, M, 2)
+            bond_dist3d:        shape: (N, M, 3)
+        """
+
+        adj_matrix_tuple_flatten = adj_matrix_tuple.reshape(-1, 2)
+        bond_dist3d_flatten = bond_dist3d.reshape(-1, 3)
+
+        # construct the search-map
+        known_order = []  # search-map, shape: (N-1, 2)
+        known_index = [known_first_order]  # shape: (N,)
+        known_index_matrix = [] # search-map corresponding to the index of adj_matrix_tuple
+        for index, item in enumerate(adj_matrix_tuple_flatten):
+            if item[0] not in known_index and item[1] in known_index:
+                known_index.append(item[0])
+                known_order.append((item[1], item[0]))
+                real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])
+                # print(item[1], item[0], adj_matrix[item[1]], real_index)
+                real_index = item[1] * adj_matrix.shape[1] + np.where(adj_matrix[item[1]] == item[0])[0][0]
+                known_index_matrix.append(real_index)
+            if item[1] not in known_index and item[0] in known_index:
+                known_index.append(item[1])
+                known_order.append((item[0], item[1]))
+                known_index_matrix.append(index)
+            if len(known_index) == adj_matrix.shape[0]:
+                break
+
+        # calculate the coord from the search-map
+        known_first_atom = structure.atoms[known_first_order]
+        known_dist3d = bond_dist3d_flatten[known_index_matrix]  # diff matrix, shape: (N-1, 3)
+        known_atoms = [known_first_atom]
+        for item, diff_coord in zip(known_order, known_dist3d):
+            atom_new = copy.deepcopy(structure.atoms[item[1]])  # unknown atom
+            atom_new.frac_coord = None
+            for atom_known in known_atoms:
+                if atom_known.order == item[0]:
+                    atom_new.cart_coord = atom_known.cart_coord + diff_coord
+                    known_atoms.append(atom_new)
+        assert len(known_atoms) == adj_matrix.shape[0], "Search-map construct failure, please check the code!"
+
+        sorted_atoms = sorted(known_atoms, key=lambda atom: atom.order)
+        sorted_atoms = [atom.set_coord(structure.lattice) for atom in sorted_atoms]
+        atoms = Atoms.from_list(sorted_atoms)
+
+        return Structure(style="Slab", atoms=atoms, lattice=structure.lattice, TF=structure.TF)
+
+    def to_POSCAR(self, fname, system=None, factor=1):
+        system = system if system is not None else " ".join([f"{key} {value}" for key, value in self.atoms.size.items()])
         lattice = self.lattice.to_strings
-        elements = [(key.formula, len(list(value))) for key, value in itertools.groupby(self.elements)]
-        element_name = " ".join([item[0] for item in elements])
-        element_count = " ".join(str(item[1]) for item in elements)
+        elements = [(key, str(len(list(value)))) for key, value in itertools.groupby(self.atoms.formula)]
+        element_name, element_count = list(map(list, zip(*elements)))
+        element_name, element_count = " ".join(element_name), " ".join(element_count)
         selective = getattr(self, "TF", None) is not None
-        coords = self.coords.to_strings(ctype="frac").split("\n")
+        coords = "\n".join([" ".join([f"{item:15.12f}" for item in atom.frac_coord]) for atom in self.atoms])
         if selective:
-            coords = "".join([coord + "\t" + "   ".join(TF) + "\n" for coord, TF in zip(coords, self.TF)])
+            coords = "".join([coord + "\t" + "   ".join(TF) + "\n" for coord, TF in zip(coords.split("\n"), self.TF)])
 
         with open(fname, "w") as f:
             f.write(f"{system}\n")
@@ -312,187 +364,3 @@ class Structure():
             f.write(coords)
 
         logger.debug(f"{fname} write finished!")
-
-# m = Molecule(elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
-#             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]))
-# print(m.pair)
-# print(m.vector)
-# print(m.dist)
-# print(m.theta)
-# print(m.phi)
-# print(m.frac_coords)
-# print(m.cart_coords)
-# print(m.inter_coords)
-# print(m.atoms_count)
-# print(m.TF)
-# s = Structure("Slab+Mol", elements=[Element("C"), Element("O")], frac_coords=np.array([[0, 0, 0], [0, 0, 0.5]]),
-#             cart_coords=np.array([[0, 0, 0], [0, 0, 1.142]]), mol_index=[0])
-# exit()
-# s = Structure.read_from_POSCAR(style="Slab+Mol", fname=f"{current_dir}/input/POSCAR_1-1", mol_index=[36, 37])
-# p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
-# p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
-# print(p1-p2)
-##print(ctype(p[2]))
-##s.find_nearest_neighbour_table()
-##for key, value in s.NNT.items():
-##    print(key, value[0])
-##s = p.to_structure(style="Slab+Mol", mol_index=[36,37])
-##print(s)
-##print(s.style)
-##print(s.slab)
-##print(s.molecule)
-##s.write_to_POSCAR(f"{current_dir}/POSCAR_test")
-# exit()
-#
-#
-#
-#
-# class POSCAR:
-#
-#    def __init__(self, fname, action="r"):
-#        self.fname = fname
-#        self.action = action
-#        self.__load() if self.action == "r" else None
-#
-#    def __load(self):
-#        with open(self.fname, self.action) as f:
-#            self.cfg = f.readlines()
-#        self.system = self.cfg[0].rstrip()
-#        self.factor = self.cfg[1].rstrip()
-#        self.latt = Latt.read_from_string(self.cfg[2:5])
-#        self.elements = [(name, int(count)) for name, count in zip(self.cfg[5].split(), self.cfg[6].split())]
-#        self.selective = self.cfg[7].lower()[0] == "s"
-#        self.coor_type = self.cfg[8].rstrip()
-#        assert self.coor_type.lower()[0] == "d"
-#        self.frac_coors = self._frac_coors()
-#        self.cart_coors = self._cart_coors()
-#        self.TF = self._TF()
-#
-#    @property
-#    def ele_count(self):
-#        return sum(n for _, n in self.elements)
-#
-#    def _frac_coors(self):
-#        if self.selective:
-#            return np.array([[float(ii) for ii in item.split()[:3]] for item in self.cfg[9:9 + self.ele_count]])
-#        else:
-#            return None
-#
-#    def _cart_coors(self):
-#        if self.frac_coors is not None:
-#            return np.dot(self.frac_coors, self.latt.matrix)
-#        else:
-#            return None
-#
-#    def _TF(self):
-#        if self.selective:
-#            return np.array([item.split()[3:6] for item in self.cfg[9:9 + self.ele_count]])
-#        else:
-#            return None
-#
-#    def nearest_neighbour_table(self):
-#
-#        NNT = defaultdict(list)
-#        cut_radius = 3.0
-#        for ii in range(self.ele_count):
-#            for jj in range(self.ele_count):
-#                if jj != ii:
-#                    dis = distance(self.cart_coors[ii], self.cart_coors[jj])
-#                    if dis <= cut_radius:
-#                        NNT[ii].append((jj, dis))
-#
-#        # sorted NNT
-#        sorted_NNT = defaultdict(list)
-#        for key, value in NNT.items():
-#            sorted_NNT[key] = sorted(value, key=lambda x: x[1])
-#
-#        setattr(self, "NNT", sorted_NNT)
-#        return sorted_NNT
-#
-#    @staticmethod
-#    def mcoord_to_coord(array, latt, anchor, intercoor_index):
-#
-#        assert ftype(array) == np.ndarray
-#        assert ftype(latt) == Latt
-#
-#        total_index = list(range(len(array)))
-#        frac_index = list(set(total_index).difference(set(intercoor_index)))
-#        anchor_cart_coor = np.dot(array[anchor], latt.matrix)
-#        intercoor = array[intercoor_index] * [1, 180, 360] + [1.142, 0, 0]  # TODO setting.yaml modify
-#        intercoor = intercoor.reshape(3)
-#        r, theta, phi = intercoor[0], math.radians(intercoor[1]), math.radians(intercoor[2])
-#        x = r * math.sin(theta) * math.cos(phi)
-#        y = r * math.sin(theta) * math.sin(phi)
-#        z = r * math.cos(theta)
-#        mol_cart_coor = anchor_cart_coor + [x, y, z]
-#        mol_frac_coor = np.dot(mol_cart_coor, latt.inverse).reshape((1, 3))
-#        return np.concatenate((array[frac_index], mol_frac_coor), axis=0)
-#
-#    def write(self, template, coor):
-#
-#        assert ftype(template) == POSCAR
-#        assert self.action == "w"
-#
-#        with open(self.fname, self.action) as f:
-#            f.writelines(template.cfg[:9])
-#            for ii, jj in zip(coor, template.TF):
-#                item = f"{ii[0]:.6f} {ii[1]:.6f} {ii[2]:.6f} {jj[0]} {jj[1]} {jj[2]} \n"
-#                f.write(item)
-#
-#    def align(self, template):
-#        indicator = 0  # 第二次对齐的原子
-#        repeat = 2  # supercell
-#        slab_coor = self.frac_coors[:36]
-#        mol_coor = self.frac_coors[36:38]
-#        model_region = np.array([1 / repeat, 1 / repeat])
-#        mass_center = np.mean(mol_coor, axis=0)[:2]
-#        search_vector = np.arange(-1, 1 + 1 / repeat, 1 / repeat)
-#        search_matrix = itertools.product(search_vector, search_vector)
-#        for ii in search_matrix:
-#            if 0 <= (mass_center + ii)[0] <= model_region[0] and 0 <= (mass_center + ii)[1] <= model_region[1]:
-#                vector_m = [ii[0], ii[1], 0]
-#                break
-#        coor_m = mol_coor + vector_m
-#        coor_first = np.concatenate((slab_coor, coor_m), axis=0)
-#
-#        return vector_m, coor_first
-#        exit()
-#
-#        for ii, jj in zip(self.elements, template.elements):
-#            if ii[0] != jj[0] or ii[1] != jj[1]:
-#                raise NotImplementedError  # TODO 3x3 or len(atoms) 不相等
-#
-#        self.frac_coors = coor_first
-#        self.cart_coors = self._cart_coors()  # Reset the cart_coords
-#
-#        NNT = defaultdict(list)
-#        for ii in range(self.ele_count):
-#            for jj in range(template.ele_count):
-#                dis = distance(self.cart_coors[ii], self.cart_coors[jj])
-#                NNT[ii].append((jj, dis))
-#
-#        sorted_NNT = defaultdict(list)
-#        for key, value in NNT.items():
-#            sorted_NNT[key] = sorted(value, key=lambda x: x[1])
-#
-#        min_NNT = []
-#        for key, value in sorted_NNT.items():
-#            min_NNT.append((key, value[0][0], value[0][1]))
-#
-#        for ii, jj, kk in sorted(min_NNT, key=lambda x: x[2]):
-#            print(ii, jj)
-#        #    if mass_center + model_region * i
-#        # print(model_region)
-#
-#
-# if __name__ == "__main__":
-#
-#    for ii in range(50):
-#        print(f"POSCAR_ML_{ii + 1}")
-#        p = POSCAR(f"../test_set/ML-2/POSCAR_ML_{ii + 1}")
-#        p.nearest_neighbour_table()
-#        print(36, p.NNT[36])
-#        p1 = POSCAR(fname=f"{current_dir}/input/POSCAR_1-1")
-#        p2 = POSCAR(fname=f"{current_dir}/output/CONTCAR_1-1")
-#        print(p1 - p2)
-#        print(37, p.NNT[37])

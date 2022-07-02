@@ -5,7 +5,6 @@ import logging
 
 root_dir = os.path.dirname(os.path.dirname(os.path.abspath(os.path.realpath(inspect.getfile(inspect.currentframe())))))
 
-
 current_dir = os.path.dirname(os.path.abspath(os.path.realpath(inspect.getfile(inspect.currentframe()))))
 parent_dir = os.path.dirname(current_dir)
 LOG_DIR = os.path.join(current_dir, "../logs")

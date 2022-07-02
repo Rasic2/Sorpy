@@ -1,9 +1,10 @@
-import re
 import os
-import yaml
-import numpy as np
-from pathlib import Path
+import re
 from multiprocessing import Pool as ProcessPool
+from pathlib import Path
+
+import numpy as np
+import yaml
 
 from common.io_file import POSCAR, CONTCAR
 # from common.operate import Operator as op
@@ -201,7 +202,8 @@ class ParameterManager:
 
     def check_trans(self):
         for key, value in ParameterManager._parameters.items():
-            if hasattr(self, key) and getattr(self, key, None) is not None and not isinstance(self.__dict__[key], value):
+            if hasattr(self, key) and getattr(self, key, None) is not None and not isinstance(self.__dict__[key],
+                                                                                              value):
                 if value == tuple:
                     self.__dict__[key] = tuple(eval(self.__dict__[key]))
                 else:

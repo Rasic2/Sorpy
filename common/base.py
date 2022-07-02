@@ -53,75 +53,6 @@ class Lattice(object):
         return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.matrix])
 
 
-# class Coordinates(object):
-#     def __init__(self, frac_coords=None, cart_coords=None, lattice: Lattice = None):
-#         self.frac_coords = frac_coords if frac_coords is not None else np.array([])
-#         self.cart_coords = cart_coords if cart_coords is not None else np.array([])
-#         self.lattice = lattice
-#         self.index = 0
-#         self.__set_coords()
-#
-#     def __getitem__(self, index):
-#         try:
-#             return Coordinates(self.frac_coords[index], self.cart_coords[index], self.lattice)
-#         except IndexError:
-#             return Coordinates(lattice=self.lattice)
-#
-#     def __iter__(self):
-#         return self
-#
-#     def __len__(self):
-#         assert len(self.frac_coords) == len(self.cart_coords)
-#         return len(self.frac_coords)
-#
-#     def __next__(self):  # TODO "may produce bug"
-#         if self.index < len(self):
-#             parameter = (self.frac_coords[self.index], self.cart_coords[self.index], self.lattice)
-#             self.index += 1
-#             return Coordinates(*parameter)
-#         else:
-#             self.index = 0
-#             raise StopIteration
-#
-#     def __repr__(self):
-#         return f"<Coordinates {self.frac_coords.shape}>"
-#
-#     def __sub__(self, other):
-#         assert len(self) == len(other)
-#         assert self.frac_coords.shape == other.frac_coords.shape
-#         return self.frac_coords - other.frac_coords
-#
-#     def __set_coords(self):
-#         self.__set_cart_coords()
-#         self.__set_frac_coords()
-#
-#     def __set_frac_coords(self):
-#         if self.cart_coords.size > 0 and self.lattice is not None and self.frac_coords.size == 0:
-#             self.frac_coords = np.dot(self.cart_coords, self.lattice.inverse)
-#
-#     def __set_cart_coords(self):
-#         if self.frac_coords.size > 0 and self.lattice is not None and self.cart_coords.size == 0:
-#             self.cart_coords = np.dot(self.frac_coords, self.lattice.matrix)
-#
-#     def to_strings(self, ctype="frac"):
-#         if ctype == "frac":
-#             return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.frac_coords]).rstrip()
-#         elif ctype == "cart":
-#             return "".join([" ".join([f"{ii:>9.6f}" for ii in item]) + "\n" for item in self.cart_coords]).rstrip()
-#         else:
-#             raise NotImplementedError
-#
-#     @staticmethod
-#     def read_from_strings(strings=None, ctype="frac", lattice: Lattice = None):
-#         coords = np.array([[float(ii) for ii in item.split()[:3]] for item in strings])
-#         if ctype == "frac":
-#             return Coordinates(frac_coords=coords, lattice=lattice)
-#         elif ctype == "cart":
-#             return Coordinates(cart_coords=coords, lattice=lattice)
-#         else:
-#             raise ValueError("Invalid ctype parameter, should be <frac>, <cart>")
-
-
 class Atom(object):
     """
         `Atom class represent one atom in periodic solid system`
@@ -141,9 +72,7 @@ class Atom(object):
             __initialize_attrs:     initialize the attributes from the element.yaml
     """
     _config_file = Path(f"{root_dir}/config/element.yaml")
-    _attributes_mono = ['number', 'period', 'group', 'color']
-    _attributes_list = ['frac_coord', 'cart_coord']
-    _attributes_dict = ['bonds']
+    _attributes_yaml = ['number', 'period', 'group', 'color', 'bonds']
     _initialize = False
     _attrs = None
 
@@ -155,13 +84,15 @@ class Atom(object):
             cls._initialize = True
         return super(Atom, cls).__new__(cls)
 
-    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None):
+    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None, selective_matrix=None):
         self.formula = formula
         self.order = order
-        self.number, self.period, self.group, self.color, self.bonds = (None, None, None, None, [])
         self.frac_coord = np.array(frac_coord) if frac_coord is not None else None
         self.cart_coord = np.array(cart_coord) if cart_coord is not None else None
+        self.selective_matrix = np.array(selective_matrix) if selective_matrix is not None else None
 
+        # config atom from `element.yaml`
+        self.number, self.period, self.group, self.color, self.bonds = (None, None, None, None, [])
         self.__initialize_attrs()
 
     def __eq__(self, other):
@@ -184,7 +115,7 @@ class Atom(object):
             for key, value in self._attrs[f'Element {self.formula}'].items():
                 setattr(self, key, value)
         elif isinstance(self.formula, list):  # <class Atoms>
-            for attr in self._attributes_mono + self._attributes_dict:
+            for attr in self._attributes_yaml:
                 setattr(self, attr, [self._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
     def set_coord(self, lattice: Lattice):
@@ -242,12 +173,14 @@ class Atoms(Atom):
     def __new__(cls, *args, **kwargs):
         return super(Atoms, cls).__new__(cls)
 
-    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None):
-        super(Atoms, self).__init__(formula, order, frac_coord, cart_coord)
+    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None, selective_matrix=None):
+        super(Atoms, self).__init__(formula, order, frac_coord, cart_coord, selective_matrix)
         self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
         self.frac_coord = [None] * len(self.formula) if self.frac_coord is None else self.frac_coord
         self.cart_coord = [None] * len(self.formula) if self.cart_coord is None else self.cart_coord
-        self.__index = 0
+        self.selective_matrix = [None] * len(self.formula) if self.selective_matrix is None else self.selective_matrix
+
+        self.__index = 0  # inner counter
 
     def __len__(self) -> int:
         return len(self.formula)
@@ -259,7 +192,7 @@ class Atoms(Atom):
         return string
 
     def __iter__(self):
-        return copy.deepcopy(self)  # return deepcopy(instance), otherwise the __index will create count bug
+        return copy.deepcopy(self)  # deepcopy(instance), otherwise the __index will create count bug
 
     def __next__(self):
         if self.__index < len(self):
@@ -277,7 +210,8 @@ class Atoms(Atom):
 
     def __getitem__(self, index):
         return Atom(formula=self.formula[index], order=self.order[index],
-                    frac_coord=self.frac_coord[index], cart_coord=self.cart_coord[index])
+                    frac_coord=self.frac_coord[index], cart_coord=self.cart_coord[index],
+                    selective_matrix=self.selective_matrix[index])
 
     @property
     def count(self) -> int:
@@ -293,69 +227,6 @@ class Atoms(Atom):
         order: List[Any] = [atom.order for atom in atoms]
         frac_coord = [atom.frac_coord for atom in atoms]
         cart_coord = [atom.cart_coord for atom in atoms]
-        return Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord)
-
-# class AtomSetBase:
-#
-#     def __init__(self, elements=None, orders=None, coords: Coordinates = None, **kargs):
-#
-#         self.elements = elements if elements is not None else np.array([])
-#         self.orders = orders
-#         self.coords = coords
-#
-#         for key, value in kargs.items():
-#             if getattr(self, key, None) is None:
-#                 setattr(self, key, value)
-#
-#     def __len__(self):
-#         assert len(self.elements) == len(self.coords)
-#         return len(self.elements)
-#
-#     def __contains__(self, item):
-#         if item is self.atoms:
-#             return True
-#         else:
-#             return False
-#
-#     @property
-#     def frac_coords(self):
-#         return self.coords.frac_coords
-#
-#     @property
-#     def cart_coords(self):
-#         return self.coords.cart_coords
-#
-#     @property
-#     def atoms(self):
-#         return np.array([Atom(element, order, coord) for element, order, coord in
-#                          itertools.zip_longest(self.elements, self.orders, self.coords)])
-#
-#     @property
-#     def atoms_total(self) -> int:
-#         return len(self)
-#
-#     @property
-#     def atoms_formulas(self):
-#         return [element.formula for element in self.elements]
-#
-#     @property
-#     def atoms_count(self):
-#         return sorted(Counter(self.atoms_formulas).items(), key=lambda x: Element(x[0]).number)
-#
-#     @property
-#     def bonds(self):
-#         min_factor, max_factor = 0.8, 1.2
-#         bonds = Format_defaultdict(list)
-#         for atom_i in self.atoms:
-#             for atom_j in self.atoms:
-#                 if atom_i != atom_j and atom_j.element in atom_i.element.bonds.keys():
-#                     bond_length = np.linalg.norm(
-#                         self.coords[atom_j.order].cart_coords - self.coords[atom_i.order].cart_coords)
-#                     if min_factor <= bond_length / atom_i.element.bonds[atom_j.element] <= max_factor:
-#                         bonds[atom_i].append((atom_j, bond_length))
-#
-#         sorted_bonds = Format_defaultdict(list)
-#         for key, value in bonds.items():
-#             sorted_bonds[key] = sorted(value, key=lambda x: x[1])
-#
-#         return bonds
+        selective_matrix = [atom.selective_matrix for atom in atoms]
+        return Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord,
+                     selective_matrix=selective_matrix)

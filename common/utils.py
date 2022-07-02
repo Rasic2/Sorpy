@@ -1,6 +1,5 @@
 import profile
 import pstats
-from collections import defaultdict
 from functools import wraps
 
 import numpy as np
@@ -53,14 +52,6 @@ def performance(func: str = "main()", fname: str = "TimeCost"):
     profile.run(func, fname)
     p = pstats.Stats(fname)
     p.strip_dirs().sort_stats("time").print_stats()
-
-
-# class Format_defaultdict(defaultdict):
-#     def __repr__(self):
-#         strings = ""
-#         for key, value in self.items():
-#             strings += f"{key} <---> {value[0]} \n"
-#         return strings
 
 
 class Format_list(list):

@@ -3,7 +3,7 @@ import math
 import torch
 import torch.nn.functional as F
 from torch import nn
-from torch.nn import Parameter, Flatten, ReLU, Tanh
+from torch.nn import Parameter, Flatten, ReLU, Tanh, Dropout, Linear
 
 
 class GraphConvLayer(nn.Module):
@@ -64,7 +64,7 @@ class GraphConvLayer(nn.Module):
             atom_neighbor = atom_neighbor.cuda()
 
         bond_norm = torch.pow(torch.sum(torch.pow(bond, 2), dim=-1), 0.5)  # shape: (B, N, M), positive value
-        bond_norm = torch.pow(bond_norm, -1)  # 1/(bond-length), shape: (B, N, M)
+        bond_norm = torch.pow(bond_norm, -2)  # 1/(bond-length), shape: (B, N, M)
         bond_norm = F.normalize(bond_norm, p=1, dim=-1)  # row normalization, shape: (B, N, M)
         bond_norm = torch.unsqueeze(bond_norm, -1)  # shape: (B, N, M, 1)
         atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
@@ -107,9 +107,15 @@ class Model(nn.Module):
         super(Model, self).__init__()
         self.conv1 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
         self.conv2 = GraphConvLayer(atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=bias)
+        self.linear1 = Linear(in_features=bond_in_fea_num, out_features=64)
+        self.tanh = Tanh()
+        self.linear2 = Linear(in_features=64, out_features=bond_out_fea_num)
 
     def forward(self, atom, bond, adj_matrix, adj_matrix_tuple, ):
         atom, bond = self.conv1(atom, bond, adj_matrix, adj_matrix_tuple)
+        # bond = self.linear1(bond)
+        # # bond = self.tanh(bond)
+        # bond = self.linear2(bond)
         # atom, bond = torch.tanh(atom), torch.tanh(bond)
         # atom, bond = self.conv2(atom, bond, adj_matrix, adj_matrix_tuple)
         return atom, bond

@@ -51,7 +51,7 @@ def main():
         loss_fn = loss_fn.cuda()
 
     loss_result = []
-    for epoch in range(20):
+    for epoch in range(1):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
@@ -103,7 +103,7 @@ def main():
     # model predict
     atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = test_dataset.data
     index = random.choice(list(range(len(atom_feature))))
-    structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure(style="Slab")
+    structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure()
     structure_target = Structure.from_adj_matrix(structure, adj_matrix[index].cpu().detach().numpy(),
                                                  adj_matrix_tuple[index].cpu().detach().numpy(),
                                                  bond_dist3d_output[index].cpu().detach().numpy(), 0)
@@ -120,7 +120,6 @@ def main():
                                                   adj_matrix_tuple[index].cpu().detach().numpy(),
                                                   predict[1][index].cpu().detach().numpy(), 0)
     structure_predict.to_POSCAR(f"CONTCAR_predict")
-
     logger.info("---------------End---------------")
 
 

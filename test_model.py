@@ -33,9 +33,10 @@ def main():
         dataset = StructureDataset(input_dir, output_dir, data=data)
         logger.info("-----All Files loaded from dataset successful-----")
 
-    TRAIN = math.floor(len(dataset) * 0.8)
-    train_dataset = dataset[:TRAIN]
-    test_dataset = dataset[TRAIN:]
+    short_dataset = dataset[:10]
+    TRAIN = math.floor(len(short_dataset) * 0.8)
+    train_dataset = short_dataset[:TRAIN]
+    test_dataset = short_dataset[TRAIN:]
     batch_size = 1
     train_dataloader = DataLoader(train_dataset, batch_size=batch_size, shuffle=True)
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
@@ -45,13 +46,13 @@ def main():
     model = Model(25, 25, 3, 3, bias=True)
     loss_fn = nn.L1Loss(reduction='mean')
     optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 0.99 ** (epoch / 10))
+    scheduler = optim.lr_scheduler.LambdaLR(optimizer, lr_lambda=lambda epoch: 0.99 ** (epoch / 1))
     if torch.cuda.is_available():
         model = model.cuda()
         loss_fn = loss_fn.cuda()
 
     loss_result = []
-    for epoch in range(1):
+    for epoch in range(20):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.

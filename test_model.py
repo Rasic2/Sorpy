@@ -20,20 +20,20 @@ def main():
     torch.set_printoptions(profile='full')
     logger.info("---------------Start----------------")
 
-    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input-20'))
-    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output-20'))
+    input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
+    output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
     dataset_path = "dataset.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
-        # torch.save(dataset.data, dataset_path)
+        torch.save(dataset.data, dataset_path)
         logger.info("-----All Files loaded successful-----")
     else:
         data = torch.load(dataset_path)
         dataset = StructureDataset(input_dir, output_dir, data=data)
         logger.info("-----All Files loaded from dataset successful-----")
 
-    short_dataset = dataset[:20]
+    short_dataset = dataset[:50]
     TRAIN = math.floor(len(short_dataset) * 0.8)
     train_dataset = short_dataset[:TRAIN]
     test_dataset = short_dataset[TRAIN:]
@@ -46,7 +46,7 @@ def main():
     model = Model(25, 25, 3, 3, bias=True)
     loss_fn = nn.L1Loss(reduction='mean')
     optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.9)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.8)
     if torch.cuda.is_available():
         model = model.cuda()
         loss_fn = loss_fn.cuda()
@@ -55,7 +55,7 @@ def main():
     test_loss_result = []
     test_min_loss = 100
     threshold = 1.3
-    for epoch in range(100):
+    for epoch in range(50):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
@@ -137,6 +137,9 @@ def main():
                                                   adj_matrix_tuple[index].cpu().detach().numpy(),
                                                   predict[1][index].cpu().detach().numpy(), 0)
     structure_predict.to_POSCAR(f"CONTCAR_predict")
+
+    diff = (structure_predict - structure_target)
+
     logger.info("---------------End---------------")
 
 

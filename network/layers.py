@@ -119,7 +119,7 @@ class EmbeddingLayer(nn.Module):
         bond_diatom = torch.matmul(bond_diatom, self.weight_node_to_edge)
 
         if self.bias:
-            bond_diatom +=  self.bias_node_to_edge # shape: (B, NxM, F_bond)
+            bond_diatom += self.bias_node_to_edge  # shape: (B, NxM, F_bond)
 
         bond_diatom = torch.tanh(bond_diatom)
 

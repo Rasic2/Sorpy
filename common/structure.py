@@ -32,6 +32,9 @@ class Structure():
         self.lattice = lattice
         self.neighbour_table = None
 
+    def __sub__(self, other):
+        return self.atoms.cart_coord - other.atoms.cart_coord
+
     def __repr__(self):
         return f"------------------------------------------------------------\n" \
                f"<Structure>                                                 \n" \

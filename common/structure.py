@@ -55,7 +55,11 @@ class Structure():
                         lattice=self.lattice)
                     distance = np.linalg.norm(atom_j_image.cart_coord - atom_i.cart_coord)
                     logger.debug(f"distance={distance}")
-                    neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord)))
+                    if f'Element {atom_j.formula}' in atom_i.bonds.keys() and distance <= atom_i.bonds[
+                        f'Element {atom_j.formula}'] * 1.1:
+                        neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord), 1))
+                    else:
+                        neighbour_table_i.append((atom_j, distance, (atom_j_image.cart_coord - atom_i.cart_coord), 0))
             neighbour_table_i = sorted(neighbour_table_i,
                                        key=lambda x: x[1]) if adj_matrix is None else neighbour_table_i
             neighbour_table[atom_i] = neighbour_table_i[:neighbour_num]
@@ -196,3 +200,7 @@ class NeighbourTable(defaultdict):
     @property
     def dist3d(self):
         return np.array([[value[2] for value in values] for _, values in self.items()])
+
+    @property
+    def coordination(self):
+        return np.array([sum([value[3] for value in values]) for _, values in self.items()])

@@ -39,7 +39,7 @@ class StructureDataset(Dataset):
         for fname_input, fname_out in zip(self.input_dir.all_files_path, self.output_dir.all_files_path):
 
             # load input-data
-            structure_input = POSCAR(fname=fname_input).to_structure(style="Slab")
+            structure_input = POSCAR(fname=fname_input).to_structure()
             structure_input.find_neighbour_table(neighbour_num=12)
             atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
             atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
@@ -49,7 +49,7 @@ class StructureDataset(Dataset):
             bond_dist3d = structure_input.neighbour_table.dist3d
 
             # load output-data
-            structure_output = CONTCAR(fname=fname_out).to_structure(style="Slab")
+            structure_output = CONTCAR(fname=fname_out).to_structure()
             structure_output.find_neighbour_table(adj_matrix=adj_matrix)
             bond_dist3d_target = structure_output.neighbour_table.dist3d
 

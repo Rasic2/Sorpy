@@ -11,6 +11,7 @@ from common.manager import DirManager
 
 PERIOD = 7
 GROUP = 18
+MAX_CN = 12
 
 
 class StructureDataset(Dataset):
@@ -43,6 +44,8 @@ class StructureDataset(Dataset):
             structure_input.find_neighbour_table(neighbour_num=12)
             atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
             atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
+            # atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.neighbour_table.coordination), num_classes=MAX_CN)
+            # atom_feature = torch.cat((atom_feature_period, atom_feature_group, atom_feature_coordination), dim=1).numpy()
             atom_feature = torch.cat((atom_feature_period, atom_feature_group), dim=1).numpy()
             adj_matrix = structure_input.neighbour_table.index
             adj_matrix_tuple = structure_input.neighbour_table.index_tuple

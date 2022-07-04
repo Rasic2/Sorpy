@@ -62,12 +62,9 @@ class AtomConvLayer(nn.Module):
         atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
         atom_update = atom * atom_neighbour_weight  # shape: (B, N, F_atom)
 
+        atom_update = torch.matmul(atom_update, self.weight_atom_1)
         if self.bias:
-            atom_update = F.linear(atom_update, self.weight_atom_1, self.bias_atom_1)
-            # atom_update = F.linear(atom_update, self.weight_atom_2, self.bias_atom_2)
-        else:
-            atom_update = F.linear(atom_update, self.weight_atom_1)
-            # atom_update = F.linear(atom_update, self.weight_atom_2)
+            atom_update += self.bias_atom_1
 
         atom_update = F.relu(atom_update)  # positive value
 

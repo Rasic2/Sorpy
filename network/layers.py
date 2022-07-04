@@ -51,6 +51,7 @@ class AtomConvLayer(nn.Module):
         atom_neighbor = torch.FloatTensor(*adj_matrix.shape, self.atom_in_fea_num)  # shape: (B, N, M, F_atom)
         for batch, _ in enumerate(atom):
             atom_neighbor[batch] = atom[batch, adj_matrix[batch]]
+        atom_neighbor = torch.mean(atom_neighbor, dim=-2)  # shape=(B, N, F)
 
         if torch.cuda.is_available():
             atom_neighbor = atom_neighbor.cuda()
@@ -58,9 +59,15 @@ class AtomConvLayer(nn.Module):
         bond_norm = torch.pow(torch.sum(torch.pow(bond, 2), dim=-1), 0.5)  # shape: (B, N, M), positive value
         bond_norm = torch.pow(bond_norm, -2)  # 1/(bond-length)^2, shape: (B, N, M)
         bond_norm = F.normalize(bond_norm, p=1, dim=-1)  # row normalization, shape: (B, N, M)
-        bond_norm = torch.unsqueeze(bond_norm, -1)  # shape: (B, N, M, 1)
-        atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
-        atom_update = atom * atom_neighbour_weight  # shape: (B, N, F_atom)
+        bond_norm = torch.prod(bond_norm, dim=2)  # shape=(B, N), describe the coordination
+        bond_norm = F.normalize(bond_norm, p=1, dim=0)  # value too small, N-dim normalization to make them [0, 1]
+        bond_norm = torch.pow(bond_norm, -1)
+        bond_norm = F.normalize(bond_norm, p=1, dim=1)  # CN small, this value big, shape=(B, N)
+        # bond_norm = torch.unsqueeze(bond_norm, -1)  # shape: (B, N, M, 1)
+        # atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
+        # atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
+        atom_update = atom + atom_neighbor  # shape: (B, N, F_atom)
+        atom_update = atom_update * torch.unsqueeze(bond_norm, 2)
 
         atom_update = torch.matmul(atom_update, self.weight_atom_1)
         if self.bias:

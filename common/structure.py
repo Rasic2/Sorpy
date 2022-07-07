@@ -30,7 +30,7 @@ class Structure():
 
         self.atoms = atoms
         self.lattice = lattice
-        self.neighbour_table = None
+        self.neighbour_table = NeighbourTable(list)
 
     def __sub__(self, other):
         return self.atoms.cart_coord - other.atoms.cart_coord

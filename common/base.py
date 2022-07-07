@@ -115,9 +115,9 @@ class Atom(object):
 
     @property
     def atom_type(self):
-        if isinstance(self.formula, str):
+        if isinstance(self.formula, str):  # <class Atom>
             return f"{self.formula}_{self.coordination_number}c"
-        elif isinstance(self.formula, list):
+        elif isinstance(self.formula, list):  # <class Atoms>
             return [f"{atom.formula}_{atom.coordination_number}c" for atom in self]
 
     def __initialize_attrs(self):
@@ -223,6 +223,8 @@ class Atoms(Atom):
         atom = Atom(formula=self.formula[index], order=self.order[index],
                     frac_coord=self.frac_coord[index], cart_coord=self.cart_coord[index],
                     selective_matrix=self.selective_matrix[index])
+
+        # update coordination number
         atom.coordination_number = self.coordination_number[index] if self.coordination_number is not None else None
         return atom
 
@@ -243,7 +245,7 @@ class Atoms(Atom):
         selective_matrix = [atom.selective_matrix for atom in atoms]
         coordination_number = [atom.coordination_number for atom in atoms]
 
-        new_atoms = Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord,
-                          selective_matrix=selective_matrix)
-        new_atoms.coordination_number = coordination_number
+        new_atoms = Atoms(formula=formula, order=order, frac_coord=frac_coord,
+                          cart_coord=cart_coord, selective_matrix=selective_matrix)
+        new_atoms.coordination_number = coordination_number  # update coordination number
         return new_atoms

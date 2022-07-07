@@ -42,6 +42,12 @@ class StructureDataset(Dataset):
             # load input-data
             structure_input = POSCAR(fname=fname_input).to_structure()
             structure_input.find_neighbour_table(neighbour_num=12)
+            if count == 0:
+                atom_type = set(structure_input.atoms.atom_type)
+            # else:
+            #     atom_type_new = set(structure_input.atoms.atom_type)
+            #     assert atom_type_new == atom_type, f"{atom_type_new} not equal {atom_type}"
+
             atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
             atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
             # atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.neighbour_table.coordination), num_classes=MAX_CN)
@@ -54,6 +60,10 @@ class StructureDataset(Dataset):
             # load output-data
             structure_output = CONTCAR(fname=fname_out).to_structure()
             structure_output.find_neighbour_table(adj_matrix=adj_matrix)
+
+            # atom_type_new = set(structure_input.atoms.atom_type)
+            # assert atom_type_new == atom_type, f"{atom_type_new} not equal {atom_type}"
+
             bond_dist3d_target = structure_output.neighbour_table.dist3d
 
             count += 1

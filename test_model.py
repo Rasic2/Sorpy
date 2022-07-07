@@ -22,7 +22,7 @@ def main():
 
     input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
     output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
-    dataset_path = "dataset.pth"
+    dataset_path = "dataset-AtomType.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)

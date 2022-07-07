@@ -46,6 +46,7 @@ class Structure():
             if self.lattice is not None else f"<Structure object>"
 
     def find_neighbour_table(self, neighbour_num: int = 12, adj_matrix=None):
+        new_atoms = []
         neighbour_table = NeighbourTable(list)
         for atom_i in self.atoms:
             neighbour_table_i = []
@@ -66,6 +67,11 @@ class Structure():
             neighbour_table_i = sorted(neighbour_table_i,
                                        key=lambda x: x[1]) if adj_matrix is None else neighbour_table_i
             neighbour_table[atom_i] = neighbour_table_i[:neighbour_num]
+
+            # update coordination number
+            atom_i.coordination_number = sum([item[3] for item in neighbour_table_i])
+            new_atoms.append(atom_i)
+        self.atoms = Atoms.from_list(new_atoms)
 
         if adj_matrix is None:
             sorted_neighbour_table = NeighbourTable(list)

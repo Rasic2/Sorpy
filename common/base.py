@@ -95,6 +95,9 @@ class Atom(object):
         self.number, self.period, self.group, self.color, self.bonds = (None, None, None, None, [])
         self.__initialize_attrs()
 
+        # atom_type property
+        self.coordination_number = None
+
     def __eq__(self, other):
         return self.number == other.number and self.order == other.order
 
@@ -109,6 +112,13 @@ class Atom(object):
 
     def __repr__(self):
         return f"(Atom {self.order} : {self.formula} : {self.cart_coord})"
+
+    @property
+    def atom_type(self):
+        if isinstance(self.formula, str):
+            return f"{self.formula}_{self.coordination_number}c"
+        elif isinstance(self.formula, list):
+            return [f"{atom.formula}_{atom.coordination_number}c" for atom in self]
 
     def __initialize_attrs(self):
         if isinstance(self.formula, str):  # <class Atom>
@@ -175,6 +185,7 @@ class Atoms(Atom):
 
     def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None, selective_matrix=None):
         super(Atoms, self).__init__(formula, order, frac_coord, cart_coord, selective_matrix)
+
         self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
         self.frac_coord = [None] * len(self.formula) if self.frac_coord is None else self.frac_coord
         self.cart_coord = [None] * len(self.formula) if self.cart_coord is None else self.cart_coord
@@ -209,9 +220,11 @@ class Atoms(Atom):
             return False
 
     def __getitem__(self, index):
-        return Atom(formula=self.formula[index], order=self.order[index],
+        atom = Atom(formula=self.formula[index], order=self.order[index],
                     frac_coord=self.frac_coord[index], cart_coord=self.cart_coord[index],
                     selective_matrix=self.selective_matrix[index])
+        atom.coordination_number = self.coordination_number[index] if self.coordination_number is not None else None
+        return atom
 
     @property
     def count(self) -> int:
@@ -228,5 +241,9 @@ class Atoms(Atom):
         frac_coord = [atom.frac_coord for atom in atoms]
         cart_coord = [atom.cart_coord for atom in atoms]
         selective_matrix = [atom.selective_matrix for atom in atoms]
-        return Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord,
-                     selective_matrix=selective_matrix)
+        coordination_number = [atom.coordination_number for atom in atoms]
+
+        new_atoms = Atoms(formula=formula, order=order, frac_coord=frac_coord, cart_coord=cart_coord,
+                          selective_matrix=selective_matrix)
+        new_atoms.coordination_number = coordination_number
+        return new_atoms

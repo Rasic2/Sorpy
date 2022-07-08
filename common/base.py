@@ -116,9 +116,9 @@ class Atom(object):
     @property
     def atom_type(self):
         if isinstance(self.formula, str):  # <class Atom>
-            return f"{self.formula}_{self.coordination_number}c"
+            return f"{self.formula}{self.coordination_number}c"
         elif isinstance(self.formula, list):  # <class Atoms>
-            return [f"{atom.formula}_{atom.coordination_number}c" for atom in self]
+            return [f"{atom.formula}{atom.coordination_number}c" for atom in self]
 
     def __initialize_attrs(self):
         if isinstance(self.formula, str):  # <class Atom>

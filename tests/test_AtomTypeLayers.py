@@ -61,7 +61,7 @@ if __name__ == '__main__':
         loss.backward()
         optimizer.step()
         print(loss)
-        print(torch.max(parameters[16][1].grad))
+        print(torch.max(parameters[0][1].grad))
         print()
 
     print()

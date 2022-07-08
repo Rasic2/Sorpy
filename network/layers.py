@@ -3,7 +3,7 @@ import math
 import torch
 import torch.nn.functional as F
 from torch import nn
-from torch.nn import Parameter, Linear
+from torch.nn import Parameter, Linear, BatchNorm1d
 
 
 class AtomTypeLayer(nn.Module):
@@ -20,6 +20,7 @@ class AtomTypeLayer(nn.Module):
 class AtomConvLayer(nn.Module):
     def __init__(self, atom_in_fea_num, atom_out_fea_num, bias=True):
         super(AtomConvLayer, self).__init__()
+        # self.BatchNorm = BatchNorm1d(num_features=atom_out_fea_num)
         self.atom_in_fea_num = atom_in_fea_num
         self.atom_out_fea_num = atom_out_fea_num
 
@@ -83,7 +84,13 @@ class AtomConvLayer(nn.Module):
         if self.bias:
             atom_update += self.bias_atom_1
 
+
+
         atom_update = F.relu(atom_update)  # positive value
+
+        # atom_update = torch.permute(atom_update, dims=(0, 2, 1))
+        # atom_update = self.BatchNorm(atom_update)
+        # atom_update = torch.permute(atom_update, dims=(0, 2, 1))
 
         return atom_update
 
@@ -91,6 +98,7 @@ class AtomConvLayer(nn.Module):
 class EmbeddingLayer(nn.Module):
     def __init__(self, atom_fea_num, bond_fea_num, bias=True):
         super(EmbeddingLayer, self).__init__()
+        self.BatchNorm = BatchNorm1d(num_features=bond_fea_num)
         self.atom_fea_num = atom_fea_num
 
         self.weight_node_to_edge = Parameter(torch.FloatTensor(2 * atom_fea_num, bond_fea_num))
@@ -137,6 +145,10 @@ class EmbeddingLayer(nn.Module):
 
         if self.bias:
             bond_diatom += self.bias_node_to_edge  # shape: (B, NxM, F_bond)
+
+        bond_diatom = torch.permute(bond_diatom, dims=(0, 2, 1))
+        bond_diatom = self.BatchNorm(bond_diatom)
+        bond_diatom = torch.permute(bond_diatom, dims=(0, 2, 1))
 
         bond_diatom = torch.tanh(bond_diatom)
 

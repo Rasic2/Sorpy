@@ -1,5 +1,6 @@
 import torch
 from torch import nn
+from torch.nn import BatchNorm2d, BatchNorm1d
 
 from network.layers import AtomConvLayer, EmbeddingLayer, BondConvLayer, AtomTypeLayer
 

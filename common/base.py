@@ -190,7 +190,7 @@ class Atoms(Atom):
         self.cart_coord = [None] * len(self.formula) if self.cart_coord is None else self.cart_coord
         self.selective_matrix = [None] * len(self.formula) if self.selective_matrix is None else self.selective_matrix
 
-        self.__index = 0  # inner counter
+        self.__index_list = []  # inner index-list
 
     def __len__(self) -> int:
         return len(self.formula)
@@ -202,14 +202,17 @@ class Atoms(Atom):
         return string
 
     def __iter__(self):
-        return copy.deepcopy(self)  # deepcopy(instance), otherwise the __index will create count bug
+        self.__index_list.append(0)
+        return self  # deepcopy(instance), otherwise the __index will create count bug
 
     def __next__(self):
-        if self.__index < len(self):
-            self.__index += 1
-            return self[self.__index - 1]
+        current_loop_index = self.__index_list[-1]  # record current-loop-index
+        if current_loop_index < len(self):
+            current_loop_index += 1
+            self.__index_list[-1] = current_loop_index  # overwrite the original index
+            return self[current_loop_index - 1]
         else:
-            self.__index = 0
+            del (self.__index_list[-1])
             raise StopIteration
 
     def __contains__(self, atom):

@@ -73,15 +73,11 @@ class Atom(object):
     """
     _config_file = Path(f"{root_dir}/config/element.yaml")
     _attributes_yaml = ['number', 'period', 'group', 'color', 'bonds']
-    _initialize = False
+    _load = False
     _attrs = None
 
     def __new__(cls, *args, **kwargs):
-        if not cls._initialize:
-            with open(cls._config_file) as f:
-                _cfg = f.read()
-            cls._attrs = yaml.safe_load(_cfg)
-            cls._initialize = True
+        cls.__load_config()
         return super(Atom, cls).__new__(cls)
 
     def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None, selective_matrix=None):
@@ -113,14 +109,15 @@ class Atom(object):
     def __repr__(self):
         return f"(Atom {self.order} : {self.formula} : {self.cart_coord})"
 
-    @property
-    def atom_type(self):
-        if isinstance(self.formula, str):  # <class Atom>
-            return f"{self.formula}{self.coordination_number}c"
-        elif isinstance(self.formula, list):  # <class Atoms>
-            return [f"{atom.formula}{atom.coordination_number}c" for atom in self]
+    @classmethod
+    def __load_config(cls):  # private classmethod
+        if not cls._load:
+            with open(cls._config_file) as f:
+                cfg = f.read()
+            cls._attrs = yaml.safe_load(cfg)
+            cls._load = True
 
-    def __initialize_attrs(self):
+    def __initialize_attrs(self):  # private method
         if isinstance(self.formula, str):  # <class Atom>
             for key, value in self._attrs[f'Element {self.formula}'].items():
                 setattr(self, key, value)
@@ -128,13 +125,15 @@ class Atom(object):
             for attr in self._attributes_yaml:
                 setattr(self, attr, [self._attrs[f'Element {formula}'][attr] for formula in self.formula])
 
+    @property
+    def atom_type(self):
+        return f"{self.formula}{self.coordination_number}c"
+
     def set_coord(self, lattice: Lattice):
         assert lattice is not None
-        if (self.cart_coord is not None and None not in self.cart_coord) and (
-                self.frac_coord is None or None in self.frac_coord):
+        if self.cart_coord is not None and self.frac_coord is None:
             self.frac_coord = np.dot(self.cart_coord, lattice.inverse)
-        elif (self.frac_coord is not None and None not in self.frac_coord) and (
-                self.cart_coord is None or None in self.cart_coord):
+        elif self.frac_coord is not None and self.cart_coord is None:
             self.cart_coord = np.dot(self.frac_coord, lattice.matrix)
 
         return self
@@ -148,9 +147,9 @@ class Atom(object):
         image_pos = np.where(atom_j.frac_coord - atom_i.frac_coord <= 0.5, 0, -1)
         image_neg = np.where(atom_j.frac_coord - atom_i.frac_coord >= -0.5, 0, 1)
         image = image_pos + image_neg
-        COD_frac = np.all(atom_j.frac_coord + image - atom_i.frac_coord <= 0.5) and np.all(
+        cod_frac = np.all(atom_j.frac_coord + image - atom_i.frac_coord <= 0.5) and np.all(
             atom_j.frac_coord + image - atom_i.frac_coord >= -0.5)
-        if not COD_frac:
+        if not cod_frac:
             SystemExit(f"Transform Error, exit!")
         logger.debug(f"Search the image {image} successfully!")
 
@@ -183,8 +182,8 @@ class Atoms(Atom):
     def __new__(cls, *args, **kwargs):
         return super(Atoms, cls).__new__(cls)
 
-    def __init__(self, formula, order: (int, list) = 0, frac_coord=None, cart_coord=None, selective_matrix=None):
-        super(Atoms, self).__init__(formula, order, frac_coord, cart_coord, selective_matrix)
+    def __init__(self, *args, **kwargs):
+        super(Atoms, self).__init__(*args, **kwargs)
 
         self.order = list(range(len(self.formula))) if isinstance(self.order, int) else self.order
         self.frac_coord = [None] * len(self.formula) if self.frac_coord is None else self.frac_coord
@@ -236,6 +235,23 @@ class Atoms(Atom):
     def size(self):
         return Counter(self.formula)
 
+    @property
+    def atom_list(self):  # atom may update, so we don't use a static list
+        return [atom for atom in self]
+
+    @property
+    def atom_type(self):  # override this property
+        return [f"{atom.formula}{atom.coordination_number}c" for atom in self]
+
+    def set_coord(self, lattice: Lattice):  # override this method
+        assert lattice is not None
+        if None not in self.cart_coord and None in self.frac_coord:
+            self.frac_coord = np.dot(self.cart_coord, lattice.inverse)
+        elif None not in self.frac_coord and None in self.cart_coord:
+            self.cart_coord = np.dot(self.frac_coord, lattice.matrix)
+
+        return self
+
     @staticmethod
     def from_list(atoms: list):
         formula = [atom.formula for atom in atoms]
@@ -245,7 +261,8 @@ class Atoms(Atom):
         selective_matrix = [atom.selective_matrix for atom in atoms]
         coordination_number = [atom.coordination_number for atom in atoms]
 
+        # update coordination number
         new_atoms = Atoms(formula=formula, order=order, frac_coord=frac_coord,
                           cart_coord=cart_coord, selective_matrix=selective_matrix)
-        new_atoms.coordination_number = coordination_number  # update coordination number
+        new_atoms.coordination_number = coordination_number
         return new_atoms

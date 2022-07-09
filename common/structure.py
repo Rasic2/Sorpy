@@ -33,7 +33,11 @@ class Structure():
         self.neighbour_table = NeighbourTable(list)
 
     def __sub__(self, other):
-        return self.atoms.cart_coord - other.atoms.cart_coord
+        diff_frac = self.atoms.frac_coord - other.atoms.frac_coord
+        diff_frac = np.where(diff_frac>=0.5, diff_frac-1, diff_frac)
+        diff_frac = np.where(diff_frac<=-0.5, diff_frac+1, diff_frac)
+        diff_cart = np.dot(diff_frac, self.lattice.matrix)
+        return diff_cart
 
     def __repr__(self):
         return f"------------------------------------------------------------\n" \

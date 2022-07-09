@@ -45,17 +45,7 @@ class StructureDataset(Dataset):
             # load input-data
             structure_input = POSCAR(fname=fname_input).to_structure()
             structure_input.find_neighbour_table(neighbour_num=12)
-            atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
-            atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
-            atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.atoms.coordination_number),
-                                                  num_classes=MAX_CN)
-            bond_dist_neighbor = structure_input.neighbour_table.dist[:, 0]  # neighbour bond-length
-            atom_bond = torch.Tensor(np.exp(-(bond_dist_neighbor[:, np.newaxis] - FILTER) ** 2 / 0.15 ** 2))
-            atom_feature = torch.cat((atom_feature_period, atom_feature_group, atom_feature_coordination, atom_bond),
-                                     dim=1).numpy()
-            adj_matrix = structure_input.neighbour_table.index
-            adj_matrix_tuple = structure_input.neighbour_table.index_tuple
-            bond_dist3d = structure_input.neighbour_table.dist3d
+            atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d = StructureDataset.transformer(structure_input)
 
             # load output-data
             structure_output = CONTCAR(fname=fname_out).to_structure()
@@ -85,3 +75,19 @@ class StructureDataset(Dataset):
         return torch.Tensor(np.array(atom_feature_input)), torch.Tensor(np.array(bond_dist3d_input)), \
                torch.LongTensor(np.array(adj_matrix_input)), torch.LongTensor(np.array(adj_matrix_tuple_input)), \
                torch.Tensor(np.array(bond_dist3d_output))
+
+    @staticmethod
+    def transformer(structure_input):
+        atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
+        atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
+        atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.atoms.coordination_number),
+                                              num_classes=MAX_CN)
+        bond_dist_neighbor = structure_input.neighbour_table.dist[:, 0]  # neighbour bond-length
+        atom_bond = torch.Tensor(np.exp(-(bond_dist_neighbor[:, np.newaxis] - FILTER) ** 2 / 0.15 ** 2))
+        atom_feature = torch.cat((atom_feature_period, atom_feature_group, atom_feature_coordination, atom_bond),
+                                 dim=1).numpy()
+        adj_matrix = structure_input.neighbour_table.index
+        adj_matrix_tuple = structure_input.neighbour_table.index_tuple
+        bond_dist3d = structure_input.neighbour_table.dist3d
+
+        return atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d

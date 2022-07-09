@@ -12,6 +12,7 @@ from common.manager import DirManager
 PERIOD = 7
 GROUP = 18
 MAX_CN = 12
+FILTER = np.arange(0.5, 4.5, 0.15)
 
 
 class StructureDataset(Dataset):
@@ -22,10 +23,12 @@ class StructureDataset(Dataset):
 
     def __getitem__(self, index):
         if isinstance(index, int):
-            return self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][index]
+            return self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
+                index]
         elif isinstance(index, slice):
-            data = self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][index]
-            return StructureDataset(input_dir = None, output_dir = None, data=data)
+            data = self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
+                index]
+            return StructureDataset(input_dir=None, output_dir=None, data=data)
 
     def __len__(self):
         return self.data[0].shape[0]
@@ -42,17 +45,14 @@ class StructureDataset(Dataset):
             # load input-data
             structure_input = POSCAR(fname=fname_input).to_structure()
             structure_input.find_neighbour_table(neighbour_num=12)
-            if count == 0:
-                atom_type = set(structure_input.atoms.atom_type)
-            # else:
-            #     atom_type_new = set(structure_input.atoms.atom_type)
-            #     assert atom_type_new == atom_type, f"{atom_type_new} not equal {atom_type}"
-
             atom_feature_period = F.one_hot(torch.LongTensor(structure_input.atoms.period), num_classes=PERIOD)
             atom_feature_group = F.one_hot(torch.LongTensor(structure_input.atoms.group), num_classes=GROUP)
-            # atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.neighbour_table.coordination), num_classes=MAX_CN)
-            # atom_feature = torch.cat((atom_feature_period, atom_feature_group, atom_feature_coordination), dim=1).numpy()
-            atom_feature = torch.cat((atom_feature_period, atom_feature_group), dim=1).numpy()
+            atom_feature_coordination = F.one_hot(torch.LongTensor(structure_input.atoms.coordination_number),
+                                                  num_classes=MAX_CN)
+            bond_dist_neighbor = structure_input.neighbour_table.dist[:, 0]  # neighbour bond-length
+            atom_bond = torch.Tensor(np.exp(-(bond_dist_neighbor[:, np.newaxis] - FILTER) ** 2 / 0.15 ** 2))
+            atom_feature = torch.cat((atom_feature_period, atom_feature_group, atom_feature_coordination, atom_bond),
+                                     dim=1).numpy()
             adj_matrix = structure_input.neighbour_table.index
             adj_matrix_tuple = structure_input.neighbour_table.index_tuple
             bond_dist3d = structure_input.neighbour_table.dist3d
@@ -60,10 +60,6 @@ class StructureDataset(Dataset):
             # load output-data
             structure_output = CONTCAR(fname=fname_out).to_structure()
             structure_output.find_neighbour_table(adj_matrix=adj_matrix)
-
-            # atom_type_new = set(structure_input.atoms.atom_type)
-            # assert atom_type_new == atom_type, f"{atom_type_new} not equal {atom_type}"
-
             bond_dist3d_target = structure_output.neighbour_table.dist3d
 
             count += 1
@@ -72,10 +68,10 @@ class StructureDataset(Dataset):
 
             # put the structure into the dataset
             atom_feature_input.append(atom_feature)
-            bond_dist3d_input.append(bond_dist3d) # POSCAR-data
+            bond_dist3d_input.append(bond_dist3d)  # POSCAR-data
             adj_matrix_input.append(adj_matrix)
             adj_matrix_tuple_input.append(adj_matrix_tuple)
-            bond_dist3d_output.append(bond_dist3d_target) #-CONTCAR data
+            bond_dist3d_output.append(bond_dist3d_target)  # CONTCAR-data
 
         # shuffle the dataset
         index = list(range(len(atom_feature_input)))

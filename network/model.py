@@ -11,11 +11,11 @@ class Model(nn.Module):
         self.atom_type = atom_type
         self._AtomType = {}
         for name in atom_type[0]:
-            atom_type_layer = AtomTypeLayer(in_features=25, out_features=25)
+            atom_type_layer = AtomTypeLayer(in_features=atom_in_fea_num, out_features=atom_out_fea_num)
             setattr(self, f"AtomType_{name}", atom_type_layer)
             self._AtomType[f"AtomType_{name}"] = atom_type_layer
 
-        self.AtomConv = AtomConvLayer(atom_in_fea_num, atom_out_fea_num, bias=bias)
+        self.AtomConv = AtomConvLayer(atom_out_fea_num, atom_out_fea_num, bias=bias)
         self.embedding = EmbeddingLayer(atom_out_fea_num, bond_in_fea_num, bias=bias)
         self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
 

@@ -43,7 +43,7 @@ def main():
 
     input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
     output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
-    dataset_path = "dataset.pth"
+    dataset_path = "dataset-AtomType.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
@@ -75,7 +75,7 @@ def main():
     atom_type_group_index = [[item[0] for item in group] for group in atom_type_group]
 
     model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
-                  atom_in_fea_num=25,
+                  atom_in_fea_num=64,
                   atom_out_fea_num=25,
                   bond_in_fea_num=3,
                   bond_out_fea_num=3,
@@ -92,9 +92,9 @@ def main():
     train_loss_result = []
     test_loss_result = []
     test_min_loss = 100
-    threshold = 1.3
+    threshold = 1.5
 
-    for epoch in range(100):
+    for epoch in range(50):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
@@ -109,7 +109,7 @@ def main():
             train_loss.backward()
             optimizer.step()
             # if step == 0:
-            #     print("AtomType_C1c.linear.weight: ", torch.max(parameters['AtomType_C1c.linear.weight'].grad))
+            #     print("AtomType_C1c.linear.weight: ", torch.max(parameters[0][1].grad))
         scheduler.step()
 
         model.eval()

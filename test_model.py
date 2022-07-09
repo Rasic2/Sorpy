@@ -1,3 +1,4 @@
+import itertools
 import math
 import random
 from pathlib import Path
@@ -15,6 +16,26 @@ from network.dataset import StructureDataset
 from network.model import Model
 
 
+def data_prepare(structure, batch_data):
+    atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = batch_data
+
+    # apply the PBC
+    diff_frac = torch.matmul((bond_dist3d_output - bond_dist3d_input), torch.Tensor(structure.lattice.inverse))
+    diff_frac = torch.where(diff_frac >= 0.99, diff_frac - 1, diff_frac)
+    diff_frac = torch.where(diff_frac <= -0.99, diff_frac + 1, diff_frac)
+    diff_cart = torch.matmul(diff_frac, torch.Tensor(structure.lattice.matrix))
+    bond_dist3d_output = bond_dist3d_input + diff_cart
+
+    if torch.cuda.is_available():
+        atom_feature = atom_feature.cuda()
+        bond_dist3d_input = bond_dist3d_input.cuda()
+        bond_dist3d_output = bond_dist3d_output.cuda()
+        adj_matrix = adj_matrix.cuda()
+        adj_matrix_tuple = adj_matrix_tuple.cuda()
+
+    return atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple
+
+
 def main():
     # logger.setLevel(logging.DEBUG)
     torch.set_printoptions(profile='full')
@@ -22,7 +43,7 @@ def main():
 
     input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
     output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
-    dataset_path = "dataset-AtomType.pth"
+    dataset_path = "dataset.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
@@ -33,7 +54,7 @@ def main():
         dataset = StructureDataset(input_dir, output_dir, data=data)
         logger.info("-----All Files loaded from dataset successful-----")
 
-    short_dataset = dataset[:50]
+    short_dataset = dataset[:100]
     TRAIN = math.floor(len(short_dataset) * 0.8)
     train_dataset = short_dataset[:TRAIN]
     test_dataset = short_dataset[TRAIN:]
@@ -42,11 +63,28 @@ def main():
     test_dataloader = DataLoader(test_dataset, batch_size=batch_size, shuffle=True)
     train_size = len(train_dataloader)
     test_size = len(test_dataloader)
-    initial_lr = 0.1
-    model = Model(25, 25, 3, 3, bias=True)
+
+    # atom_type
+    structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure()
+    structure.find_neighbour_table(neighbour_num=12)
+    atom_type = structure.atoms.atom_type
+    atom_type_index = [(index, item) for index, item in enumerate(atom_type)]
+    atom_type_sort_index = sorted(atom_type_index, key=lambda x: x[1])
+    atom_type_group = [list(item) for key, item in itertools.groupby(atom_type_sort_index, key=lambda x: x[1])]
+    atom_type_group_name = [group[0][1] for group in atom_type_group]
+    atom_type_group_index = [[item[0] for item in group] for group in atom_type_group]
+
+    model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
+                  atom_in_fea_num=25,
+                  atom_out_fea_num=25,
+                  bond_in_fea_num=3,
+                  bond_out_fea_num=3,
+                  bias=True)
+    parameters = [(name, param) for name, param in model.named_parameters()]
     loss_fn = nn.L1Loss(reduction='mean')
+    initial_lr = 0.1
     optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=1, gamma=0.8)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.8)
     if torch.cuda.is_available():
         model = model.cuda()
         loss_fn = loss_fn.cuda()
@@ -55,18 +93,13 @@ def main():
     test_loss_result = []
     test_min_loss = 100
     threshold = 1.3
-    for epoch in range(50):
+
+    for epoch in range(100):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
         for step, data in enumerate(train_dataloader):
-            atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = data
-            if torch.cuda.is_available():
-                atom_feature = atom_feature.cuda()
-                bond_dist3d_input = bond_dist3d_input.cuda()
-                bond_dist3d_output = bond_dist3d_output.cuda()
-                adj_matrix = adj_matrix.cuda()
-                adj_matrix_tuple = adj_matrix_tuple.cuda()
+            atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure, data)
 
             # input: POSCAR, output: CONTCAR, loss: (out - CONTCAR)
             atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
@@ -75,17 +108,14 @@ def main():
             optimizer.zero_grad()
             train_loss.backward()
             optimizer.step()
+            # if step == 0:
+            #     print("AtomType_C1c.linear.weight: ", torch.max(parameters['AtomType_C1c.linear.weight'].grad))
         scheduler.step()
 
         model.eval()
         for step, data in enumerate(test_dataloader):
-            atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = data
-            if torch.cuda.is_available():
-                atom_feature = atom_feature.cuda()
-                bond_dist3d_input = bond_dist3d_input.cuda()
-                bond_dist3d_output = bond_dist3d_output.cuda()
-                adj_matrix = adj_matrix.cuda()
-                adj_matrix_tuple = adj_matrix_tuple.cuda()
+            atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure,
+                                                                                                             data)
 
             atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
             test_loss = loss_fn(bond_update, bond_dist3d_output)

@@ -54,14 +54,27 @@ if __name__ == '__main__':
 
     parameters = [(name, param) for name, param in model.named_parameters()]
 
-    for i in range(100):
+    diff_frac = torch.matmul((bond_dist3d_output - bond_dist3d_input), torch.Tensor(structure.lattice.inverse))
+    diff_frac = torch.where(diff_frac >= 0.99, diff_frac - 1, diff_frac)
+    diff_frac = torch.where(diff_frac <= -0.99, diff_frac + 1, diff_frac)
+    diff_cart = torch.matmul(diff_frac, torch.Tensor(structure.lattice.matrix))
+    bond_dist3d_output = bond_dist3d_input + diff_cart
+
+    model = model.cuda()
+    atom_feature = atom_feature.cuda()
+    bond_dist3d_input = bond_dist3d_input.cuda()
+    adj_matrix = adj_matrix.cuda()
+    adj_matrix_tuple = adj_matrix_tuple.cuda()
+    bond_dist3d_output = bond_dist3d_output.cuda()
+
+    for i in range(1000):
         atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
         loss = loss_fn(bond_update, bond_dist3d_output)
         optimizer.zero_grad()
         loss.backward()
         optimizer.step()
-        print(loss)
-        print(torch.max(parameters[0][1].grad))
-        print()
+        print(i, loss)
+        # print(torch.max(parameters[0][1].grad))
+        # print()
 
     print()

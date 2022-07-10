@@ -94,15 +94,16 @@ def main():
     test_min_loss = 100
     threshold = 1.5
 
-    for epoch in range(50):
+    for epoch in range(10):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
         for step, data in enumerate(train_dataloader):
             atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure, data)
 
-            # input: POSCAR, output: CONTCAR, loss: (out - CONTCAR)
-            atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
+            # input: POSCAR, output: CONTCAR, loss: (out - CONTCAR); bond_update.grad = 1. / (batch*N*M*3)
+            atom_update, bond_update, temp = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
+            # bond_update.retain_grad()
             train_loss = loss_fn(bond_update, bond_dist3d_output)
             total_train_loss += train_loss
             optimizer.zero_grad()

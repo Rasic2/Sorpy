@@ -118,29 +118,35 @@ class EmbeddingLayer(nn.Module):
         """
 
         # update bond-feature, accumulate the two node information
-        adj_matrix_tuple_flatten = torch.reshape(adj_matrix_tuple,
-                                                 shape=(adj_matrix_tuple.shape[0], -1))  # shape: (B, NxMx2)
+        adj_matrix_tuple_flatten = torch.reshape(adj_matrix_tuple, shape=(adj_matrix_tuple.shape[0], -1))
+        # shape = (B, NxMx2)
         bond_diatom = torch.Tensor(*adj_matrix_tuple_flatten.shape, self.atom_fea_num)  # shape: (B, NxMx2, F_atom)
         for batch, _ in enumerate(atom):
             bond_diatom[batch] = atom[batch][adj_matrix_tuple_flatten[batch]]
+
         if torch.cuda.is_available():
             bond_diatom = bond_diatom.cuda()
 
-        bond_diatom = torch.reshape(bond_diatom, shape=(
-            adj_matrix_tuple_flatten.shape[0], -1, 2 * self.atom_fea_num))  # shape: (B, NxM, 2xF_atom)
-        bond_diatom = F.normalize(bond_diatom, p=1, dim=-2)  # column normalization, shape: (B, NxM, 2xF_atom)
-        bond_diatom = torch.matmul(bond_diatom, self.weight_node_to_edge)
+        bond_diatom = torch.reshape(bond_diatom, shape=(adj_matrix_tuple_flatten.shape[0], -1, 2 * self.atom_fea_num))
+        # shape: (B, NxM, 2xF_atom), bond_diatom.grad ~ 1 / x^2, bond_diatom.grad.max ~ 1E+11 (too big)
+        bond_diatom.retain_grad()
+        temp = bond_diatom
+        bond_diatom = F.normalize(bond_diatom, p=1, dim=-2)
+        # column normalization, shape: (B, NxM, 2xF_atom), bond_diatom.max ~ 0.01 (too small), bond_diatom.grad ~ 0.01
+
+        bond_diatom = torch.matmul(bond_diatom, self.weight_node_to_edge)  # weight.grad ~ 1E-04
 
         if self.bias:
             bond_diatom += self.bias_node_to_edge  # shape: (B, NxM, F_bond)
+        # bias.grad ~ 1E-06 (positive and negative offset)
 
         bond_diatom = torch.permute(bond_diatom, dims=(0, 2, 1))
         bond_diatom = self.BatchNorm(bond_diatom)
-        bond_diatom = torch.permute(bond_diatom, dims=(0, 2, 1))
+        bond_diatom = torch.permute(bond_diatom, dims=(0, 2, 1))  # grad ~ 1. / (batch*N*M*3)
 
         bond_diatom = torch.tanh(bond_diatom)
 
-        return bond_diatom
+        return bond_diatom, temp
 
 
 class BondConvLayer(nn.Module):
@@ -153,7 +159,7 @@ class BondConvLayer(nn.Module):
 
         self.bias = bias
         if self.bias:
-            self.bias_edge = Parameter(torch.FloatTensor(bond_out_fea_num))
+            self.bias_edge = Parameter(torch.FloatTensor(bond_out_fea_num))  # grad = n / (batch*N*M*3)
 
         self.reset_parameters()
 
@@ -181,9 +187,9 @@ class BondConvLayer(nn.Module):
 
         # update bond-feature, transfer the node-information in the edge <sum function>
         bond_update = torch.reshape(bond, shape=bond_diatom.shape)  # shape: (B, NxM, F_bond)
-        bond_update = bond_update + bond_diatom
+        bond_update = bond_update + bond_diatom  # grad: around 1. / (batch*N*M*3)
         bond_update = torch.matmul(bond_update, self.weight_edge)
-        bond_update = torch.reshape(bond_update,
+        bond_update = torch.reshape(bond_update,  # grad = 1. / (batch*N*M*3)
                                     shape=(*adj_matrix.shape, self.bond_out_fea_num))  # shape: (B, N, M, F_bond)
         if self.bias:
             bond_update = bond_update + self.bias_edge

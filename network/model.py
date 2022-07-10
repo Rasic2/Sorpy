@@ -29,7 +29,7 @@ class Model(nn.Module):
             atom_type_update[:, group] = self._AtomType[f"AtomType_{name}"](atom[:, group])
 
         atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)
-        bond_diatom = self.embedding(atom_update, adj_matrix_tuple)
+        bond_diatom, temp = self.embedding(atom_update, adj_matrix_tuple)
         bond_update = self.BondConv(bond_diatom, bond, adj_matrix)
 
-        return atom_update, bond_update
+        return atom_update, bond_update, temp

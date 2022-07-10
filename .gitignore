@@ -140,3 +140,5 @@ logs/
 *.svg
 CONTCAR_*
 POSCAR_*
+*.gv
+*.png

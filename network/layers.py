@@ -71,14 +71,16 @@ class AtomConvLayer(nn.Module):
         bond_norm = torch.pow(bond_norm, -2)  # 1/(bond-length)^2, shape: (B, N, M)
         bond_norm = F.normalize(bond_norm, p=1, dim=-1)  # row normalization, shape: (B, N, M)
         bond_norm = torch.unsqueeze(bond_norm, -1)  # shape: (B, N, M, 1)
-        atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom)
-        atom_update = atom * atom_neighbour_weight  # shape: (B, N, F_atom)
+        atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom), grad ~ 1E-03
 
-        atom_update = torch.matmul(atom_update, self.weight_atom_1)
+        # atom.grad.abs.mean ~  0.001
+        atom_update = atom * atom_neighbour_weight  # shape: (B, N, F_atom), atom_update.grad ~ 0.01
+        atom_update = torch.matmul(atom_update, self.weight_atom_1)  # atom_update.grad.max ~ 0.05
+
         if self.bias:
-            atom_update += self.bias_atom_1
+            atom_update += self.bias_atom_1  # atom_update.grad.max ~ 0.1
 
-        atom_update = F.relu(atom_update)  # positive value
+        atom_update = F.relu(atom_update)  # positive value, atom_update.grad.max ~ 1E+11
 
         return atom_update
 
@@ -129,8 +131,6 @@ class EmbeddingLayer(nn.Module):
 
         bond_diatom = torch.reshape(bond_diatom, shape=(adj_matrix_tuple_flatten.shape[0], -1, 2 * self.atom_fea_num))
         # shape: (B, NxM, 2xF_atom), bond_diatom.grad ~ 1 / x^2, bond_diatom.grad.max ~ 1E+11 (too big)
-        bond_diatom.retain_grad()
-        temp = bond_diatom
         bond_diatom = F.normalize(bond_diatom, p=1, dim=-2)
         # column normalization, shape: (B, NxM, 2xF_atom), bond_diatom.max ~ 0.01 (too small), bond_diatom.grad ~ 0.01
 
@@ -146,7 +146,7 @@ class EmbeddingLayer(nn.Module):
 
         bond_diatom = torch.tanh(bond_diatom)
 
-        return bond_diatom, temp
+        return bond_diatom
 
 
 class BondConvLayer(nn.Module):
@@ -187,9 +187,10 @@ class BondConvLayer(nn.Module):
 
         # update bond-feature, transfer the node-information in the edge <sum function>
         bond_update = torch.reshape(bond, shape=bond_diatom.shape)  # shape: (B, NxM, F_bond)
-        bond_update = bond_update + bond_diatom  # grad: around 1. / (batch*N*M*3)
+        # (+): bond_diatom.grad.abs.max ~ 1E-04, too small; (*): bond_diatom.grad.abs.max ~ 1E-03
+        bond_update = bond_update + bond_diatom  # bond_update.grad ~ 1. / (batch*N*M*3)
         bond_update = torch.matmul(bond_update, self.weight_edge)
-        bond_update = torch.reshape(bond_update,  # grad = 1. / (batch*N*M*3)
+        bond_update = torch.reshape(bond_update,  # bond_update.grad ~ 1. / (batch*N*M*3)
                                     shape=(*adj_matrix.shape, self.bond_out_fea_num))  # shape: (B, N, M, F_bond)
         if self.bias:
             bond_update = bond_update + self.bias_edge

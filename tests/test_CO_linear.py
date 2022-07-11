@@ -6,6 +6,7 @@ from pathlib import Path
 import torch.cuda
 from matplotlib import pyplot as plt
 from torch import nn, optim
+from torch.nn import Linear, Sequential, Tanh, Conv2d
 from torch.utils.data import DataLoader
 
 from common.io_file import POSCAR
@@ -13,7 +14,38 @@ from common.logger import root_dir, logger
 from common.manager import DirManager
 from common.structure import Structure
 from network.dataset import StructureDataset
-from network.model import Model
+
+
+class Model(nn.Module):
+    def __init__(self):
+        super(Model, self).__init__()
+
+        self.sequential1 = Sequential(
+            Conv2d(in_channels=3, out_channels=16, kernel_size=(1, 3), padding=(0, 1)),
+            Conv2d(in_channels=16, out_channels=3, kernel_size=(1, 3), padding=(0, 1)),
+        )
+
+        self.sequential2 = Sequential(
+            Linear(in_features=3, out_features=16),
+            Tanh(),
+            # Linear(in_features=16, out_features=64),
+            # Tanh(),
+            # Linear(in_features=64, out_features=128),
+            # Tanh(),
+            # Linear(in_features=128, out_features=64),
+            # Tanh(),
+            # Linear(in_features=64, out_features=16),
+            # Tanh(),
+            Linear(in_features=16, out_features=3),
+        )
+
+    def forward(self, bond):
+        bond = torch.permute(input=bond, dims=(0, 3, 1, 2))
+        bond_update = self.sequential1(bond)
+        bond_update = torch.permute(input=bond_update, dims=(0, 2, 3, 1))
+        bond_update = self.sequential2(bond_update)
+
+        return bond_update
 
 
 def data_prepare(structure, batch_data):
@@ -43,7 +75,7 @@ def main():
 
     input_dir = DirManager(dname=Path(f'{root_dir}/train_set/input'))
     output_dir = DirManager(dname=Path(f'{root_dir}/train_set/output'))
-    dataset_path = "dataset-AtomType.pth"
+    dataset_path = f"{root_dir}/dataset-AtomType.pth"
 
     if not Path(dataset_path).exists():
         dataset = StructureDataset(input_dir, output_dir)
@@ -54,7 +86,7 @@ def main():
         dataset = StructureDataset(input_dir, output_dir, data=data)
         logger.info("-----All Files loaded from dataset successful-----")
 
-    short_dataset = dataset[:100]
+    short_dataset = dataset
     TRAIN = math.floor(len(short_dataset) * 0.8)
     train_dataset = short_dataset[:TRAIN]
     test_dataset = short_dataset[TRAIN:]
@@ -67,24 +99,13 @@ def main():
     # atom_type
     structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure()
     structure.find_neighbour_table(neighbour_num=12)
-    atom_type = structure.atoms.atom_type
-    atom_type_index = [(index, item) for index, item in enumerate(atom_type)]
-    atom_type_sort_index = sorted(atom_type_index, key=lambda x: x[1])
-    atom_type_group = [list(item) for key, item in itertools.groupby(atom_type_sort_index, key=lambda x: x[1])]
-    atom_type_group_name = [group[0][1] for group in atom_type_group]
-    atom_type_group_index = [[item[0] for item in group] for group in atom_type_group]
 
-    model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
-                  atom_in_fea_num=64,
-                  atom_out_fea_num=25,
-                  bond_in_fea_num=3,
-                  bond_out_fea_num=3,
-                  bias=True)
+    model = Model()
     parameters = [(name, param) for name, param in model.named_parameters()]
     loss_fn = nn.MSELoss(reduction='mean')
     initial_lr = 0.1
     optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.9)
+    scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=10, gamma=0.9)
     if torch.cuda.is_available():
         model = model.cuda()
         loss_fn = loss_fn.cuda()
@@ -99,12 +120,13 @@ def main():
         total_train_loss = 0.
         total_test_loss = 0.
         for step, data in enumerate(train_dataloader):
-            atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure, data)
+            atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure,
+                                                                                                             data)
 
             # input: POSCAR, output: CONTCAR, loss: (out - CONTCAR); bond_update.grad = 1. / (batch*N*M*3)
-            atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
+            bond_update = model(bond_dist3d_input[:, -2:])
             # bond_update.retain_grad()
-            train_loss = loss_fn(bond_update, bond_dist3d_output)
+            train_loss = loss_fn(bond_update, bond_dist3d_output[:, -2:])
             total_train_loss += train_loss
             optimizer.zero_grad()
             train_loss.backward()
@@ -118,8 +140,8 @@ def main():
             atom_feature, bond_dist3d_input, bond_dist3d_output, adj_matrix, adj_matrix_tuple = data_prepare(structure,
                                                                                                              data)
 
-            atom_update, bond_update = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
-            test_loss = loss_fn(bond_update, bond_dist3d_output)
+            bond_update = model(bond_dist3d_input[:, -2:])
+            test_loss = loss_fn(bond_update, bond_dist3d_output[:, -2:])
             total_test_loss += test_loss
 
         if torch.cuda.is_available():
@@ -143,33 +165,7 @@ def main():
     # plot the loss-curve
     plt.plot(train_loss_result, '-o')
     plt.plot(test_loss_result, '-o')
-    plt.savefig("loss.svg")
-
-    # model save
-    torch.save(model, "model.pth")
-
-    # model predict
-    atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, bond_dist3d_output = test_dataset.data
-    index = random.choice(list(range(len(atom_feature))))
-    structure = POSCAR(fname=Path(f"{root_dir}/train_set/input/POSCAR_1-1")).to_structure()
-    structure_target = Structure.from_adj_matrix(structure, adj_matrix[index].cpu().detach().numpy(),
-                                                 adj_matrix_tuple[index].cpu().detach().numpy(),
-                                                 bond_dist3d_output[index].cpu().detach().numpy(), 0)
-    structure_target.to_POSCAR("CONTCAR_target")
-
-    if torch.cuda.is_available():
-        atom_feature = atom_feature.cuda()
-        bond_dist3d_input = bond_dist3d_input.cuda()
-        adj_matrix = adj_matrix.cuda()
-        adj_matrix_tuple = adj_matrix_tuple.cuda()
-
-    predict = model(atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple)
-    structure_predict = Structure.from_adj_matrix(structure, adj_matrix[index].cpu().detach().numpy(),
-                                                  adj_matrix_tuple[index].cpu().detach().numpy(),
-                                                  predict[1][index].cpu().detach().numpy(), 0)
-    structure_predict.to_POSCAR(f"CONTCAR_predict")
-
-    diff = (structure_predict - structure_target)
+    plt.savefig(f"{root_dir}/loss.svg")
 
     logger.info("---------------End---------------")
 

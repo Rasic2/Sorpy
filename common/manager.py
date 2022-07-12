@@ -6,7 +6,7 @@ from pathlib import Path
 import numpy as np
 import yaml
 
-from common.io_file import POSCAR, CONTCAR
+from common.io_file import POSCAR, CONTCAR, XDATCAR
 # from common.operate import Operator as op
 from common.logger import logger
 from common.utils import Format_list
@@ -16,7 +16,8 @@ yaml.warnings({'YAMLLoadWarning': False})
 
 class FileManager:
     files = {'POSCAR': POSCAR,
-             'CONTCAR': CONTCAR
+             'CONTCAR': CONTCAR,
+             'XDATCAR': XDATCAR,
              }
 
     def __new__(cls, *args, **kargs):
@@ -78,22 +79,17 @@ class FileManager:
 
     @property
     def structure(self):
-        return self.file.to_structure(style=self.style, mol_index=self.mol_index, **self.kargs)
+        return self.file.to_structure()
 
 
 class DirManager:
 
-    def __init__(self, dname: Path, template=None, style=None, mol_index=None, **kargs):
+    def __init__(self, dname: Path):
 
         self.dname = dname
-        self.template = template
-        self.style = style
-        self.mol_index = mol_index
-        self.kargs = kargs
-        if self.mol_index:
-            logger.info(f"Molecule was align to {self.mol_index} location.")
 
         self._all_files = None
+        self._sub_dir = None
 
     def __getitem__(self, index):
         return self.all_files[index].structure
@@ -101,14 +97,19 @@ class DirManager:
     def __len__(self):
         return len(self.all_files)
 
+    @property
+    def sub_dir(self):
+        if self._sub_dir is None:
+            self._sub_dir = [DirManager(file) for file in self.dname.iterdir() if file.is_dir()]
+        return self._sub_dir
+
     def single_file(self, fname: Path):
-        return FileManager(self.dname / fname, style=self.style, mol_index=self.mol_index, **self.kargs)
+        return FileManager(self.dname / fname)
 
     @property
     def all_files(self):
         if self._all_files is None:
-            all_files = [FileManager(self.dname / fname, style=self.style, mol_index=self.mol_index, **self.kargs)
-                         for fname in os.listdir(self.dname)]
+            all_files = [FileManager(self.dname / fname) for fname in os.listdir(self.dname)]
             all_files = [file for file in all_files if file is not None]
             self._all_files = Format_list(sorted(all_files, key=lambda x: x))
         return self._all_files
@@ -117,42 +118,42 @@ class DirManager:
     def all_files_path(self):
         return [Path(file.fname) for file in self.all_files]
 
-    @property
-    def coords(self):
-        logger.info("Align the structure to the template structure.")
-        pool = ProcessPool(processes=os.cpu_count())
+    # @property
+    # def coords(self):
+    #     logger.info("Align the structure to the template structure.")
+    #     pool = ProcessPool(processes=os.cpu_count())
+    #
+    #     results = [pool.apply_async(op.align, args=(self.template, file.structure)) for file in self.all_files]
+    #     temp_coords = [result.get() for result in results]
+    #
+    #     pool.close()
+    #     pool.join()
+    #
+    #     return temp_coords
 
-        results = [pool.apply_async(op.align, args=(self.template, file.structure)) for file in self.all_files]
-        temp_coords = [result.get() for result in results]
+    # @property
+    # def mcoords(self):
+    #     """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
+    #     if len(self.mol_index) > 0 and "anchor" in self.kargs:
+    #         mindex = list(set(self.mol_index).difference({self.kargs["anchor"]}))
+    #         _mcoords = np.copy(self.frac_coords)
+    #         _mcoords[:, mindex, :] = self.inter_coords[:, :, :]
+    #         return _mcoords
+    #     else:
+    #         return None
 
-        pool.close()
-        pool.join()
-
-        return temp_coords
-
-    @property
-    def mcoords(self):
-        """frac_coords<slab> + frac_coord<anchor> + inter_coords<molecule>"""
-        if len(self.mol_index) > 0 and "anchor" in self.kargs:
-            mindex = list(set(self.mol_index).difference({self.kargs["anchor"]}))
-            _mcoords = np.copy(self.frac_coords)
-            _mcoords[:, mindex, :] = self.inter_coords[:, :, :]
-            return _mcoords
-        else:
-            return None
-
-    @property
-    def frac_coords(self):
-        return np.array([coord.frac_coords for coord in self.coords])
-
-    @property
-    def cart_coords(self):
-        return np.array([coord.cart_coords for coord in self.coords])
-
-    @property
-    def inter_coords(self):
-        return np.array([[inter_coord for _, _, inter_coord in file.structure.molecule.inter_coords]
-                         for file in self.all_files])
+    # @property
+    # def frac_coords(self):
+    #     return np.array([coord.frac_coords for coord in self.coords])
+    #
+    # @property
+    # def cart_coords(self):
+    #     return np.array([coord.cart_coords for coord in self.coords])
+    #
+    # @property
+    # def inter_coords(self):
+    #     return np.array([[inter_coord for _, _, inter_coord in file.structure.molecule.inter_coords]
+    #                      for file in self.all_files])
 
 
 class ParameterManager:

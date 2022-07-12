@@ -1,11 +1,13 @@
 import random
+from collections import defaultdict
+from pathlib import Path
 
 import numpy as np
 import torch
 import torch.nn.functional as F
 from torch.utils.data import Dataset
 
-from common.io_file import POSCAR, CONTCAR
+from common.io_file import POSCAR
 from common.logger import logger
 from common.manager import DirManager
 
@@ -16,52 +18,59 @@ FILTER = np.arange(0.5, 4.5, 0.15)
 
 
 class StructureDataset(Dataset):
-    def __init__(self, input_dir: (DirManager, None), output_dir: (DirManager, None), data=None):
-        self.input_dir = input_dir
-        self.output_dir = output_dir
+    def __init__(self, xdat_dir: (DirManager, None), energy_file: (Path, None), data=None):
+        self.xdat_dir = xdat_dir
+        self.energy_file = energy_file
         self.data = self.load_data() if data is None else data
 
-    def __getitem__(self, index):
-        if isinstance(index, int):
-            return self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
-                index]
-        elif isinstance(index, slice):
-            data = self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
-                index]
-            return StructureDataset(input_dir=None, output_dir=None, data=data)
+    # def __getitem__(self, index):
+    #     if isinstance(index, int):
+    #         return self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
+    #             index]
+    #     elif isinstance(index, slice):
+    #         data = self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
+    #             index]
+    #         return StructureDataset(input_dir=None, output_dir=None, data=data)
 
-    def __len__(self):
-        return self.data[0].shape[0]
+    # def __len__(self):
+    #     return self.data[0].shape[0]
 
     def load_data(self):
+        count = 0
+
         atom_feature_input = []
-        bond_dist3d_input = []
-        bond_dist3d_output = []
         adj_matrix_input = []
         adj_matrix_tuple_input = []
-        count = 0
-        for fname_input, fname_out in zip(self.input_dir.all_files_path, self.output_dir.all_files_path):
+        bond_dist3d_input = []
+        energy = []
 
-            # load input-data
-            structure_input = POSCAR(fname=fname_input).to_structure()
-            structure_input.find_neighbour_table(neighbour_num=12)
-            atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d = StructureDataset.transformer(structure_input)
+        energy_dict = self._energy_load()
 
-            # load output-data
-            structure_output = CONTCAR(fname=fname_out).to_structure()
-            structure_output.find_neighbour_table(adj_matrix=adj_matrix)
-            bond_dist3d_target = structure_output.neighbour_table.dist3d
+        for structure_dir in self.xdat_dir.sub_dir:
+            logger.info(f"Loading the {structure_dir.dname.name}, which have {len(structure_dir)} total files")
+            key = structure_dir.dname.name.split("_")[-1]
+            energy.append(energy_dict[key])
+
+            assert len(energy[-1]) == len(structure_dir.all_files_path), \
+                f"The len(energy) = {len(energy[-1])} && len(structure) = {len(structure_dir.all_files_path)} are different!"
+
+            for fname in structure_dir.all_files_path:
+                structure = POSCAR(fname=fname).to_structure()
+                structure.find_neighbour_table(neighbour_num=12)
+                atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d = StructureDataset.transformer(structure)
+
+                # put the structure into the dataset
+                atom_feature_input.append(atom_feature)
+                bond_dist3d_input.append(bond_dist3d)
+                adj_matrix_input.append(adj_matrix)
+                adj_matrix_tuple_input.append(adj_matrix_tuple)
 
             count += 1
             if count % 100 == 0:
-                logger.info(f"-----{count} files have been loaded!-----")
+                logger.info(f"-----{count} directories have been loaded!-----")
 
-            # put the structure into the dataset
-            atom_feature_input.append(atom_feature)
-            bond_dist3d_input.append(bond_dist3d)  # POSCAR-data
-            adj_matrix_input.append(adj_matrix)
-            adj_matrix_tuple_input.append(adj_matrix_tuple)
-            bond_dist3d_output.append(bond_dist3d_target)  # CONTCAR-data
+        # flatten energy
+        energy = sum(energy, [])
 
         # shuffle the dataset
         index = list(range(len(atom_feature_input)))
@@ -70,11 +79,11 @@ class StructureDataset(Dataset):
         bond_dist3d_input = np.array(bond_dist3d_input)[index]
         adj_matrix_input = np.array(adj_matrix_input)[index]
         adj_matrix_tuple_input = np.array(adj_matrix_tuple_input)[index]
-        bond_dist3d_output = np.array(bond_dist3d_output)[index]
+        energy = np.array(energy)[index]
 
         return torch.Tensor(np.array(atom_feature_input)), torch.Tensor(np.array(bond_dist3d_input)), \
                torch.LongTensor(np.array(adj_matrix_input)), torch.LongTensor(np.array(adj_matrix_tuple_input)), \
-               torch.Tensor(np.array(bond_dist3d_output))
+               torch.Tensor(np.array(energy))
 
     @staticmethod
     def transformer(structure_input):
@@ -91,3 +100,16 @@ class StructureDataset(Dataset):
         bond_dist3d = structure_input.neighbour_table.dist3d
 
         return atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d
+
+    def _energy_load(self):
+        with open(self.energy_file) as f:
+            cfg = f.readlines()
+
+        energy = defaultdict(list)
+        for line in cfg:
+            if len(line.split()) == 1:
+                key = line.split()[0]
+            else:
+                energy[key].append(float(line.split()[-1]))
+
+        return energy

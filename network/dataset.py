@@ -23,17 +23,15 @@ class StructureDataset(Dataset):
         self.energy_file = energy_file
         self.data = self.load_data() if data is None else data
 
-    # def __getitem__(self, index):
-    #     if isinstance(index, int):
-    #         return self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
-    #             index]
-    #     elif isinstance(index, slice):
-    #         data = self.data[0][index], self.data[1][index], self.data[2][index], self.data[3][index], self.data[4][
-    #             index]
-    #         return StructureDataset(input_dir=None, output_dir=None, data=data)
+    def __getitem__(self, index):
+        if isinstance(index, int):
+            return tuple(self.data[i][index] for i in range(len(self.data)))
+        elif isinstance(index, slice):
+            data = tuple(self.data[i][index] for i in range(len(self.data)))
+            return StructureDataset(xdat_dir=None, energy_file=self.energy_file, data=data)
 
-    # def __len__(self):
-    #     return self.data[0].shape[0]
+    def __len__(self):
+        return self.data[0].shape[0]
 
     def load_data(self):
         count = 0
@@ -45,6 +43,8 @@ class StructureDataset(Dataset):
         energy = []
 
         energy_dict = self._energy_load()
+        energy_numpy = np.array(sum([value for value in energy_dict.values()], []))
+        energy_min = np.min(energy_numpy)
 
         for structure_dir in self.xdat_dir.sub_dir:
             logger.info(f"Loading the {structure_dir.dname.name}, which have {len(structure_dir)} total files")
@@ -69,8 +69,10 @@ class StructureDataset(Dataset):
             if count % 100 == 0:
                 logger.info(f"-----{count} directories have been loaded!-----")
 
-        # flatten energy
+        # flatten && normalization energy
         energy = sum(energy, [])
+        energy = np.array(energy)
+        energy = energy - energy_min
 
         # shuffle the dataset
         index = list(range(len(atom_feature_input)))

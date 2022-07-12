@@ -3,6 +3,7 @@ import math
 import random
 from pathlib import Path
 
+import numpy as np
 import torch.cuda
 from matplotlib import pyplot as plt
 from torch import nn, optim
@@ -54,7 +55,7 @@ def main():
         dataset = StructureDataset(input_dir, output_dir, data=data)
         logger.info("-----All Files loaded from dataset successful-----")
 
-    short_dataset = dataset[:100]
+    short_dataset = dataset
     TRAIN = math.floor(len(short_dataset) * 0.8)
     train_dataset = short_dataset[:TRAIN]
     test_dataset = short_dataset[TRAIN:]
@@ -94,7 +95,7 @@ def main():
     test_min_loss = 100
     threshold = 1000
 
-    for epoch in range(100):
+    for epoch in range(50):
         model.train()
         total_train_loss = 0.
         total_test_loss = 0.
@@ -169,7 +170,8 @@ def main():
                                                   predict[1][index].cpu().detach().numpy(), 0)
     structure_predict.to_POSCAR(f"CONTCAR_predict")
 
-    diff = (structure_predict - structure_target)
+    diff = np.sum((structure_predict - structure_target)**2, axis=1)
+    logger.info(f"real predict loss: {np.max(diff)}")
 
     logger.info("---------------End---------------")
 

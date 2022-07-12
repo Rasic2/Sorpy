@@ -3,17 +3,21 @@ import math
 import torch
 import torch.nn.functional as F
 from torch import nn
-from torch.nn import Parameter, Linear, BatchNorm1d
+from torch.nn import Parameter, Linear, BatchNorm1d, Sequential, Tanh, ReLU, Sigmoid
 
 
 class AtomTypeLayer(nn.Module):
     def __init__(self, in_features, out_features):
         super(AtomTypeLayer, self).__init__()
-        self.linear = Linear(in_features=in_features, out_features=out_features)
+
+        self.sequential = Sequential(
+            Linear(in_features=in_features, out_features=out_features),
+            Sigmoid(),
+        )
 
     def forward(self, atom):
-        atom_type = self.linear(atom)
-        atom_type = torch.sigmoid(atom_type)
+        atom_type = self.sequential(atom)
+
         return atom_type
 
 

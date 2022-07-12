@@ -28,14 +28,14 @@ class Model(nn.Module):
         self.sequential2 = Sequential(
             Linear(in_features=3, out_features=16),
             Tanh(),
-            # Linear(in_features=16, out_features=64),
-            # Tanh(),
+            Linear(in_features=16, out_features=64),
+            Tanh(),
             # Linear(in_features=64, out_features=128),
             # Tanh(),
             # Linear(in_features=128, out_features=64),
             # Tanh(),
-            # Linear(in_features=64, out_features=16),
-            # Tanh(),
+            Linear(in_features=64, out_features=16),
+            Tanh(),
             Linear(in_features=16, out_features=3),
         )
 

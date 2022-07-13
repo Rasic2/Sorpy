@@ -7,48 +7,13 @@ import numpy as np
 import torch
 from matplotlib import pyplot as plt
 from torch import nn, optim
-from torch.nn import Linear
 from torch.utils.data import DataLoader
 
 from common.io_file import POSCAR
 from common.logger import root_dir, logger
 from common.manager import DirManager
 from network.dataset import StructureDataset
-from network.layers import AtomConvLayer, EmbeddingLayer, BondConvLayer, AtomTypeLayer
-
-
-class Model(nn.Module):
-    def __init__(self, atom_type, atom_in_fea_num, atom_out_fea_num, bond_in_fea_num, bond_out_fea_num, bias=True):
-        super(Model, self).__init__()
-
-        self.atom_type = atom_type
-        self._AtomType = {}
-        for name in atom_type[0]:
-            atom_type_layer = AtomTypeLayer(in_features=atom_in_fea_num, out_features=atom_out_fea_num)
-            setattr(self, f"AtomType_{name}", atom_type_layer)
-            self._AtomType[f"AtomType_{name}"] = atom_type_layer
-
-        self.AtomConv = AtomConvLayer(atom_out_fea_num, atom_out_fea_num, bias=bias)
-        self.embedding = EmbeddingLayer(atom_out_fea_num, bond_in_fea_num, bias=bias)
-        self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
-        self.linear = Linear(in_features=25, out_features=1)
-
-    def forward(self, atom, bond, adj_matrix):
-        atom_type_update = torch.Tensor(atom.shape[0], atom.shape[1], 25)
-
-        if torch.cuda.is_available():
-            atom_type_update = atom_type_update.cuda()
-
-        for name, group in zip(*self.atom_type):
-            atom_type_update[:, group] = self._AtomType[f"AtomType_{name}"](atom[:, group])
-
-        atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)
-        energy_predict = torch.mean(atom_update, dim=1)
-        energy_predict = self.linear(energy_predict)
-        energy_predict = torch.relu(energy_predict)
-        energy_predict = torch.squeeze(energy_predict,dim=-1)
-
-        return energy_predict
+from network.model_energy import Model
 
 
 def data_prepare(batch_data):
@@ -65,12 +30,15 @@ def data_prepare(batch_data):
 
 
 xdat_dir = DirManager(dname=Path(f"{root_dir}/train_set/xdat"))
-sample = random.sample(range(len(xdat_dir.sub_dir)), 1)
+sample = random.sample(range(len(xdat_dir.sub_dir)), 3)
 xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
 
-dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file)
+# data = torch.load("../dataset-energy.pth")
+data = None
+dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
+# torch.save(dataset.data, "../dataset-energy.pth")
 
 TRAIN = math.floor(len(dataset) * 0.8)
 train_dataset = dataset[:TRAIN]
@@ -119,7 +87,7 @@ for epoch in range(50):
         atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, energy = data_prepare(data)
         energy_predict = model(atom_feature, bond_dist3d_input, adj_matrix)
         train_loss = loss_fn(energy_predict, energy)
-        total_train_loss += train_loss
+        total_train_loss += train_loss.detach()  # detach the loss to monitor its value
         optimizer.zero_grad()
         train_loss.backward()
         optimizer.step()
@@ -130,11 +98,11 @@ for epoch in range(50):
         atom_feature, bond_dist3d_input, adj_matrix, adj_matrix_tuple, energy = data_prepare(data)
         energy_predict = model(atom_feature, bond_dist3d_input, adj_matrix)
         test_loss = loss_fn(energy_predict, energy)
-        total_test_loss += test_loss
+        total_test_loss += test_loss.detach()
 
     if torch.cuda.is_available():
-        train_loss_result.append((total_train_loss / train_size).cpu().detach().numpy())
-        test_loss_result.append((total_test_loss / test_size).cpu().detach().numpy())
+        train_loss_result.append((total_train_loss / train_size).cpu().numpy())
+        test_loss_result.append((total_test_loss / test_size).cpu().numpy())
     else:
         train_loss_result.append(total_train_loss / train_size)
         test_loss_result.append(total_test_loss / test_size)

@@ -40,7 +40,12 @@ for step, data in enumerate(predict_dataloader):
     energy_predict_result.append(energy_predict.cpu().detach().item())
     energy_target_result.append(energy.cpu().detach().item())
 
-plt.plot(energy_predict_result, energy_target_result, "o")
+x = np.linspace(-0.1, 0.5,100)
+y = x
+plt.plot(energy_target_result, energy_predict_result, "o")
+plt.plot(x, y, '-')
+plt.xlabel("Target energy / eV")
+plt.ylabel("Predict energy / eV")
 plt.xlim([-0.1, 0.5])
 plt.ylim([-0.1, 0.5])
 plt.show()

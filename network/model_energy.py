@@ -20,6 +20,7 @@ class Model(nn.Module):
         # self.embedding = EmbeddingLayer(atom_out_fea_num, bond_in_fea_num, bias=bias)
         # self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
         self.linear = Linear(in_features=25, out_features=1)
+        self.BatchNorm = BatchNorm1d(num_features=atom_out_fea_num)
 
     def forward(self, atom, bond, adj_matrix):
         atom_type_update = torch.Tensor(atom.shape[0], atom.shape[1], 25)
@@ -30,7 +31,12 @@ class Model(nn.Module):
         for name, group in zip(*self.atom_type):
             atom_type_update[:, group] = self._AtomType[f"AtomType_{name}"](atom[:, group])
 
+        atom_type_update = torch.permute(input=atom_type_update, dims=(0, 2, 1))
+        atom_type_update = self.BatchNorm(atom_type_update)
+        atom_type_update = torch.permute(input=atom_type_update, dims=(0, 2, 1))
+
         atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)  # atom_update.grad.max ~ 0.001
+
         energy_predict = torch.mean(atom_update, dim=1)  # energy_predict.grad.max ~ 0.1
         energy_predict = self.linear(energy_predict)  # energy.predict.grad = 0
         energy_predict = torch.tanh(energy_predict)  # energy_predict.grad = -1

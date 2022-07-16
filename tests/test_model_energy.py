@@ -30,15 +30,15 @@ def data_prepare(batch_data):
 
 
 xdat_dir = DirManager(dname=Path(f"{root_dir}/train_set/xdat"))
-sample = random.sample(range(len(xdat_dir.sub_dir)), 10)
+sample = random.sample(range(len(xdat_dir.sub_dir)), 20)
 xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
 
-data = torch.load("../dataset-energy.pth")
-# data = None
+# data = torch.load("../dataset-energy.pth")
+data = None
 dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
-# torch.save(dataset.data, "../dataset-energy.pth")
+torch.save(dataset.data, "../dataset-energy.pth")
 
 TRAIN = math.floor(len(dataset) * 0.8)
 train_dataset = dataset[:TRAIN]
@@ -79,7 +79,7 @@ test_loss_result = []
 test_min_loss = 100
 threshold = 1000
 
-for epoch in range(50):
+for epoch in range(100):
     model.train()
     total_train_loss = 0.
     total_test_loss = 0.

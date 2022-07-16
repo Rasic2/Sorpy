@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torch.nn import Linear, BatchNorm1d
+from torch.nn import Linear, BatchNorm1d, Dropout
 
 from network.layers import AtomTypeLayer, AtomConvLayer, EmbeddingLayer, BondConvLayer
 
@@ -21,6 +21,7 @@ class Model(nn.Module):
         # self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
         self.linear = Linear(in_features=25, out_features=1)
         self.BatchNorm = BatchNorm1d(num_features=atom_out_fea_num)
+        self.Dropout = Dropout(p=0.1)
 
     def forward(self, atom, bond, adj_matrix):
         atom_type_update = torch.Tensor(atom.shape[0], atom.shape[1], 25)
@@ -34,6 +35,8 @@ class Model(nn.Module):
         atom_type_update = torch.permute(input=atom_type_update, dims=(0, 2, 1))
         atom_type_update = self.BatchNorm(atom_type_update)
         atom_type_update = torch.permute(input=atom_type_update, dims=(0, 2, 1))
+
+        atom_type_update = self.Dropout(atom_type_update)
 
         atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)  # atom_update.grad.max ~ 0.001
 

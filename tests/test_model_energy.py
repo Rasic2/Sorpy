@@ -35,10 +35,10 @@ xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
 
-# data = torch.load("../dataset-energy.pth")
-data = None
+data = torch.load("../dataset-energy.pth")
+# data = None
 dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
-torch.save(dataset.data, "../dataset-energy.pth")
+# torch.save(dataset.data, "../dataset-energy.pth")
 
 TRAIN = math.floor(len(dataset) * 0.8)
 train_dataset = dataset[:TRAIN]

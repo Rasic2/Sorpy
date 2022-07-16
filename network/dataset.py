@@ -45,6 +45,7 @@ class StructureDataset(Dataset):
         energy_dict = self._energy_load()
         energy_numpy = np.array(sum([value for value in energy_dict.values()], []))
         energy_min = np.min(energy_numpy)
+        energy_max = np.max(energy_numpy)
 
         for structure_dir in self.xdat_dir.sub_dir:
             logger.info(f"Loading the {structure_dir.dname.name}, which have {len(structure_dir)} total files")
@@ -72,7 +73,7 @@ class StructureDataset(Dataset):
         # flatten && normalization energy
         energy = sum(energy, [])
         energy = np.array(energy)
-        energy = energy - energy_min
+        energy = (energy - energy_min) / (energy_max - energy_min)
 
         # shuffle the dataset
         index = list(range(len(atom_feature_input)))

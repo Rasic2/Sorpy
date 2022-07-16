@@ -1,6 +1,6 @@
 import torch
 from torch import nn
-from torch.nn import Linear
+from torch.nn import Linear, BatchNorm1d
 
 from network.layers import AtomTypeLayer, AtomConvLayer, EmbeddingLayer, BondConvLayer
 
@@ -17,8 +17,8 @@ class Model(nn.Module):
             self._AtomType[f"AtomType_{name}"] = atom_type_layer
 
         self.AtomConv = AtomConvLayer(atom_out_fea_num, atom_out_fea_num, bias=bias)
-        self.embedding = EmbeddingLayer(atom_out_fea_num, bond_in_fea_num, bias=bias)
-        self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
+        # self.embedding = EmbeddingLayer(atom_out_fea_num, bond_in_fea_num, bias=bias)
+        # self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
         self.linear = Linear(in_features=25, out_features=1)
 
     def forward(self, atom, bond, adj_matrix):
@@ -30,8 +30,8 @@ class Model(nn.Module):
         for name, group in zip(*self.atom_type):
             atom_type_update[:, group] = self._AtomType[f"AtomType_{name}"](atom[:, group])
 
-        atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)
-        energy_predict = torch.mean(atom_update, dim=1)
+        atom_update = self.AtomConv(atom_type_update, bond, adj_matrix)  # atom_update.grad.max ~ 0.001
+        energy_predict = torch.mean(atom_update, dim=1)  # energy_predict.grad.max ~ 0.1
         energy_predict = self.linear(energy_predict)  # energy.predict.grad = 0
         energy_predict = torch.tanh(energy_predict)  # energy_predict.grad = -1
         energy_predict = torch.squeeze(energy_predict, dim=-1)  # energy_predict.grad = -1

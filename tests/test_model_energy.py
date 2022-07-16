@@ -30,13 +30,13 @@ def data_prepare(batch_data):
 
 
 xdat_dir = DirManager(dname=Path(f"{root_dir}/train_set/xdat"))
-sample = random.sample(range(len(xdat_dir.sub_dir)), 3)
+sample = random.sample(range(len(xdat_dir.sub_dir)), 10)
 xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
 
-# data = torch.load("../dataset-energy.pth")
-data = None
+data = torch.load("../dataset-energy.pth")
+# data = None
 dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
 # torch.save(dataset.data, "../dataset-energy.pth")
 
@@ -65,11 +65,11 @@ model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
               bond_in_fea_num=3,
               bond_out_fea_num=3,
               bias=True)
-
+# parameters = [(name, param) for name, param in model.named_parameters()]
 loss_fn = nn.L1Loss(reduction='mean')
-initial_lr = 0.1
+initial_lr = 5e-04
 optimizer = optim.SGD(model.parameters(), lr=initial_lr)
-scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.9)
+scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.6)
 if torch.cuda.is_available():
     model = model.cuda()
     loss_fn = loss_fn.cuda()
@@ -91,7 +91,7 @@ for epoch in range(50):
         optimizer.zero_grad()
         train_loss.backward()
         optimizer.step()
-    scheduler.step()
+    # scheduler.step()
 
     model.eval()
     for step, data in enumerate(test_dataloader):
@@ -99,6 +99,7 @@ for epoch in range(50):
         energy_predict = model(atom_feature, bond_dist3d_input, adj_matrix)
         test_loss = loss_fn(energy_predict, energy)
         total_test_loss += test_loss.detach()
+        # print(energy_predict.item(), energy.item())
 
     if torch.cuda.is_available():
         train_loss_result.append((total_train_loss / train_size).cpu().numpy())

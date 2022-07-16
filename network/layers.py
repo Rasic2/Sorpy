@@ -10,13 +10,11 @@ class AtomTypeLayer(nn.Module):
     def __init__(self, in_features, out_features):
         super(AtomTypeLayer, self).__init__()
 
-        self.sequential = Sequential(
-            Linear(in_features=in_features, out_features=out_features),
-            Sigmoid(),
-        )
+        self.linear = Linear(in_features=in_features, out_features=out_features)
 
     def forward(self, atom):
-        atom_type = self.sequential(atom)
+        atom_type = self.linear(atom)
+        atom_type = torch.relu(atom_type)
 
         return atom_type
 
@@ -78,7 +76,7 @@ class AtomConvLayer(nn.Module):
         atom_neighbour_weight = torch.sum(bond_norm * atom_neighbor, -2)  # shape: (B, N, F_atom), grad ~ 1E-03
 
         # atom.grad.abs.mean ~  0.001
-        atom_update = atom * atom_neighbour_weight  # shape: (B, N, F_atom), atom_update.grad ~ 0.01
+        atom_update = atom * (1 + atom_neighbour_weight)  # shape: (B, N, F_atom), atom_update.grad ~ 0.01
         atom_update = torch.matmul(atom_update, self.weight_atom_1)  # atom_update.grad.max ~ 0.05
 
         if self.bias:

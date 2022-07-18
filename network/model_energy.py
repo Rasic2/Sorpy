@@ -42,7 +42,7 @@ class Model(nn.Module):
 
         energy_predict = torch.mean(atom_update, dim=1)  # energy_predict.grad.max ~ 0.1
         energy_predict = self.linear(energy_predict)  # energy.predict.grad = 0
-        energy_predict = torch.tanh(energy_predict)  # energy_predict.grad = -1
+        energy_predict = torch.relu(energy_predict)  # energy_predict.grad = -1
         energy_predict = torch.squeeze(energy_predict, dim=-1)  # energy_predict.grad = -1
 
         return energy_predict

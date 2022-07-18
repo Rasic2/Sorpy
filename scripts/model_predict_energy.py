@@ -18,8 +18,17 @@ sample = random.sample(range(len(predict_dir.sub_dir)), 1)
 predict_dir._sub_dir = np.array(predict_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
+energy_dict = StructureDataset.load_energy(energy_file)
+energy_tensor = torch.from_numpy(np.array(sum([value for value in energy_dict.values()], [])))
+energy_mean = energy_tensor.mean()
+energy_var = energy_tensor.var()
+energy_max = energy_tensor.max()
+energy_min = energy_tensor.min()
 
 dataset = StructureDataset(xdat_dir=predict_dir, energy_file=energy_file)
+new_energy = (dataset.data[-1] -  energy_min) / (energy_max - energy_min)
+new_energy = new_energy / energy_var.pow(0.5)
+dataset.data = (*dataset.data[:-1], new_energy)
 
 batch_size = 1
 predict_dataloader = DataLoader(dataset, batch_size=batch_size, shuffle=True)
@@ -40,14 +49,14 @@ for step, data in enumerate(predict_dataloader):
     energy_predict_result.append(energy_predict.cpu().detach().item())
     energy_target_result.append(energy.cpu().detach().item())
 
-x = np.linspace(-0.1, 0.5,100)
+x = np.linspace(0, 10, 100)
 y = x
 plt.plot(energy_target_result, energy_predict_result, "o")
 plt.plot(x, y, '-')
 plt.xlabel("Target energy / eV")
 plt.ylabel("Predict energy / eV")
-plt.xlim([-0.1, 0.5])
-plt.ylim([-0.1, 0.5])
+plt.xlim([0, 10])
+plt.ylim([0, 10])
 plt.show()
 # plt.savefig("result.png")
 

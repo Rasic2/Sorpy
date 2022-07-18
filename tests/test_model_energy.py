@@ -36,6 +36,8 @@ xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
 energy_dict = StructureDataset.load_energy(energy_file)
 energy_tensor = torch.from_numpy(np.array(sum([value for value in energy_dict.values()], [])))
+energy_mean = energy_tensor.mean()
+energy_var = energy_tensor.var()
 energy_max = energy_tensor.max()
 energy_min = energy_tensor.min()
 
@@ -43,8 +45,8 @@ energy_min = energy_tensor.min()
 data = None
 dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
 # torch.save(dataset.data, "../dataset-energy.pth")
-new_energy = (dataset.data[-1] - energy_min) / (energy_max - energy_min)
-# new_energy = new_energy.pow(-0.5)
+new_energy = (dataset.data[-1] -  energy_min) / (energy_max - energy_min)
+new_energy = new_energy / energy_var.pow(0.5)
 dataset.data = (*dataset.data[:-1], new_energy)
 
 TRAIN = math.floor(len(dataset) * 0.8)
@@ -73,7 +75,7 @@ model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
               bond_out_fea_num=3,
               bias=True)
 # parameters = [(name, param) for name, param in model.named_parameters()]
-loss_fn = nn.L1Loss(reduction='mean')
+loss_fn = nn.MSELoss(reduction='mean')
 initial_lr = 0.1
 optimizer = optim.SGD(model.parameters(), lr=initial_lr)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.6)
@@ -86,7 +88,7 @@ test_loss_result = []
 test_min_loss = 100
 threshold = 1000
 
-for epoch in range(100):
+for epoch in range(50):
     model.train()
     total_train_loss = 0.
     total_test_loss = 0.

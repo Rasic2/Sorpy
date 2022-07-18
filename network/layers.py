@@ -11,9 +11,15 @@ class AtomTypeLayer(nn.Module):
         super(AtomTypeLayer, self).__init__()
 
         self.linear = Linear(in_features=in_features, out_features=out_features)
+        # self.BatchNorm = BatchNorm1d(num_features=out_features)
 
     def forward(self, atom):
         atom_type = self.linear(atom)
+
+        # atom_type = torch.permute(input=atom_type, dims=(0, 2, 1))
+        # atom_type =self.BatchNorm(atom_type)
+        # atom_type = torch.permute(input=atom_type, dims=(0, 2, 1))
+
         atom_type = torch.relu(atom_type)
 
         return atom_type

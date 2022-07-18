@@ -42,10 +42,10 @@ class StructureDataset(Dataset):
         bond_dist3d_input = []
         energy = []
 
-        energy_dict = self._energy_load()
-        energy_numpy = np.array(sum([value for value in energy_dict.values()], []))
-        energy_min = np.min(energy_numpy)
-        energy_max = np.max(energy_numpy)
+        energy_dict = self.load_energy(self.energy_file)
+        # energy_numpy = np.array(sum([value for value in energy_dict.values()], []))
+        # energy_min = np.min(energy_numpy)
+        # energy_max = np.max(energy_numpy)
 
         for structure_dir in self.xdat_dir.sub_dir:
             logger.info(f"Loading the {structure_dir.dname.name}, which have {len(structure_dir)} total files")
@@ -70,10 +70,10 @@ class StructureDataset(Dataset):
             if count % 100 == 0:
                 logger.info(f"-----{count} directories have been loaded!-----")
 
-        # flatten && normalization energy
+        # flatten
         energy = sum(energy, [])
-        energy = np.array(energy)
-        energy = (energy - energy_min) / (energy_max - energy_min)
+        # energy = np.array(energy)
+        # energy = (energy - energy_min) / (energy_max - energy_min)
 
         # shuffle the dataset
         index = list(range(len(atom_feature_input)))
@@ -104,15 +104,16 @@ class StructureDataset(Dataset):
 
         return atom_feature, adj_matrix, adj_matrix_tuple, bond_dist3d
 
-    def _energy_load(self):
-        with open(self.energy_file) as f:
+    @staticmethod
+    def load_energy(energy_file):
+        with open(energy_file) as f:
             cfg = f.readlines()
 
-        energy = defaultdict(list)
+        energy_dict = defaultdict(list)
         for line in cfg:
             if len(line.split()) == 1:
                 key = line.split()[0]
             else:
-                energy[key].append(float(line.split()[-1]))
+                energy_dict[key].append(float(line.split()[-1]))
 
-        return energy
+        return energy_dict

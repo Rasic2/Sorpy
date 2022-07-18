@@ -21,7 +21,7 @@ class Model(nn.Module):
         # self.BondConv = BondConvLayer(bond_in_fea_num, bond_out_fea_num, bias=bias)
         self.linear = Linear(in_features=25, out_features=1)
         self.BatchNorm = BatchNorm1d(num_features=atom_out_fea_num)
-        self.Dropout = Dropout(p=0.1)
+        self.Dropout = Dropout(p=0.25)
 
     def forward(self, atom, bond, adj_matrix):
         atom_type_update = torch.Tensor(atom.shape[0], atom.shape[1], 25)

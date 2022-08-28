@@ -30,7 +30,7 @@ def data_prepare(batch_data):
 
 
 xdat_dir = DirManager(dname=Path(f"{root_dir}/train_set/xdat"))
-sample = random.sample(range(len(xdat_dir.sub_dir)), 1)
+sample = random.sample(range(len(xdat_dir.sub_dir)), 20)
 xdat_dir._sub_dir = np.array(xdat_dir.sub_dir, dtype=object)[sample]
 
 energy_file = Path(f"{root_dir}/train_set/energy_summary")
@@ -41,12 +41,12 @@ energy_var = energy_tensor.var()
 energy_max = energy_tensor.max()
 energy_min = energy_tensor.min()
 
-# data = torch.load("../dataset-energy.pth")
-data = None
+data = torch.load("../dataset-energy.pth")
+# data = None
 dataset = StructureDataset(xdat_dir=xdat_dir, energy_file=energy_file, data=data)
 # torch.save(dataset.data, "../dataset-energy.pth")
 new_energy = (dataset.data[-1] -  energy_min) / (energy_max - energy_min)
-new_energy = new_energy / energy_var.pow(0.5)
+# new_energy = new_energy / new_energy.var().pow(0.5)
 dataset.data = (*dataset.data[:-1], new_energy)
 
 TRAIN = math.floor(len(dataset) * 0.8)
@@ -76,7 +76,7 @@ model = Model(atom_type=(atom_type_group_name, atom_type_group_index),
               bias=True)
 # parameters = [(name, param) for name, param in model.named_parameters()]
 loss_fn = nn.MSELoss(reduction='mean')
-initial_lr = 0.1
+initial_lr = 5E-04
 optimizer = optim.SGD(model.parameters(), lr=initial_lr)
 scheduler = optim.lr_scheduler.StepLR(optimizer, step_size=5, gamma=0.6)
 if torch.cuda.is_available():
@@ -100,7 +100,7 @@ for epoch in range(50):
         optimizer.zero_grad()
         train_loss.backward()
         optimizer.step()
-    scheduler.step()
+    # scheduler.step()
 
     model.eval()
     for step, data in enumerate(test_dataloader):

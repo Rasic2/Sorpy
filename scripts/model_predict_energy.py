@@ -7,7 +7,7 @@ from matplotlib import pyplot as plt
 from torch import nn
 from torch.utils.data import DataLoader
 
-from common.logger import root_dir
+from common.logger import root_dir, logger
 from common.manager import DirManager
 from network.dataset import StructureDataset
 
@@ -27,7 +27,7 @@ energy_min = energy_tensor.min()
 
 dataset = StructureDataset(xdat_dir=predict_dir, energy_file=energy_file)
 new_energy = (dataset.data[-1] -  energy_min) / (energy_max - energy_min)
-new_energy = new_energy / energy_var.pow(0.5)
+# new_energy = new_energy / energy_var.pow(0.5)
 dataset.data = (*dataset.data[:-1], new_energy)
 
 batch_size = 1
@@ -49,14 +49,16 @@ for step, data in enumerate(predict_dataloader):
     energy_predict_result.append(energy_predict.cpu().detach().item())
     energy_target_result.append(energy.cpu().detach().item())
 
-x = np.linspace(0, 10, 100)
+loss = loss_fn(torch.Tensor(energy_predict_result), torch.Tensor(energy_target_result))
+logger.info(f"loss =  {loss.item()}")
+x = np.linspace(-0.1, 0.5, 100)
 y = x
 plt.plot(energy_target_result, energy_predict_result, "o")
 plt.plot(x, y, '-')
 plt.xlabel("Target energy / eV")
 plt.ylabel("Predict energy / eV")
-plt.xlim([0, 10])
-plt.ylim([0, 10])
+plt.xlim([-0.1, 0.5,])
+plt.ylim([-0.1, 0.5,])
 plt.show()
 # plt.savefig("result.png")
 

@@ -134,4 +134,4 @@ plt.plot(test_loss_result, '-o')
 plt.savefig(f"{root_dir}/loss.svg")
 
 # model save
-torch.save(model, "../model-energy.pth")
+torch.save(model, "../model-energy-new.pth")
